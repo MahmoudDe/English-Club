@@ -23,6 +23,7 @@ class LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
+          SizedBox(height: 20),
           Text(
             'Sign-in',
             style:
@@ -39,7 +40,7 @@ class LoginFormState extends State<LoginForm> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Enter user name',
@@ -77,7 +78,7 @@ class LoginFormState extends State<LoginForm> {
                 ),
               // Add padding
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0),
             child: TextFormField(
               obscureText: _obscureText,
               decoration: InputDecoration(
