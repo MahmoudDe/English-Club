@@ -143,12 +143,13 @@ class LoginFormState extends State<LoginForm> {
                     padding: EdgeInsets.symmetric(
                         horizontal: 110, vertical: 10), // padding
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Processing Data')));
-                    }
-                  },
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Processing Data')));
+                        Navigator.pushReplacementNamed(context, '/home');
+                      }
+                    },
                   child: Text(
                     'Sign-in',
                     style: TextStyle(fontSize: 18, fontFamily: 'Avenir'),
