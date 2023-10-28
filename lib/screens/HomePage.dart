@@ -15,7 +15,6 @@ class HomeScreen extends StatelessWidget {
     'Alaa Shebany has borrowed a new story',
     'Magmoud turn back a new story',
     'admin has sent a new message for you',
-
   ];
 
   @override
@@ -28,10 +27,21 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Notifications',
-                style: TextStyle(fontSize: 28, color: Colors.grey),
+              padding: EdgeInsets.symmetric(horizontal: 2.0),
+              child: Row(
+                children: [
+                  Text(
+                    'Notifications',
+                    style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.notifications_active,
+                    color: Colors.amberAccent,
+                  )
+                ],
               ),
             ),
             Flexible(
@@ -53,15 +63,16 @@ class HomeScreen extends StatelessWidget {
                             leading: Container(
                               width: 50.0,
                               height: 60.0,
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Colors.orange,
                                 border: Border.all(
-                                color: Colors.orange,
-                                width: 2.0,
-                              ),
-                              shape: BoxShape.circle,
+                                  color: Colors.orange,
+                                  width: 2.0,
+                                ),
+                                shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: AssetImage('assets/images/bdh_logo2.jpeg'),
+                                  image: AssetImage(
+                                      'assets/images/bdh_logo2.jpeg'),
                                   fit: BoxFit.cover,
                                 ),
                               ),

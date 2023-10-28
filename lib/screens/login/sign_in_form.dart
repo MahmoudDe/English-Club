@@ -1,3 +1,4 @@
+import 'package:bdh/screens/navigation_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatefulWidget {
@@ -10,6 +11,8 @@ class LoginForm extends StatefulWidget {
 class LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
+  FocusNode userName = FocusNode();
+  FocusNode userpass = FocusNode();
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -27,7 +30,7 @@ class LoginFormState extends State<LoginForm> {
           Text(
             'Sign-in',
             style:
-            TextStyle(color: Theme.of(context).primaryColor, fontSize: 60),
+                TextStyle(color: Theme.of(context).primaryColor, fontSize: 60),
           ),
           Image.asset(
             'assets/images/Reading glasses-rafiki.png',
@@ -42,18 +45,23 @@ class LoginFormState extends State<LoginForm> {
                 Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: TextFormField(
+                    focusNode: userName,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(userpass);
+                    },
                     decoration: InputDecoration(
                       labelText: 'Enter user name',
                       labelStyle: TextStyle(color: Colors.deepPurple),
                       hintText: 'user name',
                       hintStyle: TextStyle(color: Colors.grey),
                       contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       // Add padding
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide:
-                        BorderSide(color: Colors.green.shade700, width: 2.0),
+                        borderSide: BorderSide(
+                            color: Colors.green.shade700, width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -76,50 +84,54 @@ class LoginFormState extends State<LoginForm> {
                     },
                   ),
                 ),
-              // Add padding
-          Padding(
-            padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0),
-            child: TextFormField(
-              obscureText: _obscureText,
-              decoration: InputDecoration(
-                labelText: 'Enter the password',
-                labelStyle: TextStyle(color: Colors.deepPurple),
-                hintText: 'password',
-                hintStyle: TextStyle(color: Colors.grey),
-                contentPadding:
-                EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 // Add padding
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide:
-                  BorderSide(color: Colors.green.shade700, width: 2.0),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.done,
+                    focusNode: userpass,
+                    obscureText: _obscureText,
+                    decoration: InputDecoration(
+                      labelText: 'Enter the password',
+                      labelStyle: TextStyle(color: Colors.deepPurple),
+                      hintText: 'password',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      // Add padding
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(
+                            color: Colors.green.shade700, width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureText
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                        onPressed: _togglePasswordVisibility,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'please enter the password';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: Colors.red, width: 2.0),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: Colors.red, width: 2.0),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility),
-                  onPressed: _togglePasswordVisibility,
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'please enter the password';
-                }
-                return null;
-              },
-            ),
-          ),
               ],
             ),
           ),
@@ -138,18 +150,19 @@ class LoginFormState extends State<LoginForm> {
                     // text color
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                      BorderRadius.circular(30), // rounded corners
+                          BorderRadius.circular(30), // rounded corners
                     ),
                     padding: EdgeInsets.symmetric(
                         horizontal: 110, vertical: 10), // padding
                   ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Processing Data')));
-                        Navigator.pushReplacementNamed(context, '/home');
-                      }
-                    },
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Processing Data')));
+                      Navigator.pushReplacementNamed(
+                          context, NavigationScreen.routeName);
+                    }
+                  },
                   child: Text(
                     'Sign-in',
                     style: TextStyle(fontSize: 18, fontFamily: 'Avenir'),
