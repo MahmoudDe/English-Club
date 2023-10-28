@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../model/constants.dart';
 
@@ -25,7 +26,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, 1), // changes position of shadow
@@ -50,15 +51,15 @@ class _NavigationScreenState extends State<NavigationScreen> {
             },
             tabs: const [
               GButton(
-                icon: Icons.home_rounded,
+                icon: Iconsax.home,
                 text: 'Home',
               ),
               GButton(
-                icon: Icons.search,
+                icon: Iconsax.search_normal_1,
                 text: 'Search',
               ),
               GButton(
-                icon: Icons.book,
+                icon: Iconsax.book_1,
                 text: 'Borrow',
               ),
             ],

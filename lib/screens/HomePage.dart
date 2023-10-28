@@ -26,9 +26,9 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
+             Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.0),
-              child: Row(
+              child:  Row(
                 children: [
                   Text(
                     'Notifications',

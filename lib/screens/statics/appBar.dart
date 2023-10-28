@@ -26,16 +26,6 @@ class appBar extends StatelessWidget implements PreferredSizeWidget {
                 },
               ),
             ),
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: IconButton(
-                  icon: Icon(Iconsax.search_normal_1), // This is the Search icon
-                  onPressed: () {
-                  },
-                ),
-              ),
-            ],
           ),
         ],
       ),
