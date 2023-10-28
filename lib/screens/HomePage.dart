@@ -1,4 +1,3 @@
-import 'package:bdh/screens/statics/appBar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -20,15 +19,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.0),
-              child:  Row(
+              child: Row(
                 children: [
                   Text(
                     'Notifications',

@@ -1,3 +1,4 @@
+import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax/iconsax.dart';
@@ -17,6 +18,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: const MainDrawer(),
+      appBar: AppBar(),
       bottomNavigationBar: Container(
         margin: EdgeInsets.symmetric(
             vertical: mediaQuery.height / 60,
