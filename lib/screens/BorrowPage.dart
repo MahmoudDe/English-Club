@@ -1,5 +1,7 @@
 import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
@@ -14,9 +16,9 @@ class Data {
   Data(this.name, this.date, this.studentClass, this.studentGrade);
 }
 
-class SearchScreen extends StatefulWidget {
+class BorrowScreen extends StatefulWidget {
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _BorrowScreenState createState() => _BorrowScreenState();
 }
 
 List<String> names = [
@@ -32,10 +34,30 @@ List<String> names = [
   'محمود'
 ];
 
-class _SearchScreenState extends State<SearchScreen> {
+class _BorrowScreenState extends State<BorrowScreen> {
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
+  String? bookScan;
+
+  Future scanBarcode() async {
+    String scanResult;
+    try {
+      scanResult = await FlutterBarcodeScanner.scanBarcode(
+        "#ff6666",
+        'cancel',
+        true,
+        ScanMode.BARCODE,
+      );
+    } on PlatformException {
+      scanResult = 'some thing wrong happening';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      bookScan = scanResult;
+    });
+  }
 
   final List<Data> _data = List.generate(
     10,
@@ -71,7 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          'Search ',
+          'Borrow ',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -110,22 +132,26 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Material(
-                    elevation: 0.0,
-                    child: Row(
-                      children: [
-                        Expanded(child: _buildDatePicker(_fromDateController)),
-                        const SizedBox(width: 8.0),
-                        Expanded(child: _buildDatePicker(_toDateController)),
-                      ],
-                    ),
-                  ),
+                SizedBox(
+                  height: mediaQuery.height / 40,
                 ),
                 Expanded(
                     child: ListView(
-                        padding: EdgeInsets.zero, children: _buildItems())),
+                        padding: EdgeInsets.zero,
+                        children: _buildItems(
+                          mediaQuery,
+                          () {
+                            scanBarcode();
+                            bookScan != null
+                                ? showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      content: Text(bookScan!),
+                                    ),
+                                  )
+                                : null;
+                          },
+                        ))),
               ],
             ),
           ),
@@ -134,39 +160,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildDatePicker(TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-      child: SizedBox(
-        height: 50,
-        child: TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText:
-                controller == _fromDateController ? 'From Date' : 'To Date',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            prefixIcon: const Icon(Iconsax.calendar_2),
-          ),
-          onTap: () async {
-            var date = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1900),
-              lastDate: DateTime(2100),
-            );
-            if (date != null) {
-              controller.text = DateFormat('yyyy-MM-dd').format(date);
-              _filterData();
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _buildItems() {
+  List<Widget> _buildItems(Size mediaQuery, void Function()? onPressed) {
     return _filteredData.map((data) {
       return Card(
         child: ExpansionTile(
@@ -184,14 +178,19 @@ class _SearchScreenState extends State<SearchScreen> {
             data.name,
             style: const TextStyle(fontSize: 18),
           ),
-          trailing: Text(
-            '${DateFormat('yyyy-MM-dd').format(data.date)}',
-            style: const TextStyle(fontFamily: 'Avenir', fontSize: 16),
+          trailing: ElevatedButton.icon(
+            onPressed: onPressed,
+            icon: const Icon(Iconsax.scan_barcode),
+            label: const Text(
+              'Scan',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           children: [
             ListTile(
               title: Padding(
-                padding: const EdgeInsets.only(left: 65.0, bottom: 15.0),
+                padding: EdgeInsets.only(
+                    left: mediaQuery.width / 5, bottom: mediaQuery.height / 80),
                 child: Text(
                   'Class: ${data.studentClass}\n\nGrade: ${data.studentGrade}',
                   style: const TextStyle(fontFamily: 'Avenir'),

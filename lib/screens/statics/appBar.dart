@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class appBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -13,9 +12,7 @@ class appBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           AppBar(
             elevation: 0.0,
-            title: Text('Welcome',
-            style: TextStyle(fontSize: 28)
-            ),
+            title: Text('Welcome', style: TextStyle(fontSize: 28)),
             toolbarHeight: 65,
             centerTitle: true,
           ),

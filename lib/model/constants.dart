@@ -1,6 +1,6 @@
 import 'package:bdh/screens/HomePage.dart';
 import 'package:bdh/screens/SearchPage.dart';
-import 'package:bdh/screens/Settings.dart';
+import 'package:bdh/screens/BorrowPage.dart';
 
 class Constants {
   // ignore: non_constant_identifier_names
@@ -9,6 +9,6 @@ class Constants {
   static List secreens = [
     HomeScreen(),
     SearchScreen(),
-    SettingsScreen(),
+    BorrowScreen(),
   ];
 }
