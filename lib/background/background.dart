@@ -20,13 +20,13 @@ class RPSCustomPainter extends CustomPainter{
 
 
     Path path_0 = Path();
-    path_0.moveTo(size.width*-0.1145875,size.height*0.7018500);
-    path_0.quadraticBezierTo(size.width*-0.2049625,size.height*1.4298000,size.width*0.1754125,size.height*0.4986000);
-    path_0.cubicTo(size.width*0.3797250,size.height*0.0551500,size.width*0.4260375,size.height*1.0365500,size.width*0.9635750,size.height*0.6835500);
-    path_0.quadraticBezierTo(size.width*1.2939125,size.height*0.2816000,size.width*1.1795750,size.height*-0.4146000);
-    path_0.lineTo(size.width*1.0554125,size.height*-0.5181500);
-    path_0.lineTo(size.width*-0.0795875,size.height*-0.8881500);
-    path_0.lineTo(size.width*-0.1145875,size.height*0.7018500);
+    path_0.moveTo(size.width*-0.1645875,size.height*0.7018500);
+    path_0.quadraticBezierTo(size.width*-0.2549625,size.height*1.4298000,size.width*0.1254125,size.height*0.4986000);
+    path_0.cubicTo(size.width*0.3297250,size.height*0.0551500,size.width*0.3760375,size.height*1.0365500,size.width*1.0135750,size.height*0.6835500);
+    path_0.quadraticBezierTo(size.width*1.3439125,size.height*0.2816000,size.width*1.2295750,size.height*-0.4146000);
+    path_0.lineTo(size.width*1.1054125,size.height*-0.5181500);
+    path_0.lineTo(size.width*-0.1295875,size.height*-1.0881500);
+    path_0.lineTo(size.width*-0.1645875,size.height*0.7018500);
     path_0.close();
 
     canvas.drawPath(path_0, paint_fill_0);
@@ -43,13 +43,13 @@ class RPSCustomPainter extends CustomPainter{
 
 
     Path path_1 = Path();
-    path_1.moveTo(size.width*-0.1891754,size.height*1.1277191);
-    path_1.quadraticBezierTo(size.width*-0.1947767,size.height*1.4894995,size.width*0.2016057,size.height*0.6212264);
-    path_1.cubicTo(size.width*0.4145034,size.height*0.2077006,size.width*0.4191875,size.height*1.1999000,size.width*0.9793500,size.height*0.8707000);
-    path_1.quadraticBezierTo(size.width*1.3235875,size.height*0.4958500,size.width*1.1594390,size.height*0.0867030);
-    path_1.lineTo(size.width*1.0300515,size.height*-0.0098527);
-    path_1.lineTo(size.width*-0.1526943,size.height*-0.3548535);
-    path_1.lineTo(size.width*-0.1891754,size.height*1.1277191);
+    path_1.moveTo(size.width*-0.2391754,size.height*1.1277191);
+    path_1.quadraticBezierTo(size.width*-0.2447767,size.height*1.4894995,size.width*0.1516057,size.height*0.6212264);
+    path_1.cubicTo(size.width*0.3645034,size.height*0.2077006,size.width*0.3691875,size.height*1.1999000,size.width*1.0293500,size.height*0.8707000);
+    path_1.quadraticBezierTo(size.width*1.3735875,size.height*0.4958500,size.width*1.209439*size.width, size.height*-006703);
+    path_1.lineTo(size.width*1.0800515*size.width, size.height*-0098527);
+    path_1.lineTo(size.width*-2026943*size.width, size.height*-3548535);
+    path_1.lineTo(size.width*-2391754*size.width, size.height*11277191);
     path_1.close();
 
     canvas.drawPath(path_1, paint_fill_1);

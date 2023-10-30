@@ -18,14 +18,6 @@ class appBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             toolbarHeight: 65,
             centerTitle: true,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: IconButton(
-                icon: Icon(Iconsax.menu_1,size: 30.0),
-                onPressed: () {
-                },
-              ),
-            ),
           ),
         ],
       ),
