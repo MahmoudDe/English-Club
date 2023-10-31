@@ -1,3 +1,4 @@
+import 'package:bdh/data/dummy_data.dart';
 import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,19 +20,6 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-List<String> names = [
-  'علاء',
-  'وسام',
-  'جميل',
-  'كمال',
-  'وداد',
-  'وسيم',
-  'رامي',
-  'عبدالله',
-  'محمد',
-  'محمود'
-];
-
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
@@ -40,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final List<Data> _data = List.generate(
     10,
     (index) => Data(
-      names[Random().nextInt(names.length)], // Use a random name
+      data().names[Random().nextInt(data().names.length)], // Use a random name
       DateTime.now().subtract(Duration(days: index)),
       'Class ${index + 1}',
       'Grade ${index + 1}',
