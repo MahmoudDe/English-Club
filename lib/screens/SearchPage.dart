@@ -6,14 +6,7 @@ import 'package:intl/intl.dart';
 import 'dart:math';
 import '../background/BackgroundPaint.dart';
 
-class Data {
-  final String name;
-  final DateTime date;
-  final String studentClass;
-  final String studentGrade;
 
-  Data(this.name, this.date, this.studentClass, this.studentGrade);
-}
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -27,13 +20,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   final List<Data> _data = List.generate(
     10,
-    (index) => Data(
-      data().names[Random().nextInt(data().names.length)], // Use a random name
+        (index) => Data(
+      names[Random().nextInt(names.length)], // Use a random name
       DateTime.now().subtract(Duration(days: index)),
       'Class ${index + 1}',
       'Grade ${index + 1}',
     ),
   );
+
 
   List<Data> _filteredData = [];
 
