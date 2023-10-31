@@ -1,12 +1,10 @@
 import 'package:bdh/data/dummy_data.dart';
 import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
+import 'package:bdh/widgets/search/search_widgets.dart';
 import 'dart:math';
+import 'package:intl/intl.dart';
 import '../background/BackgroundPaint.dart';
-
-
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -20,14 +18,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   final List<Data> _data = List.generate(
     10,
-        (index) => Data(
+    (index) => Data(
       names[Random().nextInt(names.length)], // Use a random name
       DateTime.now().subtract(Duration(days: index)),
       'Class ${index + 1}',
       'Grade ${index + 1}',
     ),
   );
-
 
   List<Data> _filteredData = [];
 
@@ -57,133 +54,64 @@ class _SearchScreenState extends State<SearchScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Stack(
-        children: [
-          CustomPaint(
-            size: Size(
-                mediaQuery.width,
-                (mediaQuery.width * 0.5833333333333334)
-                    .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automaticallypainter: AppBarCustom(),
-            painter: AppBarCustom(),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: mediaQuery.height / 6),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SizedBox(
-                    height: 50,
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        _filterData();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Search',
-                        fillColor: Colors.white.withOpacity(0.5),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              30.0), // Change this to your desired radius
-                        ),
-                        prefixIcon: const Icon(Icons.search),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Material(
-                    elevation: 0.0,
-                    child: Row(
-                      children: [
-                        Expanded(child: _buildDatePicker(_fromDateController)),
-                        const SizedBox(width: 8.0),
-                        Expanded(child: _buildDatePicker(_toDateController)),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                    child: ListView(
-                        padding: EdgeInsets.zero, children: _buildItems())),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDatePicker(TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-      child: SizedBox(
-        height: 50,
-        child: TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText:
-                controller == _fromDateController ? 'From Date' : 'To Date',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            prefixIcon: const Icon(Iconsax.calendar_2),
-          ),
-          onTap: () async {
-            var date = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1900),
-              lastDate: DateTime(2100),
-            );
-            if (date != null) {
-              controller.text = DateFormat('yyyy-MM-dd').format(date);
-              _filterData();
-            }
-          },
+      body: Stack(children: [
+        CustomPaint(
+          size: Size(mediaQuery.width,
+              (mediaQuery.width * 0.5833333333333334).toDouble()),
+          painter: AppBarCustom(),
         ),
-      ),
-    );
-  }
-
-  List<Widget> _buildItems() {
-    return _filteredData.map((data) {
-      return Card(
-        child: ExpansionTile(
-          leading: const CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.orange,
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/bdh_logo.jpeg'),
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.transparent,
-              radius: 23,
-            ),
-          ),
-          title: Text(
-            data.name,
-            style: const TextStyle(fontSize: 18),
-          ),
-          trailing: Text(
-            '${DateFormat('yyyy-MM-dd').format(data.date)}',
-            style: const TextStyle(fontFamily: 'Avenir', fontSize: 16),
-          ),
-          children: [
-            ListTile(
-              title: Padding(
-                padding: const EdgeInsets.only(left: 65.0, bottom: 15.0),
-                child: Text(
-                  'Class: ${data.studentClass}\n\nGrade: ${data.studentGrade}',
-                  style: const TextStyle(fontFamily: 'Avenir'),
+        Container(
+          margin: EdgeInsets.only(top: mediaQuery.height / 6),
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                height: 50,
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    _filterData();
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Search',
+                    fillColor: Colors.white.withOpacity(0.5),
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                          30.0), // Change this to your desired radius
+                    ),
+                    prefixIcon: const Icon(Icons.search),
+                  ),
                 ),
               ),
             ),
-          ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                elevation: 0.0,
+                child: Row(children: [
+                  Expanded(
+                      child: SearchScreenWidgets.buildDatePicker(
+                          context,
+                          _fromDateController,
+                          _filterData,
+                          _fromDateController)),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                      child: SearchScreenWidgets.buildDatePicker(context,
+                          _toDateController, _filterData, _fromDateController)),
+                ]),
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: SearchScreenWidgets.buildItems(_filteredData)),
+            ),
+          ]),
         ),
-      );
-    }).toList();
+      ]),
+    );
   }
 
   void _filterData() {
@@ -201,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _filteredData = _data.where((item) {
         return (fromDate == null ||
                 toDate == null ||
-                (item.date.isAfter(fromDate) && item.date.isBefore(toDate))) &&
+                (item.date.isAfter(fromDate))) &&
             item.name.toLowerCase().contains(searchQuery);
       }).toList();
     });

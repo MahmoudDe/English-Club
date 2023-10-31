@@ -13,21 +13,13 @@ class RPSCustomPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.miter;
 
     Path path_0 = Path();
-    path_0.moveTo(size.width * -0.1645875, size.height * 0.7018500);
-    path_0.quadraticBezierTo(size.width * -0.2549625, size.height * 1.4298000,
-        size.width * 0.1254125, size.height * 0.4986000);
-    path_0.cubicTo(
-        size.width * 0.3297250,
-        size.height * 0.0551500,
-        size.width * 0.3760375,
-        size.height * 1.0365500,
-        size.width * 1.0135750,
-        size.height * 0.6835500);
-    path_0.quadraticBezierTo(size.width * 1.3439125, size.height * 0.2816000,
-        size.width * 1.2295750, size.height * -0.4146000);
-    path_0.lineTo(size.width * 1.1054125, size.height * -0.5181500);
-    path_0.lineTo(size.width * -0.1295875, size.height * -1.0881500);
-    path_0.lineTo(size.width * -0.1645875, size.height * 0.7018500);
+    path_0.moveTo(size.width*-0.1645875,size.height*0.7018500);
+    path_0.quadraticBezierTo(size.width*-0.2549625,size.height*1.4298000,size.width*0.1254125,size.height*0.4986000);
+    path_0.cubicTo(size.width*0.3297250,size.height*0.0551500,size.width*0.3760375,size.height*1.0365500,size.width*1.0135750,size.height*0.6835500);
+    path_0.quadraticBezierTo(size.width*1.3439125,size.height*0.2816000,size.width*1.2295750,size.height*-0.4146000);
+    path_0.lineTo(size.width*1.1054125,size.height*-0.5181500);
+    path_0.lineTo(size.width*-0.1295875,size.height*-1.0881500);
+    path_0.lineTo(size.width*-0.1645875,size.height*0.7018500);
     path_0.close();
 
     canvas.drawPath(path_0, paint_fill_0);
