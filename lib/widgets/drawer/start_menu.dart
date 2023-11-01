@@ -2,6 +2,8 @@ import 'package:bdh/screens/create_account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../server/apis.dart';
+
 Widget startMenuIcon(
     Size mediaQuery, BuildContext context, void Function() expanded) {
   return Container(
@@ -104,7 +106,11 @@ Widget startMenuIcon(
             height: mediaQuery.height / 40,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              // call the logout function
+              await Apis().logout();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
             child: circleIconWidget(
               color: Colors.white,
               widget: Icon(
@@ -114,6 +120,7 @@ Widget startMenuIcon(
               ),
             ),
           ),
+
         ],
       ),
     ),

@@ -1,6 +1,8 @@
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../server/apis.dart';
+
 class LoginForm extends StatefulWidget {
   @override
   LoginFormState createState() {
@@ -13,6 +15,8 @@ class LoginFormState extends State<LoginForm> {
   bool _obscureText = true;
   FocusNode userName = FocusNode();
   FocusNode userpass = FocusNode();
+  String? _username;
+  String? _password;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -26,7 +30,7 @@ class LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             'Sign-in',
             style:
@@ -38,13 +42,14 @@ class LoginFormState extends State<LoginForm> {
             height: MediaQuery.of(context).size.height * 0.3,
             fit: BoxFit.cover,
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           SingleChildScrollView(
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: TextFormField(
+                    onSaved: (value) => _username = value ?? '',
                     focusNode: userName,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (value) {
@@ -52,11 +57,11 @@ class LoginFormState extends State<LoginForm> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Enter user name',
-                      labelStyle: TextStyle(color: Colors.deepPurple),
+                      labelStyle: const TextStyle(color: Colors.deepPurple),
                       hintText: 'user name',
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: const TextStyle(color: Colors.grey),
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       // Add padding
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -65,15 +70,15 @@ class LoginFormState extends State<LoginForm> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                        borderSide: const BorderSide(color: Colors.grey, width: 2.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
                       ),
                     ),
                     validator: (value) {
@@ -89,16 +94,17 @@ class LoginFormState extends State<LoginForm> {
                   padding:
                       const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0),
                   child: TextFormField(
+                    onSaved: (value) => _password = value ?? '',
                     textInputAction: TextInputAction.done,
                     focusNode: userpass,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       labelText: 'Enter the password',
-                      labelStyle: TextStyle(color: Colors.deepPurple),
+                      labelStyle: const TextStyle(color: Colors.deepPurple),
                       hintText: 'password',
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: const TextStyle(color: Colors.grey),
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       // Add padding
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -107,15 +113,15 @@ class LoginFormState extends State<LoginForm> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                        borderSide: const BorderSide(color: Colors.grey, width: 2.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(_obscureText
@@ -135,7 +141,7 @@ class LoginFormState extends State<LoginForm> {
               ],
             ),
           ),
-          SizedBox(height: 20), // Add padding
+          const SizedBox(height: 20), // Add padding
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -152,18 +158,28 @@ class LoginFormState extends State<LoginForm> {
                       borderRadius:
                           BorderRadius.circular(30), // rounded corners
                     ),
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                         horizontal: 110, vertical: 10), // padding
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Processing Data')));
-                      Navigator.pushReplacementNamed(
-                          context, NavigationScreen.routeName);
+                      _formKey.currentState?.save();
+
+                      // Call the login API and check the result
+                      bool loginSuccessful = await Apis().login(_username, _password);
+
+                      if (loginSuccessful) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Login Successfully ')));
+                        Navigator.pushReplacementNamed(
+                            context, NavigationScreen.routeName);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Connection error')));
+                      }
                     }
                   },
-                  child: Text(
+                  child: const Text(
                     'Sign-in',
                     style: TextStyle(fontSize: 18, fontFamily: 'Avenir'),
                   ),

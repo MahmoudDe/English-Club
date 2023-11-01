@@ -4,13 +4,22 @@ import 'package:bdh/screens/login/login.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+
+  runApp(MyApp(
+    initialRoute: token == null ? '/login' : NavigationScreen.routeName,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  MyApp({required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +34,7 @@ class MyApp extends StatelessWidget {
           secondaryHeaderColor: Colors.orange,
           fontFamily: 'Messiri',
         ),
-        home: LoginPage(),
-        initialRoute: '/login',
+        initialRoute: initialRoute,
         routes: {
           '/login': (context) => LoginPage(),
           '/home': (context) => HomeScreen(),
