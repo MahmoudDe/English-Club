@@ -1,7 +1,7 @@
-import 'package:bdh/Provider/navigation_controller.dart';
 import 'package:bdh/screens/HomePage.dart';
 import 'package:bdh/screens/navigation_screen.dart';
-import 'package:bdh/screens/start_screen.dart';
+import 'package:bdh/screens/splashscreen.dart';
+import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,20 +14,26 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => NavigationController(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: const Color.fromRGBO(56, 14, 63, 1),
-          canvasColor: Colors.grey.shade200,
-          fontFamily: 'Avenir',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Apis(),
         ),
-        home: const StartScreen(),
-        routes: {
-          '/home': (context) => HomeScreen(),
-          NavigationScreen.routeName: (context) => const NavigationScreen()
-        },
+      ],
+      child: Consumer<Apis>(
+        builder: (context, value, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: const Color.fromRGBO(56, 14, 63, 1),
+            canvasColor: Colors.grey.shade200,
+            fontFamily: 'Avenir',
+          ),
+          home: const SplashScreen(),
+          routes: {
+            '/home': (context) => HomeScreen(),
+            NavigationScreen.routeName: (context) => const NavigationScreen()
+          },
+        ),
       ),
     );
   }

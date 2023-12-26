@@ -1,36 +1,48 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dio_settings.dart';
 
 class Apis with ChangeNotifier {
   // Add the routes
-  static const String loginRoute = 'auth/login';
+  static bool isValid = false;
 
   Future<bool> login(String? username, String? password) async {
-    if (username != null && password != null) {
-      try {
-        final response = await dio().post(
-            loginRoute,
-            data: {'username': username, 'password': password});
-        if (response.statusCode == 200) {
-          print('User logged in!');
-          // Save the token
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', response.data['token']);
-          return true;
-        } else {
-          print('Failed to log in');
-          return false;
-        }
-      } catch (e) {
-        print('connection error: $e');
+    try {
+      final response = await dio().post('auth/login',
+          data: {'username': username, 'password': password});
+
+      if (response.statusCode == 200) {
+        isValid = true;
+        notifyListeners();
+        print('User logged in!');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', response.data['token']);
+        return true;
+      } else {
+        print('Failed to log in');
+        isValid = false;
+        notifyListeners();
         return false;
       }
-    } else {
-      print('Username or password is null');
+    } on DioException catch (a) {
+      isValid = false;
+      notifyListeners();
+      print('nice error');
+      print(a.error);
+      print(a);
+      print(a.requestOptions);
+      print(a.message);
+      print(a.response);
+      return false;
+    } catch (e) {
+      print('connection error: $e');
+      isValid = false;
+      notifyListeners();
       return false;
     }
   }
+
 //remove token when logout
   Future<void> logout() async {
     try {
@@ -47,6 +59,4 @@ class Apis with ChangeNotifier {
       print('connection error: $e');
     }
   }
-
 }
-

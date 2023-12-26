@@ -1,7 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bdh/screens/navigation_screen.dart';
+import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/snack_bar_widget.dart';
 import '../form_widget.dart';
@@ -27,13 +29,47 @@ class _FormWidgetState extends State<FormStartWidget> {
   String enterdEmail = '';
   String enterdPass = '';
   final Uri whatsApp = Uri.parse('https://wa.me/+963967509515');
-
+  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   bool obscureText = true;
   void _togglePasswordVisibility() {
     setState(() {
       obscureText = !obscureText;
     });
+  }
+
+  Future<void> submit(BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await Provider.of<Apis>(context, listen: false)
+          .login(enterdEmail, enterdPass);
+      setState(() {
+        isLoading = false;
+      });
+      if (Apis.isValid) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            NavigationScreen.routeName, (Route<dynamic> route) => false);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBarWidget(
+                  title: 'Success',
+                  message: 'Welcome to your app',
+                  contentType: ContentType.success)
+              .getSnakBar());
+      } else {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBarWidget(
+                  title: 'Ops',
+                  message: 'User name or password is wrong',
+                  contentType: ContentType.failure)
+              .getSnakBar());
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -147,16 +183,7 @@ class _FormWidgetState extends State<FormStartWidget> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        NavigationScreen.routeName,
-                        (Route<dynamic> route) => false);
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(SnackBarWidget(
-                              title: 'Success',
-                              message: 'Welcome to your app',
-                              contentType: ContentType.success)
-                          .getSnakBar());
+                    submit(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -171,9 +198,13 @@ class _FormWidgetState extends State<FormStartWidget> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: widget.mediaQuery.height / 20,
-              ),
+              isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : SizedBox(
+                      height: widget.mediaQuery.height / 20,
+                    ),
               const Text(
                 '______________________ or ______________________',
                 style: TextStyle(color: Colors.black26),

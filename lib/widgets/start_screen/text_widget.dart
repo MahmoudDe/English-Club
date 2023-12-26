@@ -26,7 +26,7 @@ class TextWidget extends StatelessWidget {
                 Text(
                   'Swipe up',
                   style: TextStyle(
-                      color: Colors.white70,
+                      color: Color.fromARGB(255, 160, 160, 160),
                       fontWeight: FontWeight.bold,
                       fontSize: mediaQuery.width / 10),
                 ),
