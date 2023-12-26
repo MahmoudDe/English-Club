@@ -1,7 +1,7 @@
 import 'package:bdh/Provider/navigation_controller.dart';
 import 'package:bdh/screens/HomePage.dart';
-import 'package:bdh/screens/login/login.dart';
 import 'package:bdh/screens/navigation_screen.dart';
+import 'package:bdh/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,16 +19,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          primaryColor: Colors.deepPurple,
+          primaryColor: Color.fromRGBO(56, 14, 63, 1),
           canvasColor: Colors.grey.shade200,
-          secondaryHeaderColor: Colors.orange,
-          fontFamily: 'Messiri',
+          fontFamily: 'Avenir',
         ),
-        home: LoginPage(),
-        initialRoute: '/login',
+        home: const StartScreen(),
         routes: {
-          '/login': (context) => LoginPage(),
           '/home': (context) => HomeScreen(),
           NavigationScreen.routeName: (context) => const NavigationScreen()
         },

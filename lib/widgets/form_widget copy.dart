@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
 class FormWidget extends StatelessWidget {
-  const FormWidget({
-    super.key,
-    required this.mediaQuery,
-    required this.labelText,
-    required this.hintText,
-    required this.focusNode,
-    required this.nextNode,
-    required this.validationFun,
-    required this.textInputAction,
-    required this.isNormal,
-    this.togglePasswordVisibility,
-    required this.obscureText,
-    required this.textInputType,
-  });
+  const FormWidget(
+      {super.key,
+      required this.mediaQuery,
+      required this.labelText,
+      required this.hintText,
+      required this.focusNode,
+      required this.nextNode,
+      required this.validationFun,
+      required this.textInputAction,
+      required this.isNormal,
+      this.togglePasswordVisibility,
+      required this.obscureText,
+      required this.textInputType});
   final Size mediaQuery;
   final String labelText;
   final String hintText;
@@ -44,7 +43,7 @@ class FormWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: TextFormField(
-                  textInputAction: textInputAction,
+                  textInputAction: TextInputAction.next,
                   keyboardType: textInputType,
                   focusNode: focusNode,
                   obscureText: obscureText,
@@ -61,13 +60,11 @@ class FormWidget extends StatelessWidget {
                     // Add padding
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(width: 2.0),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(width: 2.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -116,13 +113,11 @@ class FormWidget extends StatelessWidget {
                     // Add padding
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(width: 2.0),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(width: 2.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),

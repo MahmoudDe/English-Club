@@ -18,6 +18,10 @@ dependencies:
 
   flutter_barcode_scanner: ^2.0.0
   dio: ^5.3.3
+  awesome_snackbar_content: ^0.1.3
+  url_launcher: ^6.2.2
+  lottie: ^2.7.0
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +32,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/auth.jpg
+    - assets/images/background.png
+    - assets/lotties/scroll.json
+    - assets/images/auth1.jpg
+    - assets/images/auth2.jpg
+    - assets/images/englishClubText.png
   fonts:
     - family: Avenir
       fonts:
