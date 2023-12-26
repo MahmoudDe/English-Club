@@ -92,10 +92,7 @@ class _BorrowScreenState extends State<BorrowScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Borrow ',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+ 
       ),
       body: Stack(
         children: [

@@ -49,10 +49,6 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Search ',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
       ),
       body: Stack(children: [
         CustomPaint(

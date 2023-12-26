@@ -67,68 +67,32 @@ class _StartScreenState extends State<StartScreen>
       backgroundColor: const Color.fromRGBO(52, 3, 80, 1),
       body: Stack(
         children: [
-          GestureDetector(
-            // onTap: () {
-            //   setState(() {
-            //     isMenuOpen = !isMenuOpen;
-            //   });
-            //   isMenuOpen
-            //       ? _scrollController.animateTo(
-            //           _scrollController.position.maxScrollExtent,
-            //           duration: const Duration(milliseconds: 200),
-            //           curve: Curves.easeIn)
-            //       : _scrollController.animateTo(
-            //           _scrollController.position.minScrollExtent,
-            //           duration: const Duration(milliseconds: 200),
-            //           curve: Curves.easeIn);
-            // },
-            // onHorizontalDragEnd: (details) {
-            //   if (details.primaryVelocity! < 0) {
-            //     _scrollController.animateTo(
-            //         _scrollController.position.maxScrollExtent,
-            //         duration: const Duration(milliseconds: 200),
-            //         curve: Curves.easeIn);
-            //     setState(() {
-            //       isMenuOpen = true;
-            //     });
-            //   } else if (details.primaryVelocity! > 0) {
-            //     _scrollController.animateTo(
-            //         _scrollController.position.minScrollExtent,
-            //         duration: const Duration(milliseconds: 200),
-            //         curve: Curves.easeIn);
-            //     setState(() {
-            //       isMenuOpen = false;
-            //     });
-            //   }
-            // },
-            child: ListView(
-              controller: _scrollController,
-              // physics: const NeverScrollableScrollPhysics(),
-              children: [
-                SizedBox(
-                  width: mediaQuery.width,
-                  height: mediaQuery.height / 1.08,
-                  child: const Image(
-                    image: AssetImage('assets/images/auth.jpg'),
-                    fit: BoxFit.fill,
-                  ),
+          ListView(
+            controller: _scrollController,
+            children: [
+              SizedBox(
+                width: mediaQuery.width,
+                height: mediaQuery.height / 1.08,
+                child: const Image(
+                  image: AssetImage('assets/images/auth.jpg'),
+                  fit: BoxFit.fill,
                 ),
-                Container(
-                  height: mediaQuery.height / 1.7,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadiusDirectional.only(
-                        topStart: Radius.circular(50),
-                        topEnd: Radius.circular(50),
-                      ),
-                      color: Colors.white),
-                  child: FormStartWidget(
-                      mediaQuery: mediaQuery,
-                      scrollController: _scrollController,
-                      isMenuOpen: isMenuOpen),
-                )
-              ],
-            ),
+              ),
+              Container(
+                height: mediaQuery.height / 1.7,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.only(
+                      topStart: Radius.circular(50),
+                      topEnd: Radius.circular(50),
+                    ),
+                    color: Colors.white),
+                child: FormStartWidget(
+                    mediaQuery: mediaQuery,
+                    scrollController: _scrollController,
+                    isMenuOpen: isMenuOpen),
+              )
+            ],
           ),
           TextWidget(
               isMenuOpen: isMenuOpen,

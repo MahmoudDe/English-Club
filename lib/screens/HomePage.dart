@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import '../background/BackgroundPaint.dart';
 
 class HomeScreen extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -15,18 +13,12 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Home',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
       ),
       body: Stack(
         children: [
           CustomPaint(
-            size: Size(
-                mediaQuery.width,
-                (mediaQuery.width * 0.5833333333333334)
-                    .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automaticallypainter: AppBarCustom(),
+            size: Size(mediaQuery.width,
+                (mediaQuery.width * 0.5833333333333334).toDouble()),
             painter: AppBarCustom(),
           ),
           Padding(

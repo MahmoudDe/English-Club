@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Color.fromRGBO(56, 14, 63, 1),
+          primaryColor: const Color.fromRGBO(56, 14, 63, 1),
           canvasColor: Colors.grey.shade200,
           fontFamily: 'Avenir',
         ),

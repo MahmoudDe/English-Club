@@ -54,7 +54,7 @@ class AppBarCustom extends CustomPainter {
     // Layer 1 Copy
 
     Paint paintFill1 = Paint()
-      ..color = Colors.deepPurple
+      ..color = const Color.fromRGBO(56, 14, 63, 1)
       ..style = PaintingStyle.fill
       ..strokeWidth = size.width * 0.00
       ..strokeCap = StrokeCap.butt
