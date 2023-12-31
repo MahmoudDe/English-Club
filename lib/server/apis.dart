@@ -5,28 +5,24 @@ import 'dio_settings.dart';
 
 class Apis with ChangeNotifier {
   // Add the routes
-  static bool isValid = false;
+  bool isLoggedIn = false;
 
   Future<bool> login(String? username, String? password) async {
     try {
       final response = await dio().post('auth/login',
           data: {'username': username, 'password': password});
-
       if (response.statusCode == 200) {
-        isValid = true;
-        notifyListeners();
+        String token = response.data['data']['token'];
+        print(token);
+        String type = response.data['data']['type'];
+        storToken(token: token, type: type);
         print('User logged in!');
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', response.data['token']);
-        return true;
-      } else {
-        print('Failed to log in');
-        isValid = false;
-        notifyListeners();
-        return false;
+        print('-----------------------------------login response');
+        print(response.data);
+        print('------------------------------------------------');
       }
+      return true;
     } on DioException catch (a) {
-      isValid = false;
       notifyListeners();
       print('nice error');
       print(a.error);
@@ -37,10 +33,21 @@ class Apis with ChangeNotifier {
       return false;
     } catch (e) {
       print('connection error: $e');
-      isValid = false;
+      isLoggedIn = false;
       notifyListeners();
       return false;
     }
+  }
+
+  Future<void> storToken({
+    required String token,
+    required String type,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    print('-------------------------------$token');
+    print('-------------------------------$type');
+    await storage.setString('token', token);
+    await storage.setString('type', type);
   }
 
 //remove token when logout

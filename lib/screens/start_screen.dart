@@ -17,7 +17,6 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen>
     with SingleTickerProviderStateMixin {
-  // ignore: deprecated_member_use
   Locale appLocale = window.locale;
   bool isMenuOpen = false;
   final ScrollController _scrollController = ScrollController();
@@ -54,7 +53,6 @@ class _StartScreenState extends State<StartScreen>
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _scrollController.dispose();
     super.dispose();
   }

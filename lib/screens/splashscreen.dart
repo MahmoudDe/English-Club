@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,14 +43,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> checkLoginStatus(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-      if (isLoggedIn) {
+      final token = prefs.getString('token') ?? false;
+      if (token != null) {
+        print(token);
+        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => NavigationScreen()),
           (route) => false,
         );
       } else {
+        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => StartScreen()),

@@ -29,7 +29,6 @@ class _FormWidgetState extends State<FormStartWidget> {
   String enterdEmail = '';
   String enterdPass = '';
   final Uri whatsApp = Uri.parse('https://wa.me/+963967509515');
-  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   bool obscureText = true;
   void _togglePasswordVisibility() {
@@ -39,18 +38,15 @@ class _FormWidgetState extends State<FormStartWidget> {
   }
 
   Future<void> submit(BuildContext context) async {
-    setState(() {
-      isLoading = true;
-    });
     try {
-      await Provider.of<Apis>(context, listen: false)
+      bool isLoading = await Provider.of<Apis>(context, listen: false)
           .login(enterdEmail, enterdPass);
-      setState(() {
-        isLoading = false;
-      });
-      if (Apis.isValid) {
+
+      if (isLoading) {
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushNamedAndRemoveUntil(
             NavigationScreen.routeName, (Route<dynamic> route) => false);
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBarWidget(
@@ -59,6 +55,7 @@ class _FormWidgetState extends State<FormStartWidget> {
                   contentType: ContentType.success)
               .getSnakBar());
       } else {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBarWidget(
@@ -198,13 +195,9 @@ class _FormWidgetState extends State<FormStartWidget> {
                   ),
                 ),
               ),
-              isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : SizedBox(
-                      height: widget.mediaQuery.height / 20,
-                    ),
+              SizedBox(
+                height: widget.mediaQuery.height / 20,
+              ),
               const Text(
                 '______________________ or ______________________',
                 style: TextStyle(color: Colors.black26),
@@ -222,7 +215,7 @@ class _FormWidgetState extends State<FormStartWidget> {
                   launchUrl(whatsApp);
                 },
                 style: TextButton.styleFrom(),
-                icon: Icon(Icons.message),
+                icon: const Icon(Icons.message),
                 label: const Text(
                   'Contact with us',
                   textAlign: TextAlign.center,
