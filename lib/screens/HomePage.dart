@@ -1,54 +1,32 @@
+import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/Cards/homeCard.dart';
 import 'package:bdh/widgets/drawer/main_drawer.dart';
+import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
-import '../background/BackgroundPaint.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       drawer: const MainDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.main,
         elevation: 0,
       ),
-      body: Stack(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomPaint(
-            size: Size(mediaQuery.width,
-                (mediaQuery.width * 0.5833333333333334).toDouble()),
-            painter: AppBarCustom(),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 8.0, right: 8.0, bottom: 8.0, top: mediaQuery.height / 8),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 2.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Notifications',
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Icon(
-                        Icons.notifications_active,
-                        color: Colors.amberAccent,
-                      )
-                    ],
-                  ),
-                ),
-                HomeCard()
-              ],
+          TitleWidget(
+            mediaQuery: mediaQuery,
+            title: 'Notifications',
+            icon: Icon(
+              Icons.notifications_active,
+              color: AppColors.whiteLight,
             ),
           ),
+          const HomeCard()
         ],
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:bdh/screens/create_account_screen.dart';
+import 'package:bdh/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-
-import '../../server/apis.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget startMenuIcon(
     Size mediaQuery, BuildContext context, void Function() expanded) {
@@ -108,8 +108,11 @@ Widget startMenuIcon(
           InkWell(
             onTap: () async {
               // call the logout function
-              await Apis().logout();
-              Navigator.pushReplacementNamed(context, '/login');
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.remove('token');
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  StartScreen.routName, (Route<dynamic> route) => false);
             },
             child: circleIconWidget(
               color: Colors.white,
@@ -120,7 +123,6 @@ Widget startMenuIcon(
               ),
             ),
           ),
-
         ],
       ),
     ),

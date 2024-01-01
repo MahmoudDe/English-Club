@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../screens/create_account_screen.dart';
+import '../../screens/start_screen.dart';
 import 'head_profile_widget.dart';
 
 Widget invisibleSubMenu(Size mediaQuery, BuildContext context) {
@@ -145,7 +147,14 @@ Widget invisibleSubMenu(Size mediaQuery, BuildContext context) {
             height: mediaQuery.height / 40,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              // call the logout function
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.remove('token');
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  StartScreen.routName, (Route<dynamic> route) => false);
+            },
             child: circleIconWidget2(
               iconName: 'Log out',
               mediaQuery: mediaQuery,

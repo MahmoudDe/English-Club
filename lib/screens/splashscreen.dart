@@ -43,20 +43,23 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> checkLoginStatus(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token') ?? false;
+      final token = prefs.getString('token');
+      print('------------------------------------stored token');
+      print(token);
+      print('------------------------------------------------');
       if (token != null) {
         print(token);
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => NavigationScreen()),
+          MaterialPageRoute(builder: (context) => const NavigationScreen()),
           (route) => false,
         );
       } else {
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => StartScreen()),
+          MaterialPageRoute(builder: (context) => const StartScreen()),
           (route) => false,
         );
       }

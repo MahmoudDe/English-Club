@@ -1,5 +1,7 @@
 import 'package:bdh/data/dummy_data.dart';
+import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/drawer/main_drawer.dart';
+import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bdh/widgets/search/search_widgets.dart';
 import 'dart:math';
@@ -7,7 +9,10 @@ import 'package:intl/intl.dart';
 import '../background/BackgroundPaint.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SearchScreenState createState() => _SearchScreenState();
 }
 
@@ -44,68 +49,67 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: true,
       drawer: const MainDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.main,
         elevation: 0,
       ),
       body: Stack(children: [
-        CustomPaint(
-          size: Size(mediaQuery.width,
-              (mediaQuery.width * 0.5833333333333334).toDouble()),
-          painter: AppBarCustom(),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: mediaQuery.height / 6),
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: SizedBox(
-                height: 50,
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    _filterData();
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Search',
-                    fillColor: Colors.white.withOpacity(0.5),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                          30.0), // Change this to your desired radius
-                    ),
-                    prefixIcon: const Icon(Icons.search),
+        Column(children: [
+          TitleWidget(
+            mediaQuery: mediaQuery,
+            title: 'Search',
+            icon: Icon(
+              Icons.search,
+              color: AppColors.whiteLight,
+            ),
+          ),
+          SizedBox(
+            height: mediaQuery.height / 40,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: mediaQuery.width / 25),
+            child: SizedBox(
+              height: 50,
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  _filterData();
+                },
+                decoration: InputDecoration(
+                  labelText: 'Search',
+                  fillColor: Colors.white.withOpacity(0.5),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(
+                        30.0), // Change this to your desired radius
                   ),
+                  prefixIcon: const Icon(Icons.search),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Material(
-                elevation: 0.0,
-                child: Row(children: [
-                  Expanded(
-                      child: SearchScreenWidgets.buildDatePicker(
-                          context,
-                          _fromDateController,
-                          _filterData,
-                          _fromDateController)),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                      child: SearchScreenWidgets.buildDatePicker(context,
-                          _toDateController, _filterData, _fromDateController)),
-                ]),
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              elevation: 0.0,
+              child: Row(children: [
+                Expanded(
+                    child: SearchScreenWidgets.buildDatePicker(context,
+                        _fromDateController, _filterData, _fromDateController)),
+                const SizedBox(width: 8.0),
+                Expanded(
+                    child: SearchScreenWidgets.buildDatePicker(context,
+                        _toDateController, _filterData, _fromDateController)),
+              ]),
             ),
-            Expanded(
-              child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: SearchScreenWidgets.buildItems(_filteredData)),
-            ),
-          ]),
-        ),
+          ),
+          Expanded(
+            child: ListView(
+                padding: EdgeInsets.zero,
+                children: SearchScreenWidgets.buildItems(_filteredData)),
+          ),
+        ]),
       ]),
     );
   }

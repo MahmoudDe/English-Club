@@ -1,7 +1,9 @@
 import 'package:bdh/screens/HomePage.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/splashscreen.dart';
+import 'package:bdh/screens/start_screen.dart';
 import 'package:bdh/server/apis.dart';
+import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,14 +26,15 @@ class MyApp extends StatelessWidget {
         builder: (context, value, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: const Color.fromRGBO(56, 14, 63, 1),
+            primaryColor: AppColors.main,
             canvasColor: Colors.grey.shade200,
             fontFamily: 'Avenir',
           ),
           home: const SplashScreen(),
           routes: {
             '/home': (context) => HomeScreen(),
-            NavigationScreen.routeName: (context) => const NavigationScreen()
+            NavigationScreen.routeName: (context) => const NavigationScreen(),
+            StartScreen.routName: (context) => const StartScreen()
           },
         ),
       ),

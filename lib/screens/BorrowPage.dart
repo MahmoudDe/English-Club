@@ -1,4 +1,6 @@
+import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/drawer/main_drawer.dart';
+import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -87,71 +89,62 @@ class _BorrowScreenState extends State<BorrowScreen> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: true,
       drawer: const MainDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
- 
+        backgroundColor: AppColors.main,
       ),
-      body: Stack(
+      body: Column(
         children: [
-          CustomPaint(
-            size: Size(
-                mediaQuery.width,
-                (mediaQuery.width * 0.5833333333333334)
-                    .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automaticallypainter: AppBarCustom(),
-            painter: AppBarCustom(),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: mediaQuery.height / 6),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SizedBox(
-                    height: 50,
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        _filterData();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Search',
-                        fillColor: Colors.white.withOpacity(0.5),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              30.0), // Change this to your desired radius
-                        ),
-                        prefixIcon: const Icon(Icons.search),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: mediaQuery.height / 40,
-                ),
-                Expanded(
-                    child: ListView(
-                        padding: EdgeInsets.zero,
-                        children: _buildItems(
-                          mediaQuery,
-                          () {
-                            scanBarcode();
-                            bookScan != null
-                                ? showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      content: Text(bookScan!),
-                                    ),
-                                  )
-                                : null;
-                          },
-                        ))),
-              ],
+          TitleWidget(
+            mediaQuery: mediaQuery,
+            title: 'Borrow',
+            icon: Icon(
+              Iconsax.book,
+              color: AppColors.whiteLight,
             ),
           ),
+          SizedBox(
+            height: mediaQuery.height / 40,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: mediaQuery.width / 25),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                _filterData();
+              },
+              decoration: InputDecoration(
+                labelText: 'Search',
+                fillColor: Colors.white.withOpacity(0.5),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                      30.0), // Change this to your desired radius
+                ),
+                prefixIcon: const Icon(Icons.search),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: mediaQuery.height / 80,
+          ),
+          Expanded(
+              child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: _buildItems(
+                    mediaQuery,
+                    () {
+                      scanBarcode();
+                      bookScan != null
+                          ? showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                content: Text(bookScan!),
+                              ),
+                            )
+                          : null;
+                    },
+                  ))),
         ],
       ),
     );

@@ -53,15 +53,8 @@ class Apis with ChangeNotifier {
 //remove token when logout
   Future<void> logout() async {
     try {
-      final response = await dio().post('auth/logout');
-      if (response.statusCode == 200) {
-        print('User logged out!');
-        // Remove the token from shared preferences
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.remove('token');
-      } else {
-        print('Failed to log out');
-      }
+      print('User logged out!');
+      // Remove the token from shared preferences
     } catch (e) {
       print('connection error: $e');
     }
