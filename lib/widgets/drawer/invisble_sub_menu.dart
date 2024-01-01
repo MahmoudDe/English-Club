@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../screens/create_account_screen.dart';
 import '../../screens/start_screen.dart';
+import '../../server/apis.dart';
 import 'head_profile_widget.dart';
 
 Widget invisibleSubMenu(Size mediaQuery, BuildContext context) {
@@ -148,9 +150,11 @@ Widget invisibleSubMenu(Size mediaQuery, BuildContext context) {
           ),
           InkWell(
             onTap: () async {
+              await Provider.of<Apis>(context, listen: false).logout();
               // call the logout function
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('token');
+              // ignore: use_build_context_synchronously
               // ignore: use_build_context_synchronously
               Navigator.of(context).pushNamedAndRemoveUntil(
                   StartScreen.routName, (Route<dynamic> route) => false);

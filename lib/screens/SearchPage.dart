@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:bdh/widgets/search/search_widgets.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
-import '../background/BackgroundPaint.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

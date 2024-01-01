@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,13 +51,23 @@ class Apis with ChangeNotifier {
     await storage.setString('type', type);
   }
 
-//remove token when logout
   Future<void> logout() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
-      print('User logged out!');
-      // Remove the token from shared preferences
+      String? myToken = await storage.getString('token');
+      Dio.Response response = await dio().post(
+        "/auth/logout",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................logout server response');
+      print(response.data);
+      print('................................');
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
     } catch (e) {
-      print('connection error: $e');
+      print(e);
     }
   }
 }

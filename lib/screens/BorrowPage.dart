@@ -7,7 +7,6 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
-import '../background/BackgroundPaint.dart';
 
 class Data {
   final String name;

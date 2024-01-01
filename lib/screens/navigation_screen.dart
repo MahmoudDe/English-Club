@@ -66,7 +66,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ),
       body: Stack(
         children: [
-          Constants.secreens[Constants.index],
+          Constants.screens[Constants.index],
         ],
       ),
     );
