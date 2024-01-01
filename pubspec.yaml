@@ -36,6 +36,7 @@ flutter:
     - assets/images/auth.jpg
     - assets/images/background.png
     - assets/lotties/scroll.json
+    - assets/lotties/empty.json
     - assets/images/auth1.jpg
     - assets/images/auth2.jpg
     - assets/images/englishClubText.png

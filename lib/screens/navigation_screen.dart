@@ -14,6 +14,7 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+  final controller = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -45,6 +46,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
             onTabChange: (value) {
               setState(() {
                 Constants.index = value;
+                controller.animateToPage(value,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOutCirc);
               });
             },
             tabs: const [
@@ -60,15 +64,27 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 icon: Iconsax.book_1,
                 text: 'Borrow',
               ),
+              GButton(
+                icon: Iconsax.security_user,
+                text: 'Accounts',
+              ),
             ],
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          Constants.screens[Constants.index],
-        ],
-      ),
+      body: PageView(
+          controller: controller,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          pageSnapping: true,
+          allowImplicitScrolling: false,
+          onPageChanged: null,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            Constants.screens[0],
+            Constants.screens[1],
+            Constants.screens[2],
+            Constants.screens[3],
+          ]),
     );
   }
 }

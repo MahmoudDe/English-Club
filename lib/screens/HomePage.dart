@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: false,
       drawer: const MainDrawer(),
       appBar: AppBar(
         backgroundColor: AppColors.main,

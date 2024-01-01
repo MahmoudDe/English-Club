@@ -29,6 +29,20 @@ class MyApp extends StatelessWidget {
             primaryColor: AppColors.main,
             canvasColor: Colors.grey.shade200,
             fontFamily: 'Avenir',
+            tabBarTheme: TabBarTheme(
+              labelColor: AppColors.main,
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.main,
+              ), // color for text
+              // overlayColor: ,
+              indicator: UnderlineTabIndicator(
+                // color for indicator (underline)
+                borderSide: BorderSide(
+                  color: AppColors.main,
+                ),
+              ),
+            ),
           ),
           home: const SplashScreen(),
           routes: {
