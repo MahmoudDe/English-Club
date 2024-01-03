@@ -1,4 +1,4 @@
-import 'package:bdh/data/dummy_data.dart';
+import 'package:bdh/data/data.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:bdh/widgets/title_widget.dart';

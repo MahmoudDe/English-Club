@@ -1,7 +1,11 @@
+// ignore_for_file: avoid_print
+
+import 'package:bdh/data/data.dart';
+import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/title_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/accounts_screen/slides_for_tabs_widget.dart';
 import '../widgets/accounts_screen/tabs_info_widget.dart';
@@ -19,9 +23,25 @@ class _AccountScreenState extends State<AccountScreen>
   late TabController? controller;
   List students = [];
 
+  void getData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<Apis>(context, listen: false).getAllAdmins();
+      setState(() {
+        dataClass.admins = Apis.allAdmins;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     controller = TabController(length: 2, vsync: this);
+    getData();
     super.initState();
   }
 
@@ -56,24 +76,25 @@ class _AccountScreenState extends State<AccountScreen>
               backgroundColor: AppColors.main,
               elevation: 0,
             ),
-            body: Column(
-              children: [
-                TitleWidget(
-                  mediaQuery: mediaQuery,
-                  title: 'Accounts',
-                  icon: Icon(
-                    Icons.person,
-                    color: AppColors.whiteLight,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TitleWidget(
+                    mediaQuery: mediaQuery,
+                    title: 'Accounts',
+                    icon: Icon(
+                      Icons.person,
+                      color: AppColors.whiteLight,
+                    ),
                   ),
-                ),
-                TabsTeamInfo(controller: controller, mediaQuery: mediaQuery),
-                SlidesForTabs(
-                  mediaQuery: mediaQuery,
-                  controller: controller,
-                  admins: [],
-                  students: [],
-                ),
-              ],
+                  TabsTeamInfo(controller: controller, mediaQuery: mediaQuery),
+                  SlidesForTabs(
+                    mediaQuery: mediaQuery,
+                    controller: controller,
+                    students: students,
+                  ),
+                ],
+              ),
             ),
           );
   }

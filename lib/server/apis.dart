@@ -7,6 +7,9 @@ import 'dio_settings.dart';
 class Apis with ChangeNotifier {
   // Add the routes
   bool isLoggedIn = false;
+  static List<dynamic> allAdmins = [];
+  static String message = '';
+  static Map<String, dynamic> createAdmin = {};
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -66,6 +69,80 @@ class Apis with ChangeNotifier {
       print('................................');
     } on DioError catch (e) {
       print(e.response!.data['message']);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getAllAdmins() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = await storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/admins/",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      allAdmins = response.data;
+      notifyListeners();
+      print(allAdmins);
+      print('................................get all admins server response');
+      print(response.data);
+      print('................................');
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteAdmin(String id) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = await storage.getString('token');
+      Dio.Response response = await dio().delete(
+        "/admin/admins/$id",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................get all admins server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      getAllAdmins();
+      notifyListeners();
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addNewAdmin(String adminName) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = await storage.getString('token');
+      Dio.Response response = await dio().post(
+        "/admin/admins/",
+        data: {'name': adminName},
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................create admin server response');
+      print(response.data);
+      print('................................');
+      createAdmin = response.data;
+      getAllAdmins();
+      notifyListeners();
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
     } catch (e) {
       print(e);
     }
