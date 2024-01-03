@@ -1,6 +1,5 @@
 import 'package:bdh/data/data.dart';
 import 'package:bdh/styles/app_colors.dart';
-import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bdh/widgets/search/search_widgets.dart';
@@ -48,11 +47,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: const MainDrawer(),
-      appBar: AppBar(
-        backgroundColor: AppColors.main,
-        elevation: 0,
-      ),
       body: Stack(children: [
         Column(children: [
           TitleWidget(

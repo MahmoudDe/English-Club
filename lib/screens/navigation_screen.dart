@@ -1,9 +1,14 @@
+import 'package:bdh/screens/start_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/constants.dart';
+import '../server/apis.dart';
+import '../widgets/app_bar_widget.dart';
 
 class NavigationScreen extends StatefulWidget {
   static const String routeName = '/navigation-screen';
@@ -13,16 +18,43 @@ class NavigationScreen extends StatefulWidget {
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-class _NavigationScreenState extends State<NavigationScreen> {
+class _NavigationScreenState extends State<NavigationScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 500,
+      ),
+    );
+    super.initState();
+  }
+
   final controller = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: appBarWidget(
+          animationController: _animationController,
+          mediaQuery: mediaQuery,
+          onPressed: () async {
+            await Provider.of<Apis>(context, listen: false).logout();
+            // call the logout function
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.remove('token');
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                StartScreen.routName, (Route<dynamic> route) => false);
+          }).customAppBar(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.main,
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           boxShadow: [
             BoxShadow(
               color: Colors.white.withOpacity(0.1),

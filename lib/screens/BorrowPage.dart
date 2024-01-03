@@ -1,5 +1,4 @@
 import 'package:bdh/styles/app_colors.dart';
-import 'package:bdh/widgets/drawer/main_drawer.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,10 +87,6 @@ class _BorrowScreenState extends State<BorrowScreen> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: const MainDrawer(),
-      appBar: AppBar(
-        backgroundColor: AppColors.main,
-      ),
       body: Column(
         children: [
           TitleWidget(

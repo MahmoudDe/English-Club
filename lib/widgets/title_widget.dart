@@ -20,12 +20,14 @@ class TitleWidget extends StatelessWidget {
           horizontal: mediaQuery.width / 20, vertical: mediaQuery.height / 200),
       decoration: BoxDecoration(color: AppColors.mainLight),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: mediaQuery.width / 18,
+                fontSize: mediaQuery.width / 25,
                 color: AppColors.whiteLight,
                 fontWeight: FontWeight.bold),
           ),

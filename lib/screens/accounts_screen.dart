@@ -50,10 +50,6 @@ class _AccountScreenState extends State<AccountScreen>
     final mediaQuery = MediaQuery.of(context).size;
     return _isLoading
         ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppColors.main,
-              elevation: 0,
-            ),
             body: Column(
               children: [
                 TitleWidget(
@@ -72,10 +68,6 @@ class _AccountScreenState extends State<AccountScreen>
             ),
           )
         : Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppColors.main,
-              elevation: 0,
-            ),
             body: SingleChildScrollView(
               child: Column(
                 children: [

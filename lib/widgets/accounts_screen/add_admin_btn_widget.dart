@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
