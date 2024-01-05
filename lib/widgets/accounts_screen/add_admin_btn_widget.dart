@@ -2,8 +2,8 @@
 
 import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 
 import '../../styles/app_colors.dart';
 import '../form_widget copy.dart';
@@ -27,23 +27,11 @@ class _AddAdminBtnWidgetState extends State<AddAdminBtnWidget> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Row(
-              children: [
-                Text(
-                  'Add new Admin',
-                  style: TextStyle(
-                      color: AppColors.main, fontWeight: FontWeight.bold),
-                ),
-                Icon(
-                  Iconsax.security_user,
-                  color: AppColors.main,
-                )
-              ],
-            ),
-            content: Form(
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.custom,
+            title: 'Add new Admin',
+            widget: Form(
               key: formKey,
               child: FormWidget(
                 textInputType: TextInputType.text,
@@ -69,74 +57,67 @@ class _AddAdminBtnWidgetState extends State<AddAdminBtnWidget> {
                 },
               ),
             ),
-            actions: [
-              ElevatedButton(
-                  onPressed: () async {
-                    if (formKey.currentState!.validate()) {
-                      await Provider.of<Apis>(context, listen: false)
-                          .addNewAdmin(newAdminName);
-                      Navigator.of(context).pop();
-                      showDialog(
+            confirmBtnText: 'Create',
+            confirmBtnColor: Colors.green,
+            onConfirmBtnTap: () async {
+              if (formKey.currentState!.validate()) {
+                await Provider.of<Apis>(context, listen: false)
+                    .addNewAdmin(newAdminName);
+                Navigator.of(context).pop();
+                Apis.statusResponse == 200
+                    ? QuickAlert.show(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Admin'),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    'user_name',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    width: widget.mediaQuery.width / 10,
-                                  ),
-                                  Text(
-                                    Apis.createAdmin['data']['account']
-                                        ['username'],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: widget.mediaQuery.height / 50,
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Password',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    width: widget.mediaQuery.width / 10,
-                                  ),
-                                  Text(
-                                    Apis.createAdmin['data']['account']
-                                        ['password'],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            TextButton(
-                                onPressed: widget.onPressed,
-                                child: const Text('Cancel'))
+                        type: QuickAlertType.success,
+                        confirmBtnText: 'Cancel',
+                        onConfirmBtnTap: widget.onPressed,
+                        widget: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'user_name',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: widget.mediaQuery.width / 10,
+                                ),
+                                Text(
+                                  Apis.createAdmin['data']['account']
+                                      ['username'],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: widget.mediaQuery.height / 50,
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Password',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: widget.mediaQuery.width / 10,
+                                ),
+                                Text(
+                                  Apis.createAdmin['data']['account']
+                                      ['password'],
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text(
-                    'Create',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ))
-            ],
-          ),
-        );
+                        ))
+                    : QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        text: Apis.message,
+                        confirmBtnText: 'Cancel',
+                        confirmBtnColor: Colors.red,
+                        onConfirmBtnTap: () {
+                          Navigator.pop(context);
+                        });
+              }
+            });
       },
       style: ElevatedButton.styleFrom(backgroundColor: AppColors.main),
       label: const Text('Add admin'),

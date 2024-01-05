@@ -21,7 +21,6 @@ class _AccountScreenState extends State<AccountScreen>
     with TickerProviderStateMixin {
   bool _isLoading = false;
   late TabController? controller;
-  List students = [];
 
   void getData() async {
     setState(() {
@@ -29,8 +28,11 @@ class _AccountScreenState extends State<AccountScreen>
     });
     try {
       await Provider.of<Apis>(context, listen: false).getAllAdmins();
+      // ignore: use_build_context_synchronously
+      await Provider.of<Apis>(context, listen: false).getAllStudents();
       setState(() {
         dataClass.admins = Apis.allAdmins;
+        dataClass.students = Apis.allStudents['data'];
         _isLoading = false;
       });
     } catch (e) {
@@ -83,7 +85,6 @@ class _AccountScreenState extends State<AccountScreen>
                   SlidesForTabs(
                     mediaQuery: mediaQuery,
                     controller: controller,
-                    students: students,
                   ),
                 ],
               ),

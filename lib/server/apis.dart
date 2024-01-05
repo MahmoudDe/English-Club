@@ -9,7 +9,9 @@ class Apis with ChangeNotifier {
   bool isLoggedIn = false;
   static List<dynamic> allAdmins = [];
   static String message = '';
+  static int statusResponse = 0;
   static Map<String, dynamic> createAdmin = {};
+  static Map<String, dynamic> allStudents = {};
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -111,6 +113,7 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       message = response.data['message'];
+      statusResponse = response.statusCode!;
       getAllAdmins();
       notifyListeners();
     } on DioError catch (e) {
@@ -138,6 +141,30 @@ class Apis with ChangeNotifier {
       print('................................');
       createAdmin = response.data;
       getAllAdmins();
+      notifyListeners();
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getAllStudents() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = await storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/grades",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................create admin server response');
+      print(response.data);
+      print('................................');
+      allStudents = response.data;
       notifyListeners();
     } on DioError catch (e) {
       print(e.response!.data['message']);

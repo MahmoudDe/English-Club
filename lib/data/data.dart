@@ -16,4 +16,5 @@ final List<String> names = [
 
 class dataClass {
   static List admins = [];
+  static List students = [];
 }

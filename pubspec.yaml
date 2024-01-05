@@ -23,6 +23,7 @@ dependencies:
   url_launcher: ^6.2.2
   lottie: ^2.7.0
   animated_text_kit: ^4.2.2
+  quickalert: ^1.0.2
 
 dev_dependencies:
   flutter_test:

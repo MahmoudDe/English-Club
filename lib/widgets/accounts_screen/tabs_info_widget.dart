@@ -21,7 +21,7 @@ class _TabsTeamInfoState extends State<TabsTeamInfo> {
     return Container(
       margin: EdgeInsets.symmetric(
           horizontal: widget.mediaQuery.width / 30,
-          vertical: widget.mediaQuery.height / 40),
+          vertical: widget.mediaQuery.height / 100),
       height: widget.mediaQuery.height / 20,
       width: double.infinity,
       decoration: BoxDecoration(
