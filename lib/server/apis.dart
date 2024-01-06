@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, deprecated_member_use
+
 import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +61,7 @@ class Apis with ChangeNotifier {
   Future<void> logout() async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
-      String? myToken = await storage.getString('token');
+      String? myToken = storage.getString('token');
       Dio.Response response = await dio().post(
         "/auth/logout",
         options: Dio.Options(
@@ -79,7 +81,7 @@ class Apis with ChangeNotifier {
   Future<void> getAllAdmins() async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
-      String? myToken = await storage.getString('token');
+      String? myToken = storage.getString('token');
       Dio.Response response = await dio().get(
         "/admin/admins/",
         options: Dio.Options(
@@ -102,7 +104,7 @@ class Apis with ChangeNotifier {
   Future<void> deleteAdmin(String id) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
-      String? myToken = await storage.getString('token');
+      String? myToken = storage.getString('token');
       Dio.Response response = await dio().delete(
         "/admin/admins/$id",
         options: Dio.Options(
@@ -128,7 +130,7 @@ class Apis with ChangeNotifier {
   Future<void> addNewAdmin(String adminName) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
-      String? myToken = await storage.getString('token');
+      String? myToken = storage.getString('token');
       Dio.Response response = await dio().post(
         "/admin/admins/",
         data: {'name': adminName},
@@ -140,6 +142,7 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       createAdmin = response.data;
+      statusResponse = response.statusCode!;
       getAllAdmins();
       notifyListeners();
     } on DioError catch (e) {
@@ -154,7 +157,7 @@ class Apis with ChangeNotifier {
   Future<void> getAllStudents() async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
-      String? myToken = await storage.getString('token');
+      String? myToken = storage.getString('token');
       Dio.Response response = await dio().get(
         "/admin/grades",
         options: Dio.Options(

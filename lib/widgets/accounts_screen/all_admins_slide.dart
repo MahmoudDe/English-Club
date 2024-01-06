@@ -48,7 +48,7 @@ class _AllAdminsSlideState extends State<AllAdminsSlide> {
                       onPressed: () async {
                         QuickAlert.show(
                           context: context,
-                          type: QuickAlertType.info,
+                          type: QuickAlertType.warning,
                           confirmBtnText: 'delete',
                           cancelBtnText: 'No',
                           confirmBtnColor: Colors.red,
