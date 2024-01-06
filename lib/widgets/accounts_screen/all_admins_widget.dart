@@ -9,15 +9,15 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
-class AllAdminsSlide extends StatefulWidget {
-  const AllAdminsSlide({super.key, required this.mediaQuery});
+class AllAdminsWidget extends StatefulWidget {
+  const AllAdminsWidget({super.key, required this.mediaQuery});
   final Size mediaQuery;
 
   @override
-  State<AllAdminsSlide> createState() => _AllAdminsSlideState();
+  State<AllAdminsWidget> createState() => _AllAdminsSlideState();
 }
 
-class _AllAdminsSlideState extends State<AllAdminsSlide> {
+class _AllAdminsSlideState extends State<AllAdminsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -93,10 +93,6 @@ class _NavigationScreenState extends State<NavigationScreen>
                 text: 'Search',
               ),
               GButton(
-                icon: Iconsax.book_1,
-                text: 'Borrow',
-              ),
-              GButton(
                 icon: Iconsax.security_user,
                 text: 'Accounts',
               ),
@@ -115,7 +111,6 @@ class _NavigationScreenState extends State<NavigationScreen>
             Constants.screens[0],
             Constants.screens[1],
             Constants.screens[2],
-            Constants.screens[3],
           ]),
     );
   }

@@ -3,12 +3,11 @@
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/accounts_screen/all_admins_widget.dart';
+import 'package:bdh/widgets/all_student_screen/empty_data_widget.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../widgets/accounts_screen/slides_for_tabs_widget.dart';
-import '../widgets/accounts_screen/tabs_info_widget.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -28,11 +27,8 @@ class _AccountScreenState extends State<AccountScreen>
     });
     try {
       await Provider.of<Apis>(context, listen: false).getAllAdmins();
-      // ignore: use_build_context_synchronously
-      await Provider.of<Apis>(context, listen: false).getAllStudents();
       setState(() {
         dataClass.admins = Apis.allAdmins;
-        dataClass.students = Apis.allStudents['data'];
         _isLoading = false;
       });
     } catch (e) {
@@ -70,25 +66,21 @@ class _AccountScreenState extends State<AccountScreen>
             ),
           )
         : Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TitleWidget(
-                    mediaQuery: mediaQuery,
-                    title: 'Accounts',
-                    icon: Icon(
-                      Icons.person,
-                      color: AppColors.whiteLight,
-                    ),
+            body: dataClass.admins.isEmpty
+                ? EmptyDataWidget(mediaQuery: mediaQuery)
+                : Column(
+                    children: [
+                      TitleWidget(
+                        mediaQuery: mediaQuery,
+                        title: 'Accounts',
+                        icon: Icon(
+                          Icons.person,
+                          color: AppColors.whiteLight,
+                        ),
+                      ),
+                      Expanded(child: AllAdminsWidget(mediaQuery: mediaQuery)),
+                    ],
                   ),
-                  TabsTeamInfo(controller: controller, mediaQuery: mediaQuery),
-                  SlidesForTabs(
-                    mediaQuery: mediaQuery,
-                    controller: controller,
-                  ),
-                ],
-              ),
-            ),
           );
   }
 }

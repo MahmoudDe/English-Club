@@ -77,6 +77,23 @@ class appBarWidget {
                   ),
                 ),
                 PopupMenuItem<String>(
+                  value: 'Add_students',
+                  child: TextButton.icon(
+                    label: Text(
+                      'Add students',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: AppColors.main),
+                    ),
+                    onPressed: () {
+                      print('hello');
+                    },
+                    icon: Icon(
+                      Iconsax.user_cirlce_add,
+                      color: AppColors.main,
+                    ),
+                  ),
+                ),
+                PopupMenuItem<String>(
                   value: 'logout',
                   child: TextButton.icon(
                     label: Text(

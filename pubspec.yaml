@@ -24,6 +24,7 @@ dependencies:
   lottie: ^2.7.0
   animated_text_kit: ^4.2.2
   quickalert: ^1.0.2
+  flutter_slidable: ^3.0.1
 
 dev_dependencies:
   flutter_test:
