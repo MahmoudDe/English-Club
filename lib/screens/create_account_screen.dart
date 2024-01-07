@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../background/BackgroundPaint.dart';
 import '../widgets/create_account_screen/form_widget.dart';
 
 // import 'package:provider/provider.dart';
@@ -27,13 +26,6 @@ class _createAccountScreenState extends State<CreateAccountScreen> {
       ),
       body: Stack(
         children: [
-          CustomPaint(
-            size: Size(
-                mediaQuery.width,
-                (mediaQuery.width * 0.5833333333333334)
-                    .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automaticallypainter: AppBarCustom(),
-            painter: AppBarCustom(),
-          ),
           FormCreatAccountWidget(mediaQuery: mediaQuery),
         ],
       ),

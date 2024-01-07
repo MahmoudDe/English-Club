@@ -8,6 +8,7 @@ import 'package:bdh/widgets/all_student_screen/studnet_widget.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class AllStudentsScreen extends StatefulWidget {
   const AllStudentsScreen({
@@ -18,11 +19,13 @@ class AllStudentsScreen extends StatefulWidget {
   State<AllStudentsScreen> createState() => _AllStudentsScreenState();
 }
 
-class _AllStudentsScreenState extends State<AllStudentsScreen> {
+class _AllStudentsScreenState extends State<AllStudentsScreen>
+    with TickerProviderStateMixin {
   List<String> allGrades = [];
   List<String> allClassesInGrade = [];
   List filterStudents = [];
   List searchStudentList = [];
+  late AnimationController? controllerAnimation;
 
   late String selectedGradeFilterValue;
   late String selectedClassFilterValue;
@@ -53,6 +56,9 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
 
   @override
   void initState() {
+    controllerAnimation = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+
     getData();
     super.initState();
   }
@@ -60,6 +66,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    controllerAnimation!.dispose();
     super.dispose();
   }
 
@@ -144,10 +151,17 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
                               mediaQuery: mediaQuery,
                               menu: allClassesInGrade,
                               onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedClassFilterValue = newValue!;
-                                  filterData();
-                                });
+                                controllerAnimation!.reverse().whenComplete(
+                                  () {
+                                    setState(
+                                      () {
+                                        selectedClassFilterValue = newValue!;
+                                        filterData();
+                                      },
+                                    );
+                                    controllerAnimation!.forward();
+                                  },
+                                );
                               },
                               value: selectedClassFilterValue,
                               filterTitle: 'Class',
@@ -159,10 +173,15 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
                               mediaQuery: mediaQuery,
                               menu: allGrades,
                               onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedGradeFilterValue = newValue!;
-                                  changeClasses();
-                                  filterData();
+                                controllerAnimation!.reverse().whenComplete(() {
+                                  setState(
+                                    () {
+                                      selectedGradeFilterValue = newValue!;
+                                      changeClasses();
+                                      filterData();
+                                    },
+                                  );
+                                  controllerAnimation!.forward();
                                 });
                               },
                               value: selectedGradeFilterValue,
@@ -185,7 +204,15 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
                                 mediaQuery: mediaQuery,
                                 searchStudentList: searchStudentList,
                                 index: index)),
-                      ),
+                      )
+                          .animate(
+                            controller: controllerAnimation,
+                          )
+                          .fade(
+                              duration: const Duration(
+                                milliseconds: 200,
+                              ),
+                              curve: Curves.easeIn),
                     ],
                   ),
           );

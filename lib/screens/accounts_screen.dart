@@ -8,6 +8,7 @@ import 'package:bdh/widgets/all_student_screen/empty_data_widget.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -78,7 +79,13 @@ class _AccountScreenState extends State<AccountScreen>
                           color: AppColors.whiteLight,
                         ),
                       ),
-                      Expanded(child: AllAdminsWidget(mediaQuery: mediaQuery)),
+                      Expanded(child: AllAdminsWidget(mediaQuery: mediaQuery))
+                          .animate()
+                          .slide(
+                              begin: const Offset(-1, 0),
+                              end: const Offset(0, 0),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInOutCirc),
                     ],
                   ),
           );
