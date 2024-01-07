@@ -4,10 +4,9 @@ import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/all_student_screen/empty_data_widget.dart';
 import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:bdh/widgets/all_student_screen/search_widgets.dart';
+import 'package:bdh/widgets/all_student_screen/studnet_widget.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class AllStudentsScreen extends StatefulWidget {
@@ -180,79 +179,12 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
                           }),
                       Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: searchStudentList.length,
-                          itemBuilder: (context, index) => Card(
-                            child: Slidable(
-                              key: const ValueKey(0),
-                              startActionPane: ActionPane(
-                                extentRatio: 1 / 2,
-                                dragDismissible: false,
-                                motion: const ScrollMotion(),
-                                dismissible:
-                                    DismissiblePane(onDismissed: () {}),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) => print('hello'),
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: 'Delete',
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (context) => print('hello'),
-                                    backgroundColor: Colors.blueAccent,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.person_off,
-                                    label: 'disActive',
-                                  ),
-                                ],
-                              ),
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) => print('hello'),
-                                    backgroundColor: Colors.brown,
-                                    foregroundColor: Colors.white,
-                                    icon: Iconsax.scan,
-                                    label: 'borrow book',
-                                  ),
-                                ],
-                              ),
-                              child: ExpansionTile(
-                                leading: const CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.orange,
-                                  child: CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                        'assets/images/bdh_logo.jpeg'),
-                                    backgroundColor: Colors.transparent,
-                                    foregroundColor: Colors.transparent,
-                                    radius: 23,
-                                  ),
-                                ),
-                                title: Text(
-                                  searchStudentList[index]['name'],
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                children: [
-                                  ListTile(
-                                    title: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: mediaQuery.width / 5,
-                                          bottom: mediaQuery.height / 80),
-                                      child: const Text(
-                                        '',
-                                        style: TextStyle(fontFamily: 'Avenir'),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                            shrinkWrap: true,
+                            itemCount: searchStudentList.length,
+                            itemBuilder: (context, index) => StudentWidget(
+                                mediaQuery: mediaQuery,
+                                searchStudentList: searchStudentList,
+                                index: index)),
                       ),
                     ],
                   ),

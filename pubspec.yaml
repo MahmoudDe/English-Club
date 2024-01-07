@@ -25,6 +25,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   quickalert: ^1.0.2
   flutter_slidable: ^3.0.1
+  flutter_animate: ^4.3.0
 
 dev_dependencies:
   flutter_test:

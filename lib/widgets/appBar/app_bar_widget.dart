@@ -1,4 +1,6 @@
+import 'package:bdh/screens/add_students_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/appBar/app_bar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -25,24 +27,7 @@ class appBarWidget {
   PreferredSizeWidget? customAppBar() {
     return AppBar(
       backgroundColor: AppColors.main,
-      title: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Center(
-              child: Icon(
-            Iconsax.security_user,
-            color: AppColors.main,
-          )),
-        ),
-        title: const Text(
-          'Admin',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          'admin',
-          style: TextStyle(color: AppColors.whiteLight),
-        ),
-      ),
+      title: const AppBarContent(),
       actions: [
         Padding(
           padding: EdgeInsets.symmetric(
@@ -85,7 +70,11 @@ class appBarWidget {
                           fontWeight: FontWeight.bold, color: AppColors.main),
                     ),
                     onPressed: () {
-                      print('hello');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AddStudentsScreen(),
+                        ),
+                      );
                     },
                     icon: Icon(
                       Iconsax.user_cirlce_add,

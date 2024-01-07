@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/constants.dart';
 import '../server/apis.dart';
-import '../widgets/app_bar_widget.dart';
+import '../widgets/appBar/app_bar_widget.dart';
 
 class NavigationScreen extends StatefulWidget {
   static const String routeName = '/navigation-screen';
