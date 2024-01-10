@@ -17,5 +17,6 @@ final List<String> names = [
 class dataClass {
   static List admins = [];
   static List students = [];
+  static List grades = [];
   static String urlHost = 'http://127.0.0.1:8000/';
 }

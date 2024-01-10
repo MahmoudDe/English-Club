@@ -13,7 +13,7 @@ class FilterWidget extends StatelessWidget {
   final Size mediaQuery;
   final String? value;
   final void Function(String?)? onChanged;
-  final List<String> menu;
+  final List<dynamic> menu;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class FilterWidget extends StatelessWidget {
               value: value,
               onChanged: onChanged,
               items: menu.map(
-                (String value) {
+                (value) {
                   return DropdownMenuItem<String>(
                       value: value,
                       child: Text(

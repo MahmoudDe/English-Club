@@ -53,6 +53,8 @@ class appBarWidget {
                           fontWeight: FontWeight.bold, color: AppColors.main),
                     ),
                     onPressed: () {
+                      Navigator.pop(context);
+
                       print('hello');
                     },
                     icon: Icon(
@@ -70,6 +72,7 @@ class appBarWidget {
                           fontWeight: FontWeight.bold, color: AppColors.main),
                     ),
                     onPressed: () {
+                      Navigator.pop(context);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const AddStudentsScreen(),

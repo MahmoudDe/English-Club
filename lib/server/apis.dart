@@ -1,10 +1,15 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dio_settings.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart' as Dio;
 
 class Apis with ChangeNotifier {
   // Add the routes
@@ -14,6 +19,7 @@ class Apis with ChangeNotifier {
   static int statusResponse = 0;
   static Map<String, dynamic> createAdmin = {};
   static Map<String, dynamic> allStudents = {};
+  static Map<String, dynamic> allGrades = {};
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -159,12 +165,12 @@ class Apis with ChangeNotifier {
     try {
       String? myToken = storage.getString('token');
       Dio.Response response = await dio().get(
-        "/admin/grades",
+        "/admin/students",
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),
       );
-      print('................................create admin server response');
+      print('................................all students server response');
       print(response.data);
       print('................................');
       allStudents = response.data;
@@ -175,6 +181,87 @@ class Apis with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> getAllGrades() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/grades",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................all grades server response');
+      print(response.data);
+      print('................................');
+      allGrades = response.data;
+      notifyListeners();
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadData(File exclFile, int gradeId) async {
+    print(exclFile.path);
+
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    var tempDir = await getApplicationDocumentsDirectory();
+    String fullPath = "${tempDir.path}/response2.xlsx";
+    print('full path $fullPath');
+    try {
+      String? myToken = await storage.getString('token');
+      String fileName = exclFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "file": MultipartFile.fromFileSync(
+          exclFile.path,
+          filename: fileName,
+        ),
+        "grade_id": gradeId,
+      });
+      Dio.Response response = await dio().post(
+        "/admin/students/importFromExcel",
+        data: formData,
+        onReceiveProgress: showDownloadProgress,
+        options: Dio.Options(
+          responseType: ResponseType.bytes,
+          headers: {'Authorization': 'Bearer $myToken'},
+          validateStatus: (status) {
+            return status! < 300;
+          },
+        ),
+      );
+      print(
+          '............................................ excil file status code');
+      print(response.statusCode);
+      print(response.data);
+      // final directory = await getDownloadsDirectory();
+      String filePath = '/storage/emulated/0/Download/StudentsAccounts.xlsx';
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
+      print('File downloaded to: $filePath');
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = e.response!.statusCode!;
+      print('................................error upload data info');
+      message = json.decode(String.fromCharCodes(e.response!.data!))['message'];
+
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void showDownloadProgress(received, total) {
+    if (total != -1) {
+      print((received / total * 100).toStringAsFixed(0) + "%");
     }
   }
 }
