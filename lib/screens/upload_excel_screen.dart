@@ -195,9 +195,11 @@ class _UploadExcelScreenState extends State<UploadExcelScreen> {
                   uploadDta();
                   if (isUploading) {
                     QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.loading,
-                        text: 'Uploading data...');
+                      context: context,
+                      type: QuickAlertType.loading,
+                      text: 'Uploading data...',
+                      barrierDismissible: false,
+                    );
                   }
                 }
               },

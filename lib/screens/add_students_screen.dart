@@ -1,4 +1,5 @@
 import 'package:bdh/data/data.dart';
+import 'package:bdh/screens/create_account_screen.dart';
 import 'package:bdh/screens/upload_excel_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/add_students_screen/button_widget.dart';
@@ -129,7 +130,11 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   title: 'Add students manually',
                   mediaQuery: mediaQuery,
                   onTap: () {
-                    print(dataClass.grades);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CreateAccountScreen(),
+                      ),
+                    );
                   },
                   icon: Icon(
                     Iconsax.user_cirlce_add,

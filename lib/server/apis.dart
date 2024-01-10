@@ -252,7 +252,6 @@ class Apis with ChangeNotifier {
       statusResponse = e.response!.statusCode!;
       print('................................error upload data info');
       message = json.decode(String.fromCharCodes(e.response!.data!))['message'];
-
       notifyListeners();
     } catch (e) {
       print(e);
