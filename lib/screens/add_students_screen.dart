@@ -1,5 +1,5 @@
 import 'package:bdh/data/data.dart';
-import 'package:bdh/screens/create_account_screen.dart';
+import 'package:bdh/screens/create_student_account_screen.dart';
 import 'package:bdh/screens/upload_excel_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/add_students_screen/button_widget.dart';
@@ -21,7 +21,7 @@ class AddStudentsScreen extends StatefulWidget {
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
   bool _isLoading = false;
-  List gradesName = [];
+  // List gradesName = [];
   String selectedGradeFilterValue = '';
   int selectedGradeId = 0;
 
@@ -37,9 +37,9 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
       setState(() {
         for (int i = 0; i < dataClass.grades.length; i++) {
-          gradesName.add(dataClass.grades[i]['name']);
+          dataClass.gradesName.add(dataClass.grades[i]['name']);
         }
-        selectedGradeFilterValue = gradesName[0];
+        selectedGradeFilterValue = dataClass.gradesName[0];
         _isLoading = false;
       });
     } catch (e) {
@@ -132,7 +132,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const CreateAccountScreen(),
+                        builder: (context) =>
+                            const CreateStudentAccountScreen(),
                       ),
                     );
                   },

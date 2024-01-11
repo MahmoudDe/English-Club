@@ -1,8 +1,12 @@
 // import 'package:bdh/data/data.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
 // ignore: must_be_immutable
@@ -52,6 +56,28 @@ class _StudentWidgetState extends State<StudentWidget> {
     );
   }
 
+  Future<void> deleteStudent() async {
+    try {
+      await Provider.of<Apis>(context, listen: false).deleteStudent(
+          widget.searchStudentList[widget.index]['id'].toString());
+      if (Apis.statusResponse == 200) {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            text: Apis.message,
+            confirmBtnText: 'ok');
+      } else {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: Apis.message,
+            confirmBtnText: 'cancel');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -64,7 +90,9 @@ class _StudentWidgetState extends State<StudentWidget> {
           dismissible: DismissiblePane(onDismissed: () {}),
           children: [
             SlidableAction(
-              onPressed: (context) => print('hello'),
+              onPressed: (context) {
+                deleteStudent();
+              },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
               icon: Icons.delete,
