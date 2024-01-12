@@ -201,6 +201,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                             shrinkWrap: true,
                             itemCount: searchStudentList.length,
                             itemBuilder: (context, index) => StudentWidget(
+                                getData: filterData,
                                 mediaQuery: mediaQuery,
                                 searchStudentList: searchStudentList,
                                 index: index)),

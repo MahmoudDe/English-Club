@@ -1,6 +1,7 @@
 // import 'package:bdh/data/data.dart';
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -11,12 +12,13 @@ import 'package:quickalert/quickalert.dart';
 
 // ignore: must_be_immutable
 class StudentWidget extends StatefulWidget {
-  StudentWidget({
-    super.key,
-    required this.mediaQuery,
-    required this.searchStudentList,
-    required this.index,
-  });
+  StudentWidget(
+      {super.key,
+      required this.mediaQuery,
+      required this.searchStudentList,
+      required this.index,
+      required this.getData});
+  Function getData;
   Size mediaQuery;
   List searchStudentList;
   int index;
@@ -62,10 +64,19 @@ class _StudentWidgetState extends State<StudentWidget> {
           widget.searchStudentList[widget.index]['id'].toString());
       if (Apis.statusResponse == 200) {
         QuickAlert.show(
-            context: context,
-            type: QuickAlertType.success,
-            text: Apis.message,
-            confirmBtnText: 'ok');
+          context: context,
+          type: QuickAlertType.success,
+          text: Apis.message,
+          confirmBtnText: 'ok',
+          onConfirmBtnTap: () => setState(
+            () {
+              dataClass.students.clear();
+              dataClass.students = Apis.allStudents['data'];
+              widget.getData();
+              Navigator.pop(context);
+            },
+          ),
+        );
       } else {
         QuickAlert.show(
             context: context,
@@ -127,7 +138,7 @@ class _StudentWidgetState extends State<StudentWidget> {
             backgroundColor: Colors.orange,
             child: CircleAvatar(
               backgroundImage: NetworkImage(
-                '${widget.searchStudentList[widget.index]['profile_picture']}',
+                '${dataClass.urlHost}${widget.searchStudentList[widget.index]['profile_picture']}',
               ),
               backgroundColor: Colors.transparent,
               foregroundColor: Colors.transparent,

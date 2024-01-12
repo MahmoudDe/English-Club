@@ -13,6 +13,7 @@ import 'package:dio/dio.dart' as Dio;
 
 class Apis with ChangeNotifier {
   // Add the routes
+
   bool isLoggedIn = false;
   static List<dynamic> allAdmins = [];
   static String message = '';
@@ -278,8 +279,8 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       message = response.data['message'];
+      getAllStudents();
       statusResponse = 200;
-      getAllAdmins();
       notifyListeners();
     } on DioError catch (e) {
       statusResponse = 400;
