@@ -33,7 +33,7 @@ class FormWidget extends StatelessWidget {
         ? Stack(
             children: [
               Container(
-                height: mediaQuery.height / 16,
+                height: mediaQuery.height / 17,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -89,7 +89,7 @@ class FormWidget extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                height: mediaQuery.height / 16,
+                height: mediaQuery.height / 17,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bdh/data/data.dart';
 import 'package:bdh/screens/create_student_account_screen.dart';
 import 'package:bdh/screens/upload_excel_screen.dart';
@@ -31,8 +33,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     });
     try {
       await Provider.of<Apis>(context, listen: false).getAllGrades();
+      await Provider.of<Apis>(context, listen: false).getAllSections();
       setState(() {
         dataClass.grades = Apis.allGrades['data'];
+        dataClass.sections = Apis.sectionsData;
       });
 
       setState(() {

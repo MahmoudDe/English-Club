@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bdh/data/data.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
@@ -19,8 +20,10 @@ class Apis with ChangeNotifier {
   static String message = '';
   static int statusResponse = 0;
   static Map<String, dynamic> createAdmin = {};
+  static Map<String, dynamic> createStudent = {};
   static Map<String, dynamic> allStudents = {};
   static Map<String, dynamic> allGrades = {};
+  static List<dynamic> sectionsData = [];
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -199,6 +202,10 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       allGrades = response.data;
+      dataClass.customList.clear();
+      dataClass.grades.clear();
+      dataClass.gradesName.clear();
+      dataClass.sections.clear();
       notifyListeners();
     } on DioError catch (e) {
       print(e.response!.data['message']);
@@ -280,6 +287,77 @@ class Apis with ChangeNotifier {
       print('................................');
       message = response.data['message'];
       getAllStudents();
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getAllSections() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/sections",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................get all sections server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      sectionsData = response.data['data'];
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> createStudentAccount({
+    required String name,
+    required int g_class_id,
+    required String score,
+    required String golden_coins,
+    required String silver_coins,
+    required String bronze_coins,
+    required List progresses,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().post(
+        "/admin/students",
+        data: {
+          "name": name,
+          "g_class_id": g_class_id,
+          "score": score,
+          "golden_coins": golden_coins,
+          "silver_coins": silver_coins,
+          "bronze_coins": bronze_coins,
+          "progresses": progresses
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................create student server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      createStudent = response.data['data']['account'];
       statusResponse = 200;
       notifyListeners();
     } on DioError catch (e) {

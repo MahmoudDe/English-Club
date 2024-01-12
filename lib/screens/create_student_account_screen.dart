@@ -21,7 +21,10 @@ class _CreateStudentAccountScreenState
   bool isLoading = false;
 
   void initState() {
-    print(dataClass.gradesName);
+    // print(dataClass.gradesName);
+    print('-------------------------------------------');
+    // print(dataClass.sections);
+    print(dataClass.sections);
     super.initState();
   }
 
