@@ -216,6 +216,31 @@ class Apis with ChangeNotifier {
     }
   }
 
+  Future<void> getAllGrades1() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/grades",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................all grades server response');
+      print(response.data);
+      print('................................');
+      allGrades = response.data;
+
+      notifyListeners();
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> uploadData(File exclFile, int gradeId) async {
     print(exclFile.path);
 
@@ -358,6 +383,188 @@ class Apis with ChangeNotifier {
       print('................................');
       message = response.data['message'];
       createStudent = response.data['data']['account'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addNewGrade({
+    required String name,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().post(
+        "/admin/grades",
+        data: {
+          "name": name,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................add grade server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addNewClass({
+    required String name,
+    required String grade_id,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().post(
+        "/admin/classes",
+        data: {
+          "name": name,
+          "grade_id": grade_id,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................add class server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteGrade({
+    required String grade_id,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().delete(
+        "/admin/grades/$grade_id",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................delete grade server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteClass({
+    required String class_Id,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().delete(
+        "/admin/classes/$class_Id",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................delete class server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> editGrade(
+      {required String grade_id, required String newName}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().put(
+        "/admin/grades/$grade_id",
+        data: {"name": newName},
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................edit grade server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> editClass({
+    required String class_Id,
+    required String grade_id,
+    required String newName,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().put(
+        "/admin/classes/$class_Id",
+        data: {
+          "name": newName,
+          "grade_id": grade_id,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................edit class server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
       statusResponse = 200;
       notifyListeners();
     } on DioError catch (e) {

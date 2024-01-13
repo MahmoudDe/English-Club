@@ -2,6 +2,7 @@
 
 import 'package:bdh/data/data.dart';
 import 'package:bdh/screens/create_student_account_screen.dart';
+import 'package:bdh/screens/manage_grades_screen.dart';
 import 'package:bdh/screens/upload_excel_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/add_students_screen/button_widget.dart';
@@ -101,7 +102,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: mediaQuery.height / 4,
+                  height: mediaQuery.height / 5,
                 ),
                 ButtonWidget(
                   title: 'Add students by excel',
@@ -143,6 +144,24 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   },
                   icon: Icon(
                     Iconsax.user_cirlce_add,
+                    color: AppColors.main,
+                  ),
+                ),
+                SizedBox(
+                  height: mediaQuery.height / 20,
+                ),
+                ButtonWidget(
+                  title: 'Manage grades and classes',
+                  mediaQuery: mediaQuery,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ManageGradesScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Iconsax.setting,
                     color: AppColors.main,
                   ),
                 ),
