@@ -150,16 +150,94 @@ class _StudentWidgetState extends State<StudentWidget> {
             style: const TextStyle(fontSize: 18),
           ),
           children: [
+            //score
             ListTile(
-              title: Padding(
-                padding: EdgeInsets.only(
-                    left: widget.mediaQuery.width / 5,
-                    bottom: widget.mediaQuery.height / 80),
-                child: const Text(
-                  '',
-                  style: TextStyle(fontFamily: 'Avenir'),
-                ),
+              title: const Text(
+                'Score',
+                style: TextStyle(
+                    fontFamily: 'Avenir', fontWeight: FontWeight.bold),
               ),
+              leading: const Icon(
+                Icons.star_rounded,
+                color: Colors.amber,
+              ),
+              trailing: Text(
+                  widget.searchStudentList[widget.index]['score'].toString()),
+            ),
+            //golden cards
+            ListTile(
+              title: const Text(
+                'Golden cards',
+                style: TextStyle(
+                    fontFamily: 'Avenir', fontWeight: FontWeight.bold),
+              ),
+              leading: Image(
+                image: const AssetImage('assets/images/golden.png'),
+                height: widget.mediaQuery.height / 30,
+              ),
+              trailing: Text(widget.searchStudentList[widget.index]
+                      ['golden_coins']
+                  .toString()),
+            ),
+            //silver cards
+            ListTile(
+              title: const Text(
+                'Silver cards',
+                style: TextStyle(
+                    fontFamily: 'Avenir', fontWeight: FontWeight.bold),
+              ),
+              leading: Image(
+                image: const AssetImage('assets/images/silver.png'),
+                height: widget.mediaQuery.height / 30,
+              ),
+              trailing: Text(widget.searchStudentList[widget.index]
+                      ['silver_coins']
+                  .toString()),
+            ),
+            //bronze cards
+            ListTile(
+              title: const Text(
+                'Bronze cards',
+                style: TextStyle(
+                    fontFamily: 'Avenir', fontWeight: FontWeight.bold),
+              ),
+              leading: Image(
+                image: AssetImage('assets/images/bronze.png'),
+                height: widget.mediaQuery.height / 30,
+              ),
+              trailing: Text(widget.searchStudentList[widget.index]
+                      ['bronze_coins']
+                  .toString()),
+            ),
+            //finished stories
+            ListTile(
+              title: const Text(
+                'Finished stories',
+                style: TextStyle(
+                    fontFamily: 'Avenir', fontWeight: FontWeight.bold),
+              ),
+              leading: const Icon(
+                Icons.book,
+                color: Colors.amber,
+              ),
+              trailing: Text(widget.searchStudentList[widget.index]
+                      ['finishedStoriesCount']
+                  .toString()),
+            ),
+            //finished levels
+            ListTile(
+              title: const Text(
+                'Finished Levels',
+                style: TextStyle(
+                    fontFamily: 'Avenir', fontWeight: FontWeight.bold),
+              ),
+              leading: const Icon(
+                Iconsax.level,
+                color: Colors.amber,
+              ),
+              trailing: Text(widget.searchStudentList[widget.index]
+                      ['finishedStoriesCount']
+                  .toString()),
             ),
           ],
         ),

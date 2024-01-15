@@ -188,6 +188,36 @@ class Apis with ChangeNotifier {
     }
   }
 
+  Future<void> getAllStudentsWithFilter(
+      String start_date, String end_date) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/students",
+        data: {
+          'start_date': start_date,
+          'end_date': end_date,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................all students with filter server response');
+      print(response.data);
+      print('................................');
+      allStudents = response.data;
+      notifyListeners();
+    } on DioError catch (e) {
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> getAllGrades() async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {

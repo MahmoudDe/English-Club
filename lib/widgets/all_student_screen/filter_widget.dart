@@ -8,9 +8,11 @@ class FilterWidget extends StatelessWidget {
       required this.value,
       required this.onChanged,
       required this.menu,
-      required this.filterTitle});
+      required this.filterTitle,
+      required this.width});
   final String filterTitle;
   final Size mediaQuery;
+  final double width;
   final String? value;
   final void Function(String?)? onChanged;
   final List<dynamic> menu;
@@ -20,7 +22,7 @@ class FilterWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: mediaQuery.width / 50),
       height: mediaQuery.height / 20,
-      width: mediaQuery.width / 2.3,
+      width: width,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.white,

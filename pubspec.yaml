@@ -41,6 +41,9 @@ flutter:
     - assets/images/
     - assets/images/auth.jpg
     - assets/images/background.png
+    - assets/images/golden.png
+    - assets/images/bronze.png
+    - assets/images/silver.png
     - assets/lotties/scroll.json
     - assets/lotties/empty.json
     - assets/images/auth1.jpg

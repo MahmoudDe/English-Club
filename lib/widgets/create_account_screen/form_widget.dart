@@ -247,6 +247,7 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
                     FilterWidget(
                       mediaQuery: widget.mediaQuery,
                       menu: allClassesInGrade,
+                      width: widget.mediaQuery.width / 2.3,
                       onChanged: (String? newValue) {
                         setState(
                           () {
@@ -276,6 +277,7 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
                     ),
                     FilterWidget(
                       mediaQuery: widget.mediaQuery,
+                      width: widget.mediaQuery.width / 2.3,
                       menu: dataClass.gradesName,
                       onChanged: (String? newValue) {
                         setState(

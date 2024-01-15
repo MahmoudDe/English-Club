@@ -4,12 +4,15 @@ import '../../styles/app_colors.dart';
 
 // ignore: must_be_immutable
 class SearchWidget extends StatelessWidget {
-  SearchWidget(
-      {super.key,
-      required this.controller,
-      required this.mediaQuery,
-      required this.onChanged});
+  SearchWidget({
+    super.key,
+    required this.controller,
+    required this.mediaQuery,
+    required this.onChanged,
+    required this.onFilterPressed,
+  });
   void Function(String)? onChanged;
+  void Function()? onFilterPressed;
   TextEditingController? controller;
   Size mediaQuery;
 
@@ -23,16 +26,22 @@ class SearchWidget extends StatelessWidget {
         onChanged: onChanged,
         cursorColor: AppColors.main,
         decoration: InputDecoration(
-          labelText: 'Search',
-          fillColor: Colors.white.withOpacity(0.5),
-          filled: true,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.main),
-            borderRadius: BorderRadius.circular(
-                30.0), // Change this to your desired radius
-          ),
-          prefixIcon: const Icon(Icons.search),
-        ),
+            labelText: 'Search',
+            fillColor: Colors.white.withOpacity(0.5),
+            filled: true,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.main),
+              borderRadius: BorderRadius.circular(
+                  30.0), // Change this to your desired radius
+            ),
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: IconButton(
+              icon: Icon(
+                Icons.filter_list_rounded,
+                color: AppColors.main,
+              ),
+              onPressed: onFilterPressed,
+            )),
       ),
     );
   }

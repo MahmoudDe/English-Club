@@ -19,7 +19,8 @@ class dataClass {
   static List students = [];
   static List grades = [];
   static List gradesName = [];
-  static String urlHost = 'http://127.0.0.1:8000/';
+  // static String urlHost = 'http://127.0.0.1:8000/';
+  static String urlHost = '';
   static List sections = [];
   static List customList = [];
 }

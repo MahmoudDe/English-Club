@@ -116,6 +116,7 @@ class _UploadExcelScreenState extends State<UploadExcelScreen> {
             FilterWidget(
                 mediaQuery: mediaQuery,
                 value: selectedGradeFilterValue,
+                width: mediaQuery.width / 2.3,
                 onChanged: (newValue) {
                   setState(() {
                     print(newValue);
