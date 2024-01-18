@@ -299,7 +299,8 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                   onPressed: () async {
                     DateTimeRange? picked = await showDateRangePicker(
                       context: context,
-                      firstDate: DateTime.now(),
+                      firstDate: DateTime(2020),
+                      currentDate: DateTime.now(),
                       lastDate: DateTime.now().add(const Duration(days: 365)),
                     );
                     if (picked != null) {
@@ -366,10 +367,12 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                     _showFilterDialog(context, mediaQuery);
                   });
                 },
-                title: const Text(
+                title: Text(
                   'Show inActive student ',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: mediaQuery.width / 28),
                 ),
               ),
             ],
