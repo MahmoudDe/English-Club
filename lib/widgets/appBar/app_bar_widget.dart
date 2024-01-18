@@ -1,4 +1,5 @@
 import 'package:bdh/screens/add_students_screen.dart';
+import 'package:bdh/screens/english_club_settings_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/appBar/app_bar_content.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,12 @@ class appBarWidget {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const EnglishClubSettingsScreen(),
+                        ),
+                      );
                       print('hello');
                     },
                     icon: Icon(

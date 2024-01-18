@@ -24,6 +24,7 @@ class Apis with ChangeNotifier {
   static Map<String, dynamic> allStudents = {};
   static Map<String, dynamic> allGrades = {};
   static List<dynamic> sectionsData = [];
+  static Map<String, dynamic> sectionInfo = {};
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -595,6 +596,67 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getSectionInfo({
+    required String sectionId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/sections/$sectionId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................section info by id server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      sectionInfo = response.data['data'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> activeStudent(
+      {required String studentId, required String activeState}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().put(
+        "/admin/students/$studentId/inActive",
+        data: {
+          'inactive': activeState,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................inActive student server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      getAllStudents();
       statusResponse = 200;
       notifyListeners();
     } on DioError catch (e) {

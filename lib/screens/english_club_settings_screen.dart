@@ -1,0 +1,209 @@
+import 'package:bdh/server/apis.dart';
+import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
+import 'package:bdh/widgets/english_club_settings_screen/levels_widget.dart';
+import 'package:bdh/widgets/title_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
+
+class EnglishClubSettingsScreen extends StatefulWidget {
+  const EnglishClubSettingsScreen({super.key});
+
+  @override
+  State<EnglishClubSettingsScreen> createState() =>
+      _EnglishClubSettingsScreenState();
+}
+
+class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
+    with TickerProviderStateMixin {
+  bool isLoading = false;
+  bool isSectionChange = false;
+  List allSections = [];
+  List allSectionsNames = [];
+  String selectedSection = '';
+  List levels = [];
+
+  late AnimationController? controllerAnimation;
+
+  void getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await Provider.of<Apis>(context, listen: false).getAllSections();
+      setState(() {
+        allSections = Apis.sectionsData;
+      });
+      setState(() {
+        for (int i = 0; i < allSections.length; i++) {
+          allSectionsNames.add(allSections[i]['section_name']);
+        }
+        selectedSection = allSectionsNames[0];
+      });
+      getSectionData();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getSectionData() async {
+    setState(() {
+      isSectionChange = true;
+    });
+    String sectionId = '0';
+    try {
+      for (int i = 0; i < allSections.length; i++) {
+        if (allSections[i]['section_name'] == selectedSection) {
+          sectionId = allSections[i]['section_id'].toString();
+        }
+      }
+      await Provider.of<Apis>(context, listen: false)
+          .getSectionInfo(sectionId: sectionId);
+      setState(() {
+        levels = Apis.sectionInfo['levels'];
+        isSectionChange = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    controllerAnimation = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+
+    getData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
+    return isLoading
+        ? Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColors.main,
+              actions: [
+                TextButton.icon(
+                  onPressed: () {
+                    print('new section');
+                  },
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    'new section',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                TitleWidget(
+                  mediaQuery: mediaQuery,
+                  title: 'English club settings',
+                  icon: const SizedBox(
+                    width: 0,
+                  ),
+                ),
+                SizedBox(
+                  height: mediaQuery.height / 3,
+                ),
+                CircularProgressIndicator(
+                  color: AppColors.main,
+                ),
+              ],
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColors.main,
+              actions: [
+                TextButton.icon(
+                  onPressed: () {
+                    //ToDo : add new section
+                  },
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    'new section',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                TitleWidget(
+                  mediaQuery: mediaQuery,
+                  title: 'English club settings',
+                  icon: const SizedBox(
+                    width: 0,
+                  ),
+                ),
+                SizedBox(
+                  height: mediaQuery.height / 80,
+                ),
+                //section filter
+                Container(
+                  margin:
+                      EdgeInsets.symmetric(horizontal: mediaQuery.width / 40),
+                  child: FilterWidget(
+                      mediaQuery: mediaQuery,
+                      value: selectedSection,
+                      onChanged: (value) {
+                        controllerAnimation!.reverse().whenComplete(
+                          () {
+                            setState(() {
+                              selectedSection = value!;
+                              getSectionData();
+                            });
+                            controllerAnimation!.forward();
+                          },
+                        );
+                      },
+                      menu: allSectionsNames,
+                      filterTitle: 'sections',
+                      width: double.infinity),
+                ),
+                SizedBox(
+                  height: mediaQuery.height / 90,
+                ),
+                isSectionChange
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.main,
+                        ),
+                      )
+                    : SizedBox(
+                            height: mediaQuery.height / 1.3,
+                            child: LevelsWidget(
+                                levels: levels, mediaQuery: mediaQuery))
+                        .animate(controller: controllerAnimation)
+                        .slide(
+                            begin: const Offset(0, 1),
+                            end: const Offset(0, 0),
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeInOutCirc),
+              ],
+            ),
+          );
+  }
+}

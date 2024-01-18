@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:quickalert/quickalert.dart';
 
 class AllStudentsScreen extends StatefulWidget {
   const AllStudentsScreen({
@@ -118,6 +121,68 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
     });
   }
 
+  Future<void> deleteStudent(int index) async {
+    try {
+      await Provider.of<Apis>(context, listen: false)
+          .deleteStudent(searchStudentList[index]['id'].toString());
+      if (Apis.statusResponse == 200) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: Apis.message,
+          confirmBtnText: 'ok',
+          onConfirmBtnTap: () => setState(
+            () {
+              dataClass.students.clear();
+              getData();
+              Navigator.pop(context);
+            },
+          ),
+        );
+      } else {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: Apis.message,
+            confirmBtnText: 'cancel');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> changeActiveStudentState(String activeState, int index) async {
+    try {
+      await Provider.of<Apis>(context, listen: false).activeStudent(
+          studentId: searchStudentList[index]['id'].toString(),
+          activeState: activeState);
+      if (Apis.statusResponse == 200) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: Apis.message,
+          confirmBtnText: 'ok',
+          onConfirmBtnTap: () => setState(
+            () {
+              dataClass.students.clear();
+              dataClass.students = Apis.allStudents['data'];
+              getData();
+              Navigator.pop(context);
+            },
+          ),
+        );
+      } else {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: Apis.message,
+            confirmBtnText: 'cancel');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void filterData() {
     setState(() {
       filterStudents = dataClass.students
@@ -125,8 +190,16 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
           .toList()[0]['classes']
           .where((e) => e['name'] == selectedClassFilterValue)
           .toList()[0]['students'];
-      searchStudentList = [...filterStudents];
-      if (sortValue == 'no filter' || sortValue.isEmpty) {
+      if (selectedOption) {
+        searchStudentList = [...filterStudents];
+      } else {
+        for (int i = 0; i < filterStudents.length; i++) {
+          if (filterStudents[i]['inactive'] == 1) {
+            searchStudentList.add(filterStudents[i]);
+          }
+        }
+      }
+      if (sortValue == 'No filter' || sortValue.isEmpty) {
         print('no thing to sort');
       } else {
         searchStudentList.sort(
@@ -370,6 +443,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                       SizedBox(
                         height: mediaQuery.height / 80,
                       ),
+                      //filter grade and class
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -430,11 +504,22 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                           _showFilterDialog(context, mediaQuery);
                         },
                       ),
+                      //students
                       Expanded(
                         child: ListView.builder(
                             shrinkWrap: true,
                             itemCount: searchStudentList.length,
                             itemBuilder: (context, index) => StudentWidget(
+                                onPressedActive: (p0) {
+                                  changeActiveStudentState(
+                                      searchStudentList[index]['inactive'] == 0
+                                          ? '1'
+                                          : '0',
+                                      index);
+                                },
+                                onPressedDelete: (p0) {
+                                  deleteStudent(index);
+                                },
                                 getData: filterData,
                                 mediaQuery: mediaQuery,
                                 searchStudentList: searchStudentList,

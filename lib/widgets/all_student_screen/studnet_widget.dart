@@ -2,12 +2,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bdh/data/data.dart';
-import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
 // ignore: must_be_immutable
@@ -17,11 +15,15 @@ class StudentWidget extends StatefulWidget {
       required this.mediaQuery,
       required this.searchStudentList,
       required this.index,
-      required this.getData});
+      required this.getData,
+      required this.onPressedDelete,
+      required this.onPressedActive});
   Function getData;
   Size mediaQuery;
   List searchStudentList;
   int index;
+  final void Function(BuildContext)? onPressedDelete;
+  final void Function(BuildContext)? onPressedActive;
 
   @override
   State<StudentWidget> createState() => _StudentWidgetState();
@@ -58,37 +60,6 @@ class _StudentWidgetState extends State<StudentWidget> {
     );
   }
 
-  Future<void> deleteStudent() async {
-    try {
-      await Provider.of<Apis>(context, listen: false).deleteStudent(
-          widget.searchStudentList[widget.index]['id'].toString());
-      if (Apis.statusResponse == 200) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: Apis.message,
-          confirmBtnText: 'ok',
-          onConfirmBtnTap: () => setState(
-            () {
-              dataClass.students.clear();
-              dataClass.students = Apis.allStudents['data'];
-              widget.getData();
-              Navigator.pop(context);
-            },
-          ),
-        );
-      } else {
-        QuickAlert.show(
-            context: context,
-            type: QuickAlertType.error,
-            text: Apis.message,
-            confirmBtnText: 'cancel');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -101,21 +72,27 @@ class _StudentWidgetState extends State<StudentWidget> {
           dismissible: DismissiblePane(onDismissed: () {}),
           children: [
             SlidableAction(
-              onPressed: (context) {
-                deleteStudent();
-              },
+              onPressed: widget.onPressedDelete,
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
               icon: Icons.delete,
               label: 'Delete',
             ),
-            SlidableAction(
-              onPressed: (context) => print('hello'),
-              backgroundColor: Colors.blueAccent,
-              foregroundColor: Colors.white,
-              icon: Icons.person_off,
-              label: 'disActive',
-            ),
+            widget.searchStudentList[widget.index]['inactive'] == 0
+                ? SlidableAction(
+                    onPressed: widget.onPressedActive,
+                    backgroundColor: Colors.amber,
+                    foregroundColor: Colors.white,
+                    icon: Icons.person,
+                    label: 'Active',
+                  )
+                : SlidableAction(
+                    onPressed: widget.onPressedActive,
+                    backgroundColor: Colors.blueAccent,
+                    foregroundColor: Colors.white,
+                    icon: Icons.person_off,
+                    label: 'inActive',
+                  ),
           ],
         ),
         endActionPane: ActionPane(
@@ -123,7 +100,14 @@ class _StudentWidgetState extends State<StudentWidget> {
           children: [
             SlidableAction(
               onPressed: (con) {
-                scanQr();
+                widget.searchStudentList[widget.index]['inactive'] == 0
+                    ? QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        text:
+                            'You can not borrow book to this account until you active it again',
+                        confirmBtnText: 'cancel')
+                    : scanQr();
               },
               backgroundColor: Colors.brown,
               foregroundColor: Colors.white,
@@ -133,6 +117,10 @@ class _StudentWidgetState extends State<StudentWidget> {
           ],
         ),
         child: ExpansionTile(
+          collapsedBackgroundColor:
+              widget.searchStudentList[widget.index]['inactive'] == 0
+                  ? Colors.blueAccent
+                  : Colors.white,
           leading: CircleAvatar(
             radius: 25,
             backgroundColor: Colors.orange,
