@@ -1,5 +1,5 @@
 import '../screens/HomePage.dart';
-import '../screens/accounts_screen.dart';
+import '../screens/admins_accounts_screen.dart';
 import '../screens/all_students_screen.dart';
 
 class Constants {
