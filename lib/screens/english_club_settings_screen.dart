@@ -36,6 +36,15 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
   late AnimationController? controllerAnimation;
   final formKey = GlobalKey<FormState>();
   FocusNode nameNode = FocusNode();
+  TextEditingController controller = TextEditingController(text: '');
+
+  @override
+  void dispose() {
+    nameNode.dispose();
+    controller.dispose();
+    controllerAnimation!.dispose();
+    super.dispose();
+  }
 
   void getData() async {
     setState(() {
@@ -144,6 +153,7 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                   onPressed: () {
                     // Navigator.pushReplacement(context,
                     //     customPageRouteBuilder(const CreateSectionScreen()));
+
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.custom,
@@ -151,6 +161,7 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                         widget: Form(
                           key: formKey,
                           child: FormWidget(
+                            controller: controller,
                             textInputType: TextInputType.text,
                             isNormal: true,
                             obscureText: false,
@@ -237,22 +248,9 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                   //section filter
                   SectionsWidget(
                     mediaQuery: mediaQuery,
-                    nameNode: nameNode,
                     allSectionsNames: allSectionsNames,
                     selectedSection: selectedSection,
-                    newSectionName: newSectionName,
                     sectionId: sectionId,
-                    validationFun: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter section name please";
-                      } else if (value.length < 2) {
-                        return 'You have to enter 2 character at least';
-                      }
-                      setState(() {
-                        newSectionName = value;
-                      });
-                      return null;
-                    },
                     onChangedFilter: (value) {
                       controllerAnimation!.reverse().whenComplete(
                         () {

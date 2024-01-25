@@ -1,10 +1,12 @@
-import 'package:bdh/widgets/english_club_settings_screen/parts_widget.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:bdh/widgets/english_club_settings_screen/subLevel_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+// ignore: must_be_immutable
 class LevelsWidget extends StatelessWidget {
-  const LevelsWidget(
-      {super.key, required this.levels, required this.mediaQuery});
+  LevelsWidget({super.key, required this.mediaQuery, required this.levels});
   final Size mediaQuery;
   final List levels;
 
@@ -70,7 +72,7 @@ class LevelsWidget extends StatelessWidget {
               ),
             ),
           ),
-          PartWidget(levels: levels, index: index, mediaQuery: mediaQuery),
+          subLevelWidget(levels: levels, index: index, mediaQuery: mediaQuery),
         ],
       ),
     );

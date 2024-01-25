@@ -27,6 +27,7 @@ class _AddAdminBtnWidgetState extends State<AddAdminBtnWidget> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
+        TextEditingController controller = TextEditingController(text: '');
         QuickAlert.show(
             context: context,
             type: QuickAlertType.custom,
@@ -34,6 +35,7 @@ class _AddAdminBtnWidgetState extends State<AddAdminBtnWidget> {
             widget: Form(
               key: formKey,
               child: FormWidget(
+                controller: controller,
                 textInputType: TextInputType.text,
                 isNormal: true,
                 obscureText: false,

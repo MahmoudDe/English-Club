@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
 class FormWidget extends StatelessWidget {
-  const FormWidget(
-      {super.key,
-      required this.mediaQuery,
-      required this.labelText,
-      required this.hintText,
-      required this.focusNode,
-      required this.nextNode,
-      required this.validationFun,
-      required this.textInputAction,
-      required this.isNormal,
-      this.togglePasswordVisibility,
-      required this.obscureText,
-      required this.textInputType});
+  const FormWidget({
+    super.key,
+    required this.mediaQuery,
+    required this.labelText,
+    required this.hintText,
+    required this.focusNode,
+    required this.nextNode,
+    required this.validationFun,
+    required this.textInputAction,
+    required this.isNormal,
+    this.togglePasswordVisibility,
+    required this.obscureText,
+    required this.textInputType,
+    required this.controller,
+  });
   final Size mediaQuery;
   final String labelText;
   final String hintText;
@@ -25,6 +27,7 @@ class FormWidget extends StatelessWidget {
   final Function()? togglePasswordVisibility;
   final bool obscureText;
   final TextInputType? textInputType;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +46,7 @@ class FormWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: TextFormField(
+                  controller: controller,
                   textInputAction: TextInputAction.next,
                   keyboardType: textInputType,
                   focusNode: focusNode,

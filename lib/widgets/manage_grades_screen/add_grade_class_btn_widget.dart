@@ -39,6 +39,7 @@ class _AddGradeClassBtnWidgetState extends State<AddGradeClassBtnWidget> {
   String name = '';
   FocusNode nameNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  TextEditingController controller = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -50,6 +51,7 @@ class _AddGradeClassBtnWidgetState extends State<AddGradeClassBtnWidget> {
             widget: Form(
               key: formKey,
               child: FormWidget(
+                controller: controller,
                 textInputType: TextInputType.text,
                 isNormal: true,
                 obscureText: false,

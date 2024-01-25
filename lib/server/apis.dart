@@ -728,4 +728,95 @@ class Apis with ChangeNotifier {
       print(e);
     }
   }
+
+  Future<void> createSupLevel(
+      {required String levelId, required String supLevelName}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().post(
+        "/admin/sections/levels/$levelId/subLevels",
+        data: {
+          'name': supLevelName,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................create supLevel server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteSubLevel(
+      {required String levelId, required String supLevelId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().delete(
+        "/admin/sections/levels/$levelId/subLevels/$supLevelId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................delete subLevel server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> upDateSubLevel(
+      {required String levelId,
+      required String newSubLevelName,
+      required String newLevelId,
+      required subLevelId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().put(
+        "/admin/sections/levels/$levelId/subLevels/$subLevelId",
+        data: {
+          'name': newSubLevelName,
+          'level_id': newLevelId,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................update subLevel server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 }

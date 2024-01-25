@@ -9,28 +9,44 @@ import 'package:quickalert/quickalert.dart';
 import '../../server/apis.dart';
 import '../form_widget copy.dart';
 
-class SectionsWidget extends StatelessWidget {
+class SectionsWidget extends StatefulWidget {
   SectionsWidget(
       {super.key,
       required this.mediaQuery,
-      required this.nameNode,
-      this.validationFun,
       this.onChangedFilter,
       required this.allSectionsNames,
       required this.selectedSection,
-      required this.newSectionName,
       required this.sectionId,
       this.onConfirmBtnTap});
   final Size mediaQuery;
-  final formKey = GlobalKey<FormState>();
-  final FocusNode nameNode;
-  final String? Function(String?)? validationFun;
   final void Function(String?)? onChangedFilter;
   final List<dynamic> allSectionsNames;
   final String selectedSection;
-  final String newSectionName;
   final String sectionId;
   final Function()? onConfirmBtnTap;
+
+  @override
+  State<SectionsWidget> createState() => _SectionsWidgetState();
+}
+
+class _SectionsWidgetState extends State<SectionsWidget> {
+  final formKey = GlobalKey<FormState>();
+  String newSectionName = '';
+  FocusNode nameNode = FocusNode();
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    controller = TextEditingController(text: widget.selectedSection);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameNode.dispose();
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +65,6 @@ class SectionsWidget extends StatelessWidget {
             icon: Icons.delete,
             label: 'Delete',
           ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        children: [
           SlidableAction(
             onPressed: (con) {
               QuickAlert.show(
@@ -63,17 +74,28 @@ class SectionsWidget extends StatelessWidget {
                   widget: Form(
                     key: formKey,
                     child: FormWidget(
+                      controller: controller,
                       textInputType: TextInputType.text,
                       isNormal: true,
                       obscureText: false,
                       togglePasswordVisibility: () {},
-                      mediaQuery: mediaQuery,
+                      mediaQuery: widget.mediaQuery,
                       textInputAction: TextInputAction.done,
                       labelText: 'new section name',
                       hintText: 'EX: national geographic',
                       focusNode: nameNode,
                       nextNode: nameNode,
-                      validationFun: validationFun,
+                      validationFun: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter section name please";
+                        } else if (value.length < 2) {
+                          return 'You have to enter 2 character at least';
+                        }
+                        setState(() {
+                          newSectionName = value;
+                        });
+                        return null;
+                      },
                     ),
                   ),
                   confirmBtnText: 'edit',
@@ -82,7 +104,7 @@ class SectionsWidget extends StatelessWidget {
                     if (formKey.currentState!.validate()) {
                       await Provider.of<Apis>(context, listen: false)
                           .updateSection(
-                              sectionId: sectionId,
+                              sectionId: widget.sectionId,
                               sectionName: newSectionName);
                       Navigator.of(context).pop();
                       Apis.statusResponse == 200
@@ -90,12 +112,7 @@ class SectionsWidget extends StatelessWidget {
                               context: context,
                               type: QuickAlertType.success,
                               confirmBtnText: 'Ok',
-                              onConfirmBtnTap: () {
-                                // allSections.clear();
-                                // allSectionsNames.clear();
-                                // levels.clear();
-                                // getData();
-                              },
+                              onConfirmBtnTap: widget.onConfirmBtnTap,
                               text: Apis.message,
                             )
                           : QuickAlert.show(
@@ -117,13 +134,25 @@ class SectionsWidget extends StatelessWidget {
           ),
         ],
       ),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) {},
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+            icon: Icons.add_circle_outline,
+            label: 'add level',
+          ),
+        ],
+      ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: mediaQuery.width / 40),
+        margin: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width / 40),
         child: FilterWidget(
-            mediaQuery: mediaQuery,
-            value: selectedSection,
-            onChanged: onChangedFilter,
-            menu: allSectionsNames,
+            mediaQuery: widget.mediaQuery,
+            value: widget.selectedSection,
+            onChanged: widget.onChangedFilter,
+            menu: widget.allSectionsNames,
             filterTitle: 'sections',
             width: double.infinity),
       ),
