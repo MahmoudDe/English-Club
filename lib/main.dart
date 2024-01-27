@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bdh/screens/HomePage.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/splashscreen.dart';
@@ -6,11 +8,17 @@ import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MyApp());
+  WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    if (Platform.isAndroid) {
+      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {

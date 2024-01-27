@@ -819,4 +819,60 @@ class Apis with ChangeNotifier {
       print(e);
     }
   }
+
+  Future<bool> createBook({
+    required String subLevelId,
+    required String title,
+    required String quantity,
+    required String allowedBorrowDays,
+    required String qrCode,
+    required File exclFile,
+    required File bookCover,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      String fileName = exclFile.path.split('/').last;
+      String fileName1 = bookCover.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'title': title,
+        'allowed_borrow_days': allowedBorrowDays,
+        'quantity': quantity,
+        "cover_image": MultipartFile.fromFileSync(
+          bookCover.path,
+          filename: fileName1,
+        ),
+        "file": MultipartFile.fromFileSync(
+          exclFile.path,
+          filename: fileName,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/admin/sections/levels/subLevels/$subLevelId/stories",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................create level server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data['message']);
+      message = e.response!.data['errors'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

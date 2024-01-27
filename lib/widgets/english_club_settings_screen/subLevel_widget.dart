@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, use_build_context_synchronously
 
+import 'package:bdh/screens/create_story_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/widgets/english_club_settings_screen/books_widget.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,6 @@ class _subLevelWidgetState extends State<subLevelWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Your code here, which will be executed when the dependencies change.
-    // This can be useful for fetching data or performing other actions.
   }
 
   Future<void> deleteSubLevel(
@@ -203,9 +202,6 @@ class _subLevelWidgetState extends State<subLevelWidget> {
           if (formKey.currentState!.validate()) {
             Navigator.of(context).pop();
             upDateSubLevel(context, index1);
-            // print(selectedLevel);
-            // print(selectedLevelId);
-            // print(newSubLevelName);
           }
         });
   }
@@ -280,7 +276,20 @@ class _subLevelWidgetState extends State<subLevelWidget> {
           motion: const ScrollMotion(),
           children: [
             SlidableAction(
-              onPressed: (con) {},
+              onPressed: (con) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CreateStoryScreen(
+                      subLevelName: widget.levels[widget.index]['sub_levels']
+                          [index1]['name'],
+                      levelName: widget.levels[widget.index]['name'],
+                      subLevelId: widget.levels[widget.index]['sub_levels']
+                              [index1]['id']
+                          .toString(),
+                    ),
+                  ),
+                );
+              },
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               icon: Icons.add_circle_outline,
