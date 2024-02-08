@@ -1,4 +1,4 @@
-
+import 'package:bdh/server/image_url.dart';
 import 'package:flutter/material.dart';
 
 class BooksWidget extends StatelessWidget {
@@ -29,21 +29,34 @@ class BooksWidget extends StatelessWidget {
           childAspectRatio: 2 / 3, // Width to height ratio of grid items
         ),
         itemCount: levels[index]['sub_levels'][index1]['stories'].length,
-        itemBuilder: (context, index) => Container(
-          height: mediaQuery.height / 2,
-          width: mediaQuery.width / 40,
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 246, 246, 246),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: const Offset(0, 1), // changes position of shadow
-              ),
-            ],
-          ),
-        ),
+        itemBuilder: (context, index2) => Container(
+            height: mediaQuery.height / 2,
+            width: mediaQuery.width / 40,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 246, 246, 246),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 1), // changes position of shadow
+                ),
+              ],
+            ),
+            child: levels[index]['sub_levels'][index1]['stories'][index2]
+                        ['cover_url'] !=
+                    null
+                ? Image(
+                    image: NetworkImage(
+                      '${ImageUrl.imageUrl}${levels[index]['sub_levels'][index1]['stories'][index2]['cover_url']}',
+                    ),
+                    fit: BoxFit.contain,
+                    alignment: Alignment.topCenter,
+                  )
+                : const Image(
+                    image: AssetImage('assets/images/bookCover.jpg'),
+                    fit: BoxFit.cover,
+                  )),
       ),
     );
   }

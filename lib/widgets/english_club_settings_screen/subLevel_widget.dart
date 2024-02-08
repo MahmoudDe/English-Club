@@ -1,6 +1,6 @@
 // ignore_for_file: camel_case_types, use_build_context_synchronously
 
-import 'package:bdh/screens/create_story_screen.dart';
+import 'package:bdh/screens/create_new_story_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/widgets/english_club_settings_screen/books_widget.dart';
 import 'package:flutter/material.dart';

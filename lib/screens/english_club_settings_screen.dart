@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 // import 'package:bdh/screens/create_new_section_screen.dart';
+import 'package:bdh/screens/all_sections_map_roads_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/english_club_settings_screen/levels_widget.dart';
@@ -107,24 +108,6 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: AppColors.main,
-              actions: [
-                TextButton.icon(
-                  onPressed: () {
-                    print('new section');
-                  },
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                    color: Colors.white,
-                  ),
-                  label: const Text(
-                    'new section',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
             ),
             body: Column(
               mainAxisSize: MainAxisSize.max,
@@ -146,6 +129,28 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
             ),
           )
         : Scaffold(
+            floatingActionButton: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AllSectionsMapRoadsScreen(
+                        allSections: allSections, mediaQuery: mediaQuery),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: mediaQuery.width / 30,
+                    vertical: mediaQuery.height / 50),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.amber),
+                child: const Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             appBar: AppBar(
               backgroundColor: AppColors.main,
               actions: [
@@ -153,7 +158,6 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                   onPressed: () {
                     // Navigator.pushReplacement(context,
                     //     customPageRouteBuilder(const CreateSectionScreen()));
-
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.custom,
@@ -231,65 +235,68 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                 )
               ],
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  TitleWidget(
-                    mediaQuery: mediaQuery,
-                    title: 'English club settings',
-                    icon: const SizedBox(
-                      width: 0,
+            body: Hero(
+              tag: 'tag1',
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    TitleWidget(
+                      mediaQuery: mediaQuery,
+                      title: 'English club settings',
+                      icon: const SizedBox(
+                        width: 0,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: mediaQuery.height / 80,
-                  ),
-                  //section filter
-                  SectionsWidget(
-                    mediaQuery: mediaQuery,
-                    allSectionsNames: allSectionsNames,
-                    selectedSection: selectedSection,
-                    sectionId: sectionId,
-                    onChangedFilter: (value) {
-                      controllerAnimation!.reverse().whenComplete(
-                        () {
-                          setState(() {
-                            selectedSection = value!;
-                            getSectionData();
-                          });
-                          controllerAnimation!.forward();
-                        },
-                      );
-                    },
-                    onConfirmBtnTap: () {
-                      Navigator.pop(context);
-                      allSections.clear();
-                      allSectionsNames.clear();
-                      levels.clear();
-                      getData();
-                    },
-                  ),
-                  SizedBox(
-                    height: mediaQuery.height / 90,
-                  ),
-                  isSectionChange
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.main,
-                          ),
-                        )
-                      : SizedBox(
-                              height: mediaQuery.height / 1.3,
-                              child: LevelsWidget(
-                                  levels: levels, mediaQuery: mediaQuery))
-                          .animate(controller: controllerAnimation)
-                          .slide(
-                              begin: const Offset(0, 1),
-                              end: const Offset(0, 0),
-                              duration: const Duration(milliseconds: 800),
-                              curve: Curves.easeInOutCirc),
-                ],
+                    SizedBox(
+                      height: mediaQuery.height / 80,
+                    ),
+                    //section filter
+                    SectionsWidget(
+                      mediaQuery: mediaQuery,
+                      allSectionsNames: allSectionsNames,
+                      selectedSection: selectedSection,
+                      sectionId: sectionId,
+                      onChangedFilter: (value) {
+                        controllerAnimation!.reverse().whenComplete(
+                          () {
+                            setState(() {
+                              selectedSection = value!;
+                              getSectionData();
+                            });
+                            controllerAnimation!.forward();
+                          },
+                        );
+                      },
+                      onConfirmBtnTap: () {
+                        Navigator.pop(context);
+                        allSections.clear();
+                        allSectionsNames.clear();
+                        levels.clear();
+                        getData();
+                      },
+                    ),
+                    SizedBox(
+                      height: mediaQuery.height / 90,
+                    ),
+                    isSectionChange
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.main,
+                            ),
+                          )
+                        : SizedBox(
+                                height: mediaQuery.height / 1.3,
+                                child: LevelsWidget(
+                                    levels: levels, mediaQuery: mediaQuery))
+                            .animate(controller: controllerAnimation)
+                            .slide(
+                                begin: const Offset(0, 1),
+                                end: const Offset(0, 0),
+                                duration: const Duration(milliseconds: 800),
+                                curve: Curves.easeInOutCirc),
+                  ],
+                ),
               ),
             ),
           );

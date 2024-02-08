@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, deprecated_member_use
+// ignore_for_file: avoid_print, deprecated_member_use, non_constant_identifier_names
 
 import 'dart:convert';
 import 'dart:io';
@@ -849,6 +849,75 @@ class Apis with ChangeNotifier {
       });
       Dio.Response response = await dio().post(
         "/admin/sections/levels/subLevels/$subLevelId/stories",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................create level server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data['message']);
+      message = e.response!.data['errors'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> createLevel({
+    required String sectionId,
+    required String name,
+    required String good_percentage,
+    required String veryGood_percentage,
+    required String excellent_percentage,
+    required List prizes,
+    required String vocab_g_percentage,
+    required String vocab_vg_percentage,
+    required String vocab_exc_percentage,
+    required List vocabPrizes,
+    required File file,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    // List<String> prizesString = [];
+    // List<String> vocabPrizesString = [];
+    // for (int i = 0; i < prizes.length; i++) {
+    //   prizesString.add(prizes[i].toString());
+    //   vocabPrizesString.add(vocabPrizes[i].toString());
+    // }
+    // print(prizesString);
+    // print(vocabPrizesString);
+    try {
+      String? myToken = storage.getString('token');
+      String fileName = file.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'name': name,
+        'good_percentage': good_percentage,
+        'veryGood_percentage': veryGood_percentage,
+        'excellent_percentage': excellent_percentage,
+        'prizes': prizes,
+        'vocab_g_percentage': vocab_g_percentage,
+        'vocab_vg_percentage': vocab_vg_percentage,
+        'vocab_exc_percentage': vocab_exc_percentage,
+        'vocabPrizes': vocabPrizes,
+        "file": MultipartFile.fromFileSync(
+          file.path,
+          filename: fileName,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/admin/sections/$sectionId/levels",
         data: formData,
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},

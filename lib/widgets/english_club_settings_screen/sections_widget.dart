@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/screens/create_new_level_screen.dart';
 import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -138,7 +139,13 @@ class _SectionsWidgetState extends State<SectionsWidget> {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CreateNewLevelScreen(
+                    sectionId: widget.sectionId,
+                    sectionName: widget.selectedSection),
+              ));
+            },
             backgroundColor: Colors.green,
             foregroundColor: Colors.white,
             icon: Icons.add_circle_outline,
