@@ -1,3 +1,4 @@
+import 'package:bdh/model/constants.dart';
 import 'package:bdh/screens/road_level.dart';
 import 'package:bdh/styles/app_colors.dart';
 
@@ -16,16 +17,18 @@ class AllSectionsMapRoadsScreen extends StatefulWidget {
 
 class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
     with SingleTickerProviderStateMixin {
-  List roads = [];
-
+  // List roads = [];
+  // final PageController _controller = PageController();
+  int _currentPage = 0;
   @override
   void initState() {
-    for (int i = 0; i < widget.allSections.length; i++) {
-      roads.add(RoadLevelsScreen(
-        roadData: widget.allSections[i],
-        mediaQuery: widget.mediaQuery,
-      ));
-    }
+    // for (int i = 0; i < widget.allSections.length; i++) {
+    //   roads.add(RoadLevelsScreen(
+    //     roadData: widget.allSections[i],
+    //     mediaQuery: widget.mediaQuery,
+    //     color: Constants.colorsForRoad[i],
+    //   ));
+    // }
     super.initState();
   }
 
@@ -50,13 +53,24 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
           ),
         ),
       ),
-      body: PageView(
+      body: PageView.builder(
           controller: controller,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          pageSnapping: true,
-          allowImplicitScrolling: false,
-          onPageChanged: null,
-          children: [for (int i = 0; i < roads.length; i++) roads[i]]),
+          onPageChanged: (index) {
+            _currentPage = index;
+          },
+          itemCount: widget.allSections.length,
+          itemBuilder: (context, index) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              color: Constants.colorsForRoad[_currentPage],
+              child: RoadLevelsScreen(
+                assetUrls: Constants.animations[index],
+                roadData: widget.allSections[index],
+                mediaQuery: widget.mediaQuery,
+                color: Constants.colorsForRoad[index],
+              ),
+            );
+          }),
     );
   }
 }

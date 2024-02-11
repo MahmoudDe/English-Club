@@ -1,12 +1,21 @@
-import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/road_level_screen/level_step_widget.dart';
+import 'package:bdh/widgets/road_level_screen/part_step_widget.dart';
+import 'package:bdh/widgets/road_level_screen/start_step_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lottie/lottie.dart';
 
 class RoadLevelsScreen extends StatefulWidget {
   const RoadLevelsScreen(
-      {super.key, required this.roadData, required this.mediaQuery});
+      {super.key,
+      required this.roadData,
+      required this.mediaQuery,
+      required this.color,
+      required this.assetUrls});
   final Map roadData;
   final Size mediaQuery;
+  final Color? color;
+  final List assetUrls;
+
   @override
   State<RoadLevelsScreen> createState() => _RoadLevelsScreenState();
 }
@@ -21,77 +30,56 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
   }
 
   String tempLevel = '';
+  int counter = 0;
+
+  Color _darkenColor(Color color, [double factor = 0.5]) {
+    assert(factor >= 0 && factor <= 1);
+    final int red = (color.red * factor).round();
+    final int green = (color.green * factor).round();
+    final int blue = (color.blue * factor).round();
+    return Color.fromRGBO(red, green, blue, 1);
+  }
+
+  void editStep() {
+    if (partPosition == 3) {
+      isForwarding = false;
+    }
+    if (partPosition == -1) {
+      isForwarding = true;
+    }
+    counter = partPosition == -1
+        ? 0
+        : partPosition == 3
+            ? 2
+            : partPosition;
+    if (counter == 0 || counter == 2) {
+      steps.add(SizedBox(
+        height: widget.mediaQuery.height / 50,
+      ));
+    }
+    if (isForwarding) {
+      partPosition += 1;
+    }
+    if (!isForwarding) {
+      partPosition -= 1;
+    }
+  }
 
   void addSteps(Size mediaQuery) {
     setState(() {
       isLoading = true;
     });
 
-    int counter;
     for (int i = 0; i < widget.roadData['data'].length; i++) {
-      if (partPosition == 3) {
-        isForwarding = false;
-      }
-      if (partPosition == -1) {
-        isForwarding = true;
-      }
-      counter = partPosition == -1
-          ? 0
-          : partPosition == 3
-              ? 2
-              : partPosition;
-      if (counter == 0 || counter == 2) {
-        steps.add(SizedBox(
-          height: mediaQuery.height / 50,
-        ));
-      }
-      if (isForwarding) {
-        partPosition += 1;
-      }
-      if (!isForwarding) {
-        partPosition -= 1;
-      }
-
+      editStep();
       //adding start step
       if (tempLevel == '') {
-        steps.add(Row(
-          mainAxisAlignment: aligmentList[counter],
-          children: [
-            SizedBox(
-              height: mediaQuery.height / 7.5,
-              width: mediaQuery.width / 3.5,
-              child: const Stack(
-                // fit: StackFit.expand,
-                children: [
-                  Image(
-                    image: AssetImage(
-                      'assets/images/circle.png',
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      'Start',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              )
-                  .animate(
-                    autoPlay: true,
-                    // onPlay: (controller) => controller.repeat(),
-                    onComplete: (controller) {
-                      controller.repeat(reverse: true, min: 0.9, max: 1.0);
-                    },
-                  )
-                  .scale(
-                    duration: const Duration(
-                      milliseconds: 500,
-                    ),
-                  ),
-            ),
-          ],
-        ));
+        steps.add(
+          StartStepWidget(
+              mediaQuery: mediaQuery,
+              aligmentList: aligmentList,
+              counter: counter),
+        );
         if (counter == 0 || counter == 2) {
           steps.add(SizedBox(
             height: mediaQuery.height / 30,
@@ -103,67 +91,17 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
 
       String currentLevel = widget.roadData['data'][i]['name']
           .substring(0, widget.roadData['data'][i]['name'].indexOf('/'));
+      String currentPart = widget.roadData['data'][i]['name'].substring(
+          widget.roadData['data'][i]['name'].indexOf('/') + 1,
+          widget.roadData['data'][i]['name'].length);
 
       //when end all part add uniq step
       if (currentLevel != tempLevel) {
         steps.add(
-          Row(
-            mainAxisAlignment: aligmentList[counter],
-            children: [
-              SizedBox(
-                height: mediaQuery.height / 7.5,
-                width: mediaQuery.width / 3.5,
-                child: Stack(
-                  // fit: StackFit.expand,
-                  children: [
-                    const Center(
-                      child: Image(
-                        image: AssetImage(
-                          'assets/images/circle.png',
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Navigate to the selected level
-                          print('Level 1 selected!');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.transparent,
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: mediaQuery.width / 15,
-                              vertical: mediaQuery.height /
-                                  20), // Adjust padding for size
-                        ),
-                        child: Text(
-                          tempLevel.substring(0,
-                              widget.roadData['data'][i]['name'].indexOf('/')),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: mediaQuery.width / 25),
-                        ),
-                      ),
-                    )
-                  ],
-                )
-                    .animate(
-                      autoPlay: true,
-                      // onPlay: (controller) => controller.repeat(),
-                      onComplete: (controller) {
-                        controller.repeat(reverse: true, min: 0.9, max: 1.0);
-                      },
-                    )
-                    .scale(
-                      duration: const Duration(
-                        milliseconds: 500,
-                      ),
-                    ),
-              ),
-            ],
-          ),
+          LevelStepWidget(
+              mediaQuery: mediaQuery,
+              aligmentList: aligmentList,
+              counter: counter),
         );
         if (counter == 0 || counter == 2) {
           steps.add(SizedBox(
@@ -174,36 +112,14 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       }
 
       //adding steps for each level
-      steps.add(
-        Row(
-          mainAxisAlignment: aligmentList[counter],
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the selected level
-                print('Level 1 selected!');
-              },
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(
-                    side: BorderSide(
-                        color: Colors.amber.shade200)), // Circular shape
-                padding: EdgeInsets.symmetric(
-                    horizontal: mediaQuery.width / 15,
-                    vertical:
-                        mediaQuery.height / 20), // Adjust padding for size
-              ),
-              child: Text(
-                widget.roadData['data'][i]['name'].substring(
-                    0, widget.roadData['data'][i]['name'].indexOf('/')),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: mediaQuery.width / 25),
-              ),
-            ),
-          ],
-        ),
-      );
+      steps.add(PartStepWidget(
+          mediaQuery: mediaQuery,
+          aligmentList: aligmentList,
+          counter: counter,
+          color: widget.color!,
+          currentPart: currentPart,
+          roadData: widget.roadData,
+          i: i));
 
       if (counter == 0 || counter == 2) {
         steps.add(SizedBox(
@@ -213,72 +129,12 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
 
       //add final level step
       if (i == widget.roadData['data'].length - 1) {
-        if (partPosition == 3) {
-          isForwarding = false;
-        }
-        if (partPosition == -1) {
-          isForwarding = true;
-        }
-        counter = partPosition == -1
-            ? 0
-            : partPosition == 3
-                ? 2
-                : partPosition;
-        if (counter == 0 || counter == 2) {
-          steps.add(SizedBox(
-            height: mediaQuery.height / 50,
-          ));
-        }
-        if (isForwarding) {
-          partPosition += 1;
-        }
-        if (!isForwarding) {
-          partPosition -= 1;
-        }
-
+        editStep();
         steps.add(
-          Row(
-            mainAxisAlignment: aligmentList[counter],
-            children: [
-              SizedBox(
-                height: mediaQuery.height / 7.5,
-                width: mediaQuery.width / 3.5,
-                child: Stack(
-                  // fit: StackFit.expand,
-                  children: [
-                    Center(
-                      child: Image(
-                        image: const AssetImage(
-                          'assets/images/circle.png',
-                        ),
-                        height: mediaQuery.height / 7.5,
-                        width: mediaQuery.width / 3.5,
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        tempLevel,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                )
-                    .animate(
-                      autoPlay: true,
-                      // onPlay: (controller) => controller.repeat(),
-                      onComplete: (controller) {
-                        controller.repeat(reverse: true, min: 0.9, max: 1.0);
-                      },
-                    )
-                    .scale(
-                      duration: const Duration(
-                        milliseconds: 500,
-                      ),
-                    ),
-              ),
-            ],
-          ),
+          LevelStepWidget(
+              mediaQuery: mediaQuery,
+              aligmentList: aligmentList,
+              counter: counter),
         );
         if (counter == 0 || counter == 2) {
           steps.add(SizedBox(
@@ -312,56 +168,71 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: _darkenColor(widget.color!, 0.7),
+      ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Stack(
               children: [
+                const Opacity(
+                  opacity: 0.5,
+                  child: Image(
+                    image: AssetImage(
+                      'assets/images/backRoad.png',
+                    ),
+                    fit: BoxFit.fill,
+                  ),
+                ),
                 Positioned(
-                    // right: 1,
-                    top: 0,
-                    child: Opacity(
-                      opacity: 0.8,
-                      child: Image(
-                        image: const AssetImage(
-                          'assets/images/readImage2.png',
-                        ),
-                        height: mediaQuery.height / 1.1,
-                        fit: BoxFit.cover,
-                        width: mediaQuery.width,
-                      ),
-                    )),
+                  left: 1,
+                  bottom: mediaQuery.height / 20,
+                  child: SizedBox(
+                    height: mediaQuery.height / 7,
+                    // width: mediaQuery.width / 3,
+                    child:
+                        Lottie.asset(widget.assetUrls[0], fit: BoxFit.contain),
+                  ),
+                ),
+                Positioned(
+                  right: mediaQuery.width / 10,
+                  top: mediaQuery.height / 5,
+                  child: SizedBox(
+                    height: mediaQuery.height / 7,
+                    // width: mediaQuery.width / 3,
+                    child:
+                        Lottie.asset(widget.assetUrls[1], fit: BoxFit.contain),
+                  ),
+                ),
                 Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    SizedBox(
-                      height: mediaQuery.height / 30,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: mediaQuery.height / 50),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: mediaQuery.width / 10,
-                          vertical: mediaQuery.height / 70,
-                        ),
-                        child: Text(
-                          '${widget.roadData['section_name']} section',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppColors.main,
+                    AnimatedContainer(
+                      duration: const Duration(seconds: 2),
+                      padding: EdgeInsets.symmetric(
+                          vertical: mediaQuery.height / 80),
+                      color: widget.color,
+                      width: mediaQuery.width,
+                      alignment: Alignment.bottomCenter,
+                      height: mediaQuery.height / 20,
+                      child: Text(
+                        '${widget.roadData['section_name']} section',
+                        style: TextStyle(
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                            fontSize: mediaQuery.width / 20),
                       ),
                     ),
                     Container(
-                      height: mediaQuery.height / 1.15,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: mediaQuery.width / 50),
+                      height: mediaQuery.height / 1.19,
                       padding: EdgeInsets.symmetric(
-                          horizontal: mediaQuery.width / 50),
+                          vertical: mediaQuery.width / 50,
+                          horizontal: mediaQuery.width / 10),
                       child: ListView(
+                        padding: EdgeInsets.zero,
                         children: steps,
                       ),
                     )
@@ -372,297 +243,3 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
     );
   }
 }
-
-
-  //  child: Column(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   children: [
-
-  //                     //column1
-  //                     Column(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: [
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.start,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.center,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.end,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         )
-  //                       ],
-  //                     ),
-  //                     SizedBox(
-  //                       height: mediaQuery.height / 30,
-  //                     ),
-  //                     //column2
-  //                     Column(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: [
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.end,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.center,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.start,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         )
-  //                       ],
-  //                     ),
-  //                     SizedBox(
-  //                       height: mediaQuery.height / 30,
-  //                     ),
-  //                     //column1
-  //                     Column(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: [
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.start,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.center,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Row(
-  //                           mainAxisAlignment: MainAxisAlignment.end,
-  //                           children: [
-  //                             ElevatedButton(
-  //                               onPressed: () {
-  //                                 // Navigate to the selected level
-  //                                 // Add your navigation logic here
-  //                                 print('Level 1 selected!');
-  //                               },
-  //                               style: ElevatedButton.styleFrom(
-  //                                 shape: CircleBorder(
-  //                                     side: BorderSide(
-  //                                         color: Colors.amber
-  //                                             .shade200)), // Circular shape
-  //                                 padding: EdgeInsets.symmetric(
-  //                                     horizontal: mediaQuery.width / 15,
-  //                                     vertical: mediaQuery.height /
-  //                                         20), // Adjust padding for size
-  //                               ),
-  //                               child: Text(
-  //                                 'Level 1',
-  //                                 style: TextStyle(
-  //                                     fontWeight: FontWeight.bold,
-  //                                     color: Colors.white,
-  //                                     fontSize: mediaQuery.width / 25),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-               

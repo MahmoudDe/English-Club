@@ -30,6 +30,9 @@ dependencies:
   permission_handler: ^11.0.1
   path_provider: ^2.1.2
   flutter_windowmanager: ^0.2.0
+  awesome_dialog: ^3.2.0
+  popover: ^0.2.8+2
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
@@ -48,9 +51,19 @@ flutter:
     - assets/images/golden.png
     - assets/images/bronze.png
     - assets/images/circle.png
+    - assets/images/openbook.png
+    - assets/images/circleBackground.png
+    - assets/images/backRoad.png
+    - assets/images/road.png
     - assets/images/bookCover.jpg
     - assets/images/silver.png
     - assets/lotties/scroll.json
+    - assets/lotties/read.json
+    - assets/lotties/read2.json
+    - assets/lotties/catReading.json
+    - assets/lotties/catReading2.json
+    - assets/lotties/roadCick.json
+    - assets/lotties/roadCick2.json
     - assets/lotties/empty.json
     - assets/lotties/step.json
     - assets/images/auth1.jpg

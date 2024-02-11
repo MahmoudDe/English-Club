@@ -140,16 +140,16 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                 );
               },
               child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: mediaQuery.width / 30,
-                    vertical: mediaQuery.height / 50),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.amber),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                ),
-              ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: mediaQuery.width / 30,
+                      vertical: mediaQuery.height / 50),
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.amber),
+                  child: Image(
+                    image: const AssetImage('assets/images/road.png'),
+                    height: mediaQuery.height / 30,
+                    width: mediaQuery.width / 15,
+                  )),
             ),
             appBar: AppBar(
               backgroundColor: AppColors.main,
