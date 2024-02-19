@@ -8,7 +8,7 @@ import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/create_story_screen/add_cover_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:iconsax/iconsax.dart';
+// import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -276,41 +276,42 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                   },
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      scanQr();
-                    },
-                    style: ElevatedButton.styleFrom(primary: AppColors.main),
-                    icon: const Icon(
-                      Iconsax.scan,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Qr',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: mediaQuery.height / 25,
-                    width: mediaQuery.width / 1.5,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: AppColors.main, width: 2),
-                    ),
-                    child: Text(
-                      bookQrCode.isEmpty ? 'Qr code' : bookQrCode,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.main,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              // Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     ElevatedButton.icon(
+              //       onPressed: () {
+              //         scanQr();
+              //       },
+              //       style: ElevatedButton.styleFrom(primary: AppColors.main),
+              //       icon: const Icon(
+              //         Iconsax.scan,
+              //         color: Colors.white,
+              //       ),
+              //       label: const Text(
+              //         'Qr',
+              //         style: TextStyle(color: Colors.white),
+              //       ),
+              //     ),
+              //     Container(
+              //       alignment: Alignment.center,
+              //       height: mediaQuery.height / 25,
+              //       width: mediaQuery.width / 1.5,
+              //       decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         border: Border.all(color: AppColors.main, width: 2),
+              //       ),
+              //       child: Text(
+              //         bookQrCode.isEmpty ? 'Qr code' : bookQrCode,
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           color: AppColors.main,
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
+
               SizedBox(
                 height: mediaQuery.height / 90,
               ),
@@ -355,7 +356,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate() &&
-                      (bookQrCode.isNotEmpty || bookQrCode != '-1') &&
+                      // (bookQrCode.isNotEmpty || bookQrCode != '-1') &&
                       didSelectFile) {
                     print('storyTitle => $storyTitle');
                     print('bookQuantity => $bookQuantity');

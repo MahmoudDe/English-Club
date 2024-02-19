@@ -18,8 +18,11 @@ import '../server/apis.dart';
 import '../widgets/form_widget copy.dart';
 
 class CreateNewLevelScreen extends StatefulWidget {
-  const CreateNewLevelScreen(
-      {super.key, required this.sectionId, required this.sectionName});
+  const CreateNewLevelScreen({
+    super.key,
+    required this.sectionId,
+    required this.sectionName,
+  });
   final String sectionName;
   final String sectionId;
 
@@ -29,6 +32,7 @@ class CreateNewLevelScreen extends StatefulWidget {
 
 class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
   TextEditingController titleController = TextEditingController(text: '');
+  TextEditingController quizCountController = TextEditingController(text: '');
   TextEditingController storyGoodPerController =
       TextEditingController(text: '');
   TextEditingController vocabGoodPerController =
@@ -43,6 +47,7 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
       TextEditingController(text: '');
   final _formKey = GlobalKey<FormState>();
   FocusNode titleNode = FocusNode();
+  FocusNode quizCountNode = FocusNode();
   FocusNode storiesGoodPerNode = FocusNode();
   FocusNode vocabGoodPerNode = FocusNode();
   FocusNode storiesVeryGoodPerNode = FocusNode();
@@ -50,6 +55,7 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
   FocusNode storiesExcellentPerNode = FocusNode();
   FocusNode vocabExcellentPerNode = FocusNode();
   String levelName = '';
+  String quizCount = '';
   String storiesGoodPer = '';
   String vocabGoodPer = '';
   String storiesVeryGoodPer = '';
@@ -98,6 +104,24 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
     }
   ];
 
+  @override
+  void initState() {
+    fillTextField();
+    super.initState();
+  }
+
+  void fillTextField() {
+    titleController = TextEditingController(text: levelName);
+    storyGoodPerController = TextEditingController(text: storiesGoodPer);
+    vocabGoodPerController = TextEditingController(text: vocabGoodPer);
+    storyVeryGoodPerController = TextEditingController(text: storiesGoodPer);
+    vocabVeryGoodPerController = TextEditingController(text: vocabVeryGoodPer);
+    storyExcellentPerController =
+        TextEditingController(text: storiesExcellentPer);
+    vocabExcellentPerController =
+        TextEditingController(text: vocabExcellentPer);
+  }
+
   File? exclFile;
   String excelFileName = '';
   bool didSelectFile = false;
@@ -128,6 +152,7 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
     try {
       await Provider.of<Apis>(context, listen: false).createLevel(
           sectionId: widget.sectionId,
+          test_subQuestions_count: quizCount,
           name: levelName,
           good_percentage: storiesGoodPer,
           veryGood_percentage: storiesVeryGoodPer,
@@ -237,7 +262,7 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
                   labelText: 'level title',
                   hintText: 'EX: level(1)',
                   focusNode: titleNode,
-                  nextNode: titleNode,
+                  nextNode: quizCountNode,
                   validationFun: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter title for the level';
@@ -246,6 +271,34 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
                     }
                     setState(() {
                       levelName = value;
+                    });
+                    return null;
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: mediaQuery.width / 10,
+                    vertical: mediaQuery.height / 200),
+                child: FormWidget(
+                  controller: quizCountController,
+                  textInputType: TextInputType.number,
+                  isNormal: true,
+                  obscureText: false,
+                  togglePasswordVisibility: () {},
+                  mediaQuery: mediaQuery,
+                  textInputAction: TextInputAction.next,
+                  labelText: 'subQuestions count',
+                  hintText: 'EX: 70',
+                  focusNode: quizCountNode,
+                  nextNode: storiesGoodPerNode,
+                  validationFun: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter title for the level';
+                    }
+                    setState(() {
+                      quizCount = value;
                     });
                     return null;
                   },

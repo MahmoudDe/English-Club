@@ -257,6 +257,7 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                       allSectionsNames: allSectionsNames,
                       selectedSection: selectedSection,
                       sectionId: sectionId,
+                      allSections: allSections,
                       onChangedFilter: (value) {
                         controllerAnimation!.reverse().whenComplete(
                           () {
@@ -288,7 +289,10 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                         : SizedBox(
                                 height: mediaQuery.height / 1.3,
                                 child: LevelsWidget(
-                                    levels: levels, mediaQuery: mediaQuery))
+                                    sectionName: selectedSection,
+                                    sectionId: sectionId,
+                                    levels: levels,
+                                    mediaQuery: mediaQuery))
                             .animate(controller: controllerAnimation)
                             .slide(
                                 begin: const Offset(0, 1),

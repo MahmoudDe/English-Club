@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
+import '../../screens/english_club_settings_screen.dart';
 import '../../server/apis.dart';
 import '../form_widget copy.dart';
 
@@ -18,10 +19,12 @@ class SectionsWidget extends StatefulWidget {
       required this.allSectionsNames,
       required this.selectedSection,
       required this.sectionId,
-      this.onConfirmBtnTap});
+      this.onConfirmBtnTap,
+      required this.allSections});
   final Size mediaQuery;
   final void Function(String?)? onChangedFilter;
   final List<dynamic> allSectionsNames;
+  final List<dynamic> allSections;
   final String selectedSection;
   final String sectionId;
   final Function()? onConfirmBtnTap;
@@ -49,6 +52,78 @@ class _SectionsWidgetState extends State<SectionsWidget> {
     super.dispose();
   }
 
+  Future<void> deleteSection({required BuildContext context}) async {
+    try {
+      await Provider.of<Apis>(context, listen: false).deleteSection(
+        sectionId: widget.sectionId,
+      );
+      Apis.statusResponse == 200
+          ? QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              confirmBtnText: 'Ok',
+              onConfirmBtnTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EnglishClubSettingsScreen(),
+                  ),
+                );
+              },
+              text: Apis.message,
+            )
+          : QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: Apis.message,
+              confirmBtnText: 'Cancel',
+              confirmBtnColor: Colors.red,
+              onConfirmBtnTap: () {
+                Navigator.pop(context);
+              });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> activateSection({
+    required BuildContext context,
+  }) async {
+    try {
+      await Provider.of<Apis>(context, listen: false).makeSectionReady(
+        sectionId: widget.sectionId,
+      );
+      Apis.statusResponse == 200
+          ? QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              confirmBtnText: 'Ok',
+              onConfirmBtnTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EnglishClubSettingsScreen(),
+                  ),
+                );
+              },
+              text: Apis.message,
+            )
+          : QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: Apis.message,
+              confirmBtnText: 'Cancel',
+              confirmBtnColor: Colors.red,
+              onConfirmBtnTap: () {
+                Navigator.pop(context);
+              });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -59,15 +134,34 @@ class _SectionsWidgetState extends State<SectionsWidget> {
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {}),
         children: [
+          //delete section slide
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context1) {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.warning,
+                text:
+                    'Are you sure you want to delete this section ( ${widget.selectedSection} )?',
+                confirmBtnText: 'yes',
+                cancelBtnText: 'cancel',
+                confirmBtnColor: Colors.blueGrey,
+                onConfirmBtnTap: () {
+                  Navigator.pop(context);
+                  deleteSection(
+                    context: context,
+                  );
+                },
+              );
+            },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
           ),
+          //edit section slide
           SlidableAction(
             onPressed: (con) {
+              controller = TextEditingController(text: widget.selectedSection);
               QuickAlert.show(
                   context: context,
                   type: QuickAlertType.custom,
@@ -138,6 +232,7 @@ class _SectionsWidgetState extends State<SectionsWidget> {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
+          //add level slide
           SlidableAction(
             onPressed: (context) {
               Navigator.of(context).push(MaterialPageRoute(
@@ -151,17 +246,55 @@ class _SectionsWidgetState extends State<SectionsWidget> {
             icon: Icons.add_circle_outline,
             label: 'add level',
           ),
+          //Active || inActive section
+          if (Apis.sectionInfo['ready'] == 0)
+            SlidableAction(
+              onPressed: (context1) {
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.warning,
+                  text:
+                      'Are you sure you want to activate this section ( ${widget.selectedSection} )? \n Activate this section if you end adding levels, subLevels and stories',
+                  confirmBtnText: 'yes',
+                  cancelBtnText: 'cancel',
+                  confirmBtnColor: Colors.blueGrey,
+                  onConfirmBtnTap: () {
+                    Navigator.pop(context);
+                    activateSection(
+                      context: context,
+                    );
+                  },
+                );
+              },
+              backgroundColor: Colors.amber,
+              foregroundColor: Colors.white,
+              icon: Icons.star_rounded,
+              label: 'active',
+            ),
         ],
       ),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width / 40),
-        child: FilterWidget(
-            mediaQuery: widget.mediaQuery,
-            value: widget.selectedSection,
-            onChanged: widget.onChangedFilter,
-            menu: widget.allSectionsNames,
-            filterTitle: 'sections',
-            width: double.infinity),
+        child: Column(
+          children: [
+            Apis.sectionInfo['ready'] == 0
+                ? const Text(
+                    'This section is not activated  yet',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
+                  )
+                : const SizedBox(
+                    height: 0,
+                  ),
+            FilterWidget(
+                mediaQuery: widget.mediaQuery,
+                value: widget.selectedSection,
+                onChanged: widget.onChangedFilter,
+                menu: widget.allSectionsNames,
+                filterTitle: 'sections',
+                width: double.infinity),
+          ],
+        ),
       ),
     );
   }

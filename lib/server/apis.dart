@@ -25,6 +25,7 @@ class Apis with ChangeNotifier {
   static Map<String, dynamic> allGrades = {};
   static List<dynamic> sectionsData = [];
   static Map<String, dynamic> sectionInfo = {};
+  static Map<String, dynamic> levelData = {};
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -878,6 +879,7 @@ class Apis with ChangeNotifier {
 
   Future<bool> createLevel({
     required String sectionId,
+    required String test_subQuestions_count,
     required String name,
     required String good_percentage,
     required String veryGood_percentage,
@@ -890,19 +892,13 @@ class Apis with ChangeNotifier {
     required File file,
   }) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
-    // List<String> prizesString = [];
-    // List<String> vocabPrizesString = [];
-    // for (int i = 0; i < prizes.length; i++) {
-    //   prizesString.add(prizes[i].toString());
-    //   vocabPrizesString.add(vocabPrizes[i].toString());
-    // }
-    // print(prizesString);
-    // print(vocabPrizesString);
+
     try {
       String? myToken = storage.getString('token');
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
         'name': name,
+        'test_subQuestions_count': test_subQuestions_count,
         'good_percentage': good_percentage,
         'veryGood_percentage': veryGood_percentage,
         'excellent_percentage': excellent_percentage,
@@ -924,6 +920,250 @@ class Apis with ChangeNotifier {
         ),
       );
       print('................................create level server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data['message']);
+      message = e.response!.data['errors'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteLevel({
+    required String sectionId,
+    required String levelId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().delete(
+        "/admin/sections/$sectionId/levels/$levelId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................delete level server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data['message']);
+      message = e.response!.data['message'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteSection({
+    required String sectionId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().delete(
+        "/admin/sections/$sectionId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................delete section server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data);
+      message = e.response!.data['message'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> makeSectionReady({
+    required String sectionId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().put(
+        "/admin/sections/$sectionId/makeReady",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................make section ready server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data);
+      message = e.response!.data['message'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> getLevelData(
+      {required String sectionId, required String levelId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/admin/sections/$sectionId/levels/$levelId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................get level data server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      levelData = response.data['data'];
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data);
+      message = e.response!.data['message'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateLevelControlP({
+    required String sectionId,
+    required String levelId,
+    required String good_percentage,
+    required String veryGood_percentage,
+    required String excellent_percentage,
+    required List prizes,
+    required String vocab_g_percentage,
+    required String vocab_vg_percentage,
+    required String vocab_exc_percentage,
+    required List vocabPrizes,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().put(
+        "/admin/sections/$sectionId/levels/$levelId/controlPanel",
+        data: {
+          'good_percentage': good_percentage,
+          'veryGood_percentage': veryGood_percentage,
+          'excellent_percentage': excellent_percentage,
+          'prizes': prizes,
+          'vocab_g_percentage': vocab_g_percentage,
+          'vocab_vg_percentage': vocab_vg_percentage,
+          'vocab_exc_percentage': vocab_exc_percentage,
+          'vocabPrizes': vocabPrizes,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................update level controlP server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.data['message']);
+      message = e.response!.data['errors'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateLevel({
+    required String sectionId,
+    required String levelId,
+    required String name,
+    required String test_subQuestions_count,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().put(
+        "/admin/sections/$sectionId/levels/$levelId",
+        data: {
+          'name': name,
+          'test_subQuestions_count': test_subQuestions_count,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................update level controlP server response');
       print(response.data);
       print('................................');
       message = response.data['message'];
