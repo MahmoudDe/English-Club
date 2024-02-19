@@ -87,6 +87,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         }
         tempLevel = widget.roadData['data'][i]['name']
             .substring(0, widget.roadData['data'][i]['name'].indexOf('/'));
+        editStep();
       }
 
       String currentLevel = widget.roadData['data'][i]['name']
@@ -109,6 +110,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
           ));
         }
         tempLevel = currentLevel;
+        editStep();
       }
 
       //adding steps for each level
