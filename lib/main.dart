@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/screens/HomePage.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/splashscreen.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Apis(),
+        ),
+        ChangeNotifierProvider.value(
+          value: showBookController(),
         ),
       ],
       child: Consumer<Apis>(

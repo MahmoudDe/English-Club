@@ -40,6 +40,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
   File? bookImagePath;
   String storyTitle = '';
   String bookQuantity = '';
+  String subQuestions = '';
   String bookAllowBorrowDays = '';
   String bookQrCode = '';
   String excelFileName = '';
@@ -51,10 +52,13 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
 
   FocusNode storyTitleNode = FocusNode();
   FocusNode allowBorrowDaysNode = FocusNode();
+  FocusNode subQuestionsNode = FocusNode();
   FocusNode quantityNode = FocusNode();
   FocusNode qrNode = FocusNode();
 
   TextEditingController controllerTitle = TextEditingController(text: '');
+  TextEditingController controllerSubQuestions =
+      TextEditingController(text: '');
   TextEditingController controllerQuantity = TextEditingController(text: '');
   TextEditingController controllerBorrowDays = TextEditingController(text: '');
   TextEditingController controllerQrCode = TextEditingController(text: '');
@@ -111,6 +115,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
     try {
       await Provider.of<Apis>(context, listen: false).createBook(
         subLevelId: widget.subLevelId,
+        subQuestions: subQuestions,
         title: storyTitle,
         quantity: bookQuantity,
         allowedBorrowDays: bookAllowBorrowDays,
@@ -208,7 +213,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                   labelText: 'Story title',
                   hintText: 'EX: W.ever\'s success story',
                   focusNode: storyTitleNode,
-                  nextNode: quantityNode,
+                  nextNode: subQuestionsNode,
                   validationFun: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter title for the book';
@@ -217,6 +222,33 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                     }
                     setState(() {
                       storyTitle = value;
+                    });
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: mediaQuery.width / 10,
+                    vertical: mediaQuery.height / 90),
+                child: FormWidget(
+                  controller: controllerSubQuestions,
+                  textInputType: TextInputType.number,
+                  isNormal: true,
+                  obscureText: false,
+                  togglePasswordVisibility: () {},
+                  mediaQuery: mediaQuery,
+                  textInputAction: TextInputAction.next,
+                  labelText: 'subQuestions',
+                  hintText: 'EX: 30',
+                  focusNode: subQuestionsNode,
+                  nextNode: quantityNode,
+                  validationFun: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter number of subQuestions';
+                    }
+                    setState(() {
+                      subQuestions = value;
                     });
                     return null;
                   },
@@ -237,7 +269,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                   labelText: 'Quantity',
                   hintText: 'EX: 10',
                   focusNode: quantityNode,
-                  nextNode: quantityNode,
+                  nextNode: allowBorrowDaysNode,
                   validationFun: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter quantity for the book';

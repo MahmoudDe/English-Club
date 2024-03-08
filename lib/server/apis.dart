@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart' as Dio;
@@ -26,6 +27,7 @@ class Apis with ChangeNotifier {
   static List<dynamic> sectionsData = [];
   static Map<String, dynamic> sectionInfo = {};
   static Map<String, dynamic> levelData = {};
+  static Map<String, dynamic> stroyData = {};
 
   Future<bool> login(String? username, String? password) async {
     try {
@@ -824,6 +826,7 @@ class Apis with ChangeNotifier {
   Future<bool> createBook({
     required String subLevelId,
     required String title,
+    required String subQuestions,
     required String quantity,
     required String allowedBorrowDays,
     required String qrCode,
@@ -837,6 +840,7 @@ class Apis with ChangeNotifier {
       String fileName1 = bookCover.path.split('/').last;
       FormData formData = FormData.fromMap({
         'title': title,
+        'test_subQuestions_count': subQuestions,
         'allowed_borrow_days': allowedBorrowDays,
         'quantity': quantity,
         "cover_image": MultipartFile.fromFileSync(
@@ -1177,6 +1181,167 @@ class Apis with ChangeNotifier {
       print(e.response);
       print(e.response!.data['message']);
       message = e.response!.data['errors'].toString();
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> getStoriesSublevel({
+    required String storyId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/admin/story/$storyId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................story in subLevel data server response');
+      print(response.data);
+      print('................................');
+      showBookController.bookData['story'] = response.data;
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateStoryCover(
+      {required String storyId,
+      required String subLevelId,
+      required File bookCover}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      String fileName1 = bookCover.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "cover_image": MultipartFile.fromFileSync(
+          bookCover.path,
+          filename: fileName1,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/admin/sections/levels/subLevels/$subLevelId/stories/$storyId/updateCoverImage",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................update book cober data server response');
+      print(response.data);
+      print('................................');
+      showBookController.bookData = response.data['story'];
+      showBookController.message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteStory({
+    required String storyId,
+    required String subLevelId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().delete(
+        "/admin/sections/levels/subLevels/$subLevelId/stories/$storyId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................delete story server response');
+      print(response.data);
+      print('................................');
+      showBookController.message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return false;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateStory({
+    required String storyId,
+    required String subLevelId,
+    required String title,
+    required String test_subQuestions_count,
+    required String allowed_borrow_days,
+    required String quantity,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().patch(
+        "/admin/sections/levels/subLevels/$subLevelId/stories/$storyId",
+        data: {
+          'title': title,
+          'test_subQuestions_count': test_subQuestions_count,
+          'allowed_borrow_days': allowed_borrow_days,
+          'quantity': quantity,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................update story server response');
+      print(response.data);
+      print('................................');
+      showBookController.message = response.data['message'];
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
       notifyListeners();
       return false;
     } catch (e) {
