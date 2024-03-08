@@ -132,11 +132,10 @@ class FloatButtonWidget extends StatelessWidget {
                             barrierDismissible: false);
                         if (await Provider.of<Apis>(context, listen: false)
                             .updateStory(
-                          storyId: showBookController.bookData['story']['story']
-                                  ['id']
-                              .toString(),
-                          subLevelId: showBookController.bookData['story']
-                                  ['story']['sub_level_id']
+                          storyId:
+                              showBookController.bookData[0]['id'].toString(),
+                          subLevelId: showBookController.bookData[0]
+                                  ['sub_level_id']
                               .toString(),
                           title: titleController.text,
                           test_subQuestions_count: subQuestionsController.text,
@@ -153,11 +152,9 @@ class FloatButtonWidget extends StatelessWidget {
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
                                 builder: (context) => ShowBookDetailsScreen(
-                                    bookId: showBookController.bookData['story']
-                                            ['story']['id']
+                                    bookId: showBookController.bookData[0]['id']
                                         .toString(),
-                                    subLevelId: showBookController
-                                        .bookData['story']['story']
+                                    subLevelId: showBookController.bookData[0]
                                             ['sub_level_id']
                                         .toString(),
                                     subLevelName: subLevelName,
@@ -195,14 +192,11 @@ class FloatButtonWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         titleController = TextEditingController(
-            text: showBookController.bookData['story']['story']['title']
-                .toString());
+            text: showBookController.bookData[0]['title'].toString());
         quantityController = TextEditingController(
-            text: showBookController.bookData['story']['story']['quantity']
-                .toString());
+            text: showBookController.bookData[0]['quantity'].toString());
         borrowController = TextEditingController(
-            text: showBookController.bookData['story']['story']
-                    ['allowed_borrow_days']
+            text: showBookController.bookData[0]['allowed_borrow_days']
                 .toString());
 
         showDialogFun(context);

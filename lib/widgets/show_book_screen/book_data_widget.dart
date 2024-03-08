@@ -12,20 +12,20 @@ class BookDataWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          infoWidget('Title',
+              showBookController.bookData[0]['title'].toString(), mediaQuery),
           infoWidget(
-              'Title',
-              showBookController.bookData['story']['story']['title'].toString(),
+              'subQuestions',
+              showBookController.bookData[0]['test']['subQuestions_count']
+                  .toString(),
               mediaQuery),
           infoWidget(
               'Quantity',
-              showBookController.bookData['story']['story']['quantity']
-                  .toString(),
+              showBookController.bookData[0]['quantity'].toString(),
               mediaQuery),
           infoWidget(
               'Allowed borrow days',
-              showBookController.bookData['story']['story']
-                      ['allowed_borrow_days']
-                  .toString(),
+              showBookController.bookData[0]['allowed_borrow_days'].toString(),
               mediaQuery),
           SizedBox(
             height: mediaQuery.height / 30,

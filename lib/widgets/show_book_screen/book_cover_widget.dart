@@ -137,36 +137,35 @@ class _BookCoverWidgetState extends State<BookCoverWidget> {
               ),
             ],
           ),
-          child:
-              showBookController.bookData['story']['story']['cover_url'] != null
-                  ? ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15)),
-                      child: Image(
-                        image: NetworkImage(
-                          '${ImageUrl.imageUrl}${showBookController.bookData['story']['story']['cover_url']}',
-                        ),
-                        fit: BoxFit.cover,
-                        height: widget.mediaQuery.height / 3.5,
-                        // alignment: Alignment.topCenter,
-                      ),
+          child: showBookController.bookData[0]['cover_url'] != null
+              ? ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15)),
+                  child: Image(
+                    image: NetworkImage(
+                      '${ImageUrl.imageUrl}${showBookController.bookData[0]['cover_url']}',
+                    ),
+                    fit: BoxFit.cover,
+                    height: widget.mediaQuery.height / 3.5,
+                    // alignment: Alignment.topCenter,
+                  ),
+                )
+              : const Center(
+                  child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.add_a_photo,
+                      color: Colors.amber,
+                    ),
+                    Text(
+                      'Add a cover',
+                      style: TextStyle(
+                          color: Colors.amber, fontWeight: FontWeight.bold),
                     )
-                  : const Center(
-                      child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.add_a_photo,
-                          color: Colors.amber,
-                        ),
-                        Text(
-                          'Add a cover',
-                          style: TextStyle(
-                              color: Colors.amber, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
+                  ],
+                )),
         ),
       ),
     );

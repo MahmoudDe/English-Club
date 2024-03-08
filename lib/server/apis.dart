@@ -1202,11 +1202,12 @@ class Apis with ChangeNotifier {
           headers: {'Authorization': 'Bearer $myToken'},
         ),
       );
+
+      showBookController.bookData = response.data['story'];
       print(
           '................................story in subLevel data server response');
-      print(response.data);
+      print(showBookController.bookData);
       print('................................');
-      showBookController.bookData['story'] = response.data;
       statusResponse = 200;
       notifyListeners();
       return false;

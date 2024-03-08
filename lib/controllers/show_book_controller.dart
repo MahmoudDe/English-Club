@@ -15,7 +15,7 @@ class showBookController with ChangeNotifier {
   static bool isLoading = true;
   static bool isUploading = true;
   static late BuildContext context;
-  static Map<String, dynamic> bookData = {};
+  static List<dynamic> bookData = [];
   static File? bookImage;
   static File? bookImagePath;
   static String message = '';

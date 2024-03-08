@@ -28,14 +28,14 @@ class _QrWidgetState extends State<QrWidget> {
     if (status.isGranted) {
       try {
         final qrImage = await QrPainter(
-          data: showBookController.bookData['story']['story']['qrCode'],
+          data: showBookController.bookData[0]['qrCode'],
           version: 4,
           color: Colors.black,
           emptyColor: Colors.white,
         ).toImage(150);
 
         String filePath =
-            '/storage/emulated/0/Download/${showBookController.bookData['story']['story']['title']}.png';
+            '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png';
         File file = File(filePath);
         final bytes = await qrImage.toByteData(
           format: ImageByteFormat.png,
@@ -63,11 +63,11 @@ class _QrWidgetState extends State<QrWidget> {
           title: const Text('QR Code'),
           content: Container(
             child: PrettyQrView.data(
-              data: showBookController.bookData['story']['story']['qrCode'],
+              data: showBookController.bookData[0]['qrCode'],
               decoration: PrettyQrDecoration(
                 image: PrettyQrDecorationImage(
                   image: NetworkImage(
-                      '${ImageUrl.imageUrl}${showBookController.bookData['story']['story']['cover_url']}'),
+                      '${ImageUrl.imageUrl}${showBookController.bookData[0]['cover_url']}'),
                 ),
               ),
             ),
