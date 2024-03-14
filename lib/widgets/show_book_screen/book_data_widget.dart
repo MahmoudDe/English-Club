@@ -1,4 +1,5 @@
 import 'package:bdh/controllers/show_book_controller.dart';
+import 'package:bdh/screens/admin_quiz_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,13 @@ class BookDataWidget extends StatelessWidget {
             height: mediaQuery.height / 30,
           ),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => AdminQuizScreen(
+                      testId:
+                          showBookController.bookData[0]['test_id'].toString()),
+                ));
+              },
               style: ElevatedButton.styleFrom(
                 primary: AppColors.main,
               ),

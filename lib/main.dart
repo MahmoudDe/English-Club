@@ -15,11 +15,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MyApp());
-  WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    if (Platform.isAndroid) {
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-    }
-  });
+  // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+  //   if (Platform.isAndroid) {
+  //     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  //   }
+  // });
 }
 
 class MyApp extends StatelessWidget {

@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bdh/controllers/quiz_controller.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/dio_settings.dart';
@@ -1343,6 +1344,179 @@ class Apis with ChangeNotifier {
       print(e.error);
       print(e.response);
       showBookController.message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> getAdminQuiz({
+    required String quizId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/admin/tests/$quizId/adminView",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      // print('................................quiz admin server response');
+      // print(response.data);
+      // print('................................');
+      QuizController.numberOfQuestions =
+          response.data['data']['subQuestions_count'];
+      QuizController.test.clear();
+      QuizController.questions.clear();
+      QuizController.test = response.data['data']['test_sections'];
+      for (int i = 0; i < QuizController.test.length; i++) {
+        for (int j = 0; j < QuizController.test[i]['questions'].length; j++) {
+          QuizController.questions.add({
+            'data': QuizController.test[i]['questions'][j],
+            'main_text_url': QuizController.test[i]['text_url'],
+            'main_is_image': QuizController.test[i]['is_image'],
+            'main_id': QuizController.test[i]['id'],
+          });
+        }
+      }
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> changeMainQuestionToText(
+      {required String mainQuestionId,
+      required String quizId,
+      required String newText}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/tests/$quizId/sections/$mainQuestionId/turnIntoText",
+        data: {'text': newText},
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change main question to text server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> changeMainQuestionToImage({
+    required String mainQuestionId,
+    required String quizId,
+    required File questionImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      String fileName1 = questionImage.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "image": MultipartFile.fromFileSync(
+          questionImage.path,
+          filename: fileName1,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/admin/tests/$quizId/sections/$mainQuestionId/turnIntoImage",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change main question to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteMainQuestion({
+    required String mainQuestionId,
+    required String quizId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().delete(
+        "/admin/tests/$quizId/sections/$mainQuestionId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................delete main question to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
       notifyListeners();
       return false;
     } catch (e) {
