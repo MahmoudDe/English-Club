@@ -24,7 +24,7 @@ class MainQuestionWidget extends StatelessWidget {
             )
           : Image(
               image: NetworkImage(
-                '${ImageUrl.imageUrl}storage/${QuizController.questions[index]['main_text_url']}',
+                '${ImageUrl.imageUrl}${QuizController.questions[index]['main_text_url']}',
               ),
               fit: BoxFit.contain,
             ),

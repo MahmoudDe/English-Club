@@ -7,7 +7,6 @@ import 'package:bdh/controllers/quiz_controller.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/dio_settings.dart';
-import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -126,7 +125,7 @@ class Apis with ChangeNotifier {
           headers: {'Authorization': 'Bearer $myToken'},
         ),
       );
-      print('................................get all admins server response');
+      print('................................delete admin server response');
       print(response.data);
       print('................................');
       message = response.data['message'];
@@ -1504,6 +1503,173 @@ class Apis with ChangeNotifier {
       );
       print(
           '................................delete main question to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> changeCurrentQuestionToText(
+      {required String currentQuestionId,
+      required String mainQuestionId,
+      required String quizId,
+      required String newText}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/tests/sections/$mainQuestionId/questions/$currentQuestionId/turnIntoText",
+        data: {'text': newText},
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change current question to text server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> changeCurrentQuestionToImage({
+    required String mainQuestionId,
+    required String currentQuestionId,
+    required String quizId,
+    required File questionImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      String fileName1 = questionImage.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "image": MultipartFile.fromFileSync(
+          questionImage.path,
+          filename: fileName1,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/admin/tests/sections/$mainQuestionId/questions/$currentQuestionId/turnIntoImage",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change current question to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteCurrentQuestion({
+    required String mainQuestionId,
+    required String currentQuestionId,
+    required String quizId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().delete(
+        "/admin/tests/sections/$mainQuestionId/questions/$currentQuestionId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................delete current question to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateCurrentQuestion(
+      {required String mainQuestionId,
+      required String currentQuestionId,
+      required String quizId,
+      required String allOrNothing,
+      required String mark}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().put(
+        "/admin/tests/sections/$mainQuestionId/questions/$currentQuestionId",
+        data: {'allOrNothing': allOrNothing, 'mark': mark},
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................update current question to image server response');
       print(response.data);
       print('................................');
       getAdminQuiz(quizId: quizId);
