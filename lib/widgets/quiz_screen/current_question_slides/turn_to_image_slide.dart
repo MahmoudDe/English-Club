@@ -21,6 +21,7 @@ class TurnToImageSlide extends StatelessWidget {
   final String testId;
   final Size mediaQuery;
   final int index;
+  static File? currentQuestionImage;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,7 @@ class TurnToImageSlide extends StatelessWidget {
                             child: Icon(
                               Icons.image,
                               color: AppColors.main,
-                              size: widget.mediaQuery.height / 15,
+                              size: mediaQuery.height / 15,
                             ),
                           ),
                           Text(

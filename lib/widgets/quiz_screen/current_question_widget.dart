@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 
-import 'dart:io';
-
 import 'package:bdh/server/image_url.dart';
 import 'package:bdh/widgets/quiz_screen/current_question_slides/delete_slide.dart';
 import 'package:bdh/widgets/quiz_screen/current_question_slides/turn_to_image_slide.dart';
@@ -14,7 +12,7 @@ import '../../controllers/quiz_controller.dart';
 import '../../styles/app_colors.dart';
 
 class CurrentQuestionWidget extends StatefulWidget {
-  CurrentQuestionWidget(
+  const CurrentQuestionWidget(
       {super.key,
       required this.index,
       required this.mediaQuery,
@@ -54,7 +52,11 @@ class _CurrentQuestionWidgetState extends State<CurrentQuestionWidget> {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
-          TurnToTextSlide(index: widget.index, testId: widget.testId),
+          TurnToTextSlide(
+            index: widget.index,
+            testId: widget.testId,
+            context: context,
+          ),
           TurnToImageSlide(
               index: widget.index,
               testId: widget.testId,

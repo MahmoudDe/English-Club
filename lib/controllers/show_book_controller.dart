@@ -22,7 +22,6 @@ class showBookController with ChangeNotifier {
 
   Future<void> getData() async {
     isLoading = true;
-    notifyListeners();
     try {
       await Provider.of<Apis>(context, listen: false)
           .getStoriesSublevel(storyId: bookId);

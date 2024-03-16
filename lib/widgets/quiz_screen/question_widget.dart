@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:bdh/server/apis.dart';
+import 'package:bdh/widgets/quiz_screen/add_new_answer_btn_widget.dart';
 import 'package:bdh/widgets/quiz_screen/answers_widget.dart';
 import 'package:bdh/widgets/quiz_screen/current_question_widget.dart';
 import 'package:bdh/widgets/quiz_screen/main_question_widget.dart';
@@ -50,7 +51,11 @@ class QuestionWidget extends StatelessWidget {
               SizedBox(
                 height: mediaQuery.height / 100,
               ),
-              MainQuestionWidget(index: index, mediaQuery: mediaQuery),
+              Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: mediaQuery.width / 40),
+                  child:
+                      MainQuestionWidget(index: index, mediaQuery: mediaQuery)),
               SizedBox(
                 height: mediaQuery.height / 40,
               ),
@@ -61,6 +66,11 @@ class QuestionWidget extends StatelessWidget {
               ),
               SizedBox(
                 height: mediaQuery.height / 40,
+              ),
+              AddNewAnswerButtonWidget(
+                index: index,
+                testId: testId,
+                mediaQuery: mediaQuery,
               ),
               AnswersWidget(index: index, mediaQuery: mediaQuery)
             ],
