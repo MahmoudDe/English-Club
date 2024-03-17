@@ -8,15 +8,17 @@ import 'package:quickalert/quickalert.dart';
 import '../../../controllers/quiz_controller.dart';
 import '../../../server/apis.dart';
 
-class DeleteSlide extends StatelessWidget {
-  const DeleteSlide(
+class DeleteAnswerSlide extends StatelessWidget {
+  const DeleteAnswerSlide(
       {super.key,
       required this.index,
       required this.testId,
+      required this.answerIndex,
       required this.context});
   final int index;
-  final String testId;
   final BuildContext context;
+  final int answerIndex;
+  final String testId;
 
   @override
   Widget build(BuildContext context2) {
@@ -29,14 +31,13 @@ class DeleteSlide extends StatelessWidget {
             confirmBtnText: 'delete',
             confirmBtnColor: Colors.red,
             onConfirmBtnTap: () async {
-              await Provider.of<Apis>(context, listen: false)
-                  .deleteCurrentQuestion(
-                      mainQuestionId:
-                          QuizController.questions[index]['main_id'].toString(),
-                      currentQuestionId: QuizController.questions[index]['data']
-                              ['id']
-                          .toString(),
-                      quizId: testId);
+              await Provider.of<Apis>(context, listen: false).deleteAnswer(
+                  answerId: QuizController.questions[index]['data']['answers']
+                          [answerIndex]['id']
+                      .toString(),
+                  currentQuestionId:
+                      QuizController.questions[index]['data']['id'].toString(),
+                  quizId: testId);
               Navigator.of(context).pop();
               Apis.statusResponse == 200
                   ? QuickAlert.show(

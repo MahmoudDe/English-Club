@@ -72,7 +72,14 @@ class QuestionWidget extends StatelessWidget {
                 testId: testId,
                 mediaQuery: mediaQuery,
               ),
-              AnswersWidget(index: index, mediaQuery: mediaQuery)
+              SizedBox(
+                height: mediaQuery.height / 60,
+              ),
+              AnswersWidget(
+                index: index,
+                mediaQuery: mediaQuery,
+                testId: testId,
+              )
             ],
           ),
         ),

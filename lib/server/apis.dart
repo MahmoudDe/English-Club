@@ -1783,4 +1783,133 @@ class Apis with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> changeAnswerToText(
+      {required String answerId,
+      required String currentQuestionId,
+      required String quizId,
+      required String is_correct,
+      required String newText}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/tests/sections/questions/$currentQuestionId/answers/$answerId/turnIntoText",
+        data: {'text': newText, 'is_correct': is_correct},
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change answer to text server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> changeAnswerToImage({
+    required String answerId,
+    required String currentQuestionId,
+    required String quizId,
+    required String is_correct,
+    required File answerImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      String fileName1 = answerImage.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "is_correct": is_correct,
+        "image": MultipartFile.fromFileSync(
+          answerImage.path,
+          filename: fileName1,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/admin/tests/sections/questions/$currentQuestionId/answers/$answerId/turnIntoImage",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change answer to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteAnswer({
+    required String currentQuestionId,
+    required String answerId,
+    required String quizId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().delete(
+        "/admin/tests/sections/questions/$currentQuestionId/answers/$answerId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................delete answer to image server response');
+      print(response.data);
+      print('................................');
+      getAdminQuiz(quizId: quizId);
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

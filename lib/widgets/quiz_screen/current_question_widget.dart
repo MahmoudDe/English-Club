@@ -42,8 +42,13 @@ class _CurrentQuestionWidgetState extends State<CurrentQuestionWidget> {
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {}),
         children: [
-          DeleteSlide(index: widget.index, testId: widget.testId),
+          DeleteSlide(
+            index: widget.index,
+            testId: widget.testId,
+            context: context,
+          ),
           UpdateSlide(
+            context: context,
             testId: widget.testId,
             index: widget.index,
           ),

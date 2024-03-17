@@ -11,9 +11,14 @@ import '../../../styles/app_colors.dart';
 import '../../form_widget copy.dart';
 
 class UpdateSlide extends StatelessWidget {
-   UpdateSlide({super.key , required this.index , required this.testId});
-   final int index ;
-   final String testId;
+  UpdateSlide(
+      {super.key,
+      required this.index,
+      required this.testId,
+      required this.context});
+  final int index;
+  final String testId;
+  final BuildContext context;
   late TextEditingController currentQuestionMarkController;
 
   final formKey = GlobalKey<FormState>();
@@ -23,7 +28,7 @@ class UpdateSlide extends StatelessWidget {
   FocusNode currentQuestionMarkNode = FocusNode();
 
   late String allOrNothing;
-  void showUpdateDialog(BuildContext context , Size mediaQuery) {
+  void showUpdateDialog(BuildContext context, Size mediaQuery) {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.custom,
@@ -39,7 +44,7 @@ class UpdateSlide extends StatelessWidget {
                 isNormal: true,
                 obscureText: false,
                 togglePasswordVisibility: () {},
-                mediaQuery:mediaQuery,
+                mediaQuery: mediaQuery,
                 textInputAction: TextInputAction.done,
                 labelText: 'mark',
                 hintText: 'EX: 5',
@@ -61,11 +66,10 @@ class UpdateSlide extends StatelessWidget {
               activeColor: Colors.amber,
               checkColor: Colors.white,
               onChanged: (value) {
-               
-                  allOrNothing = '1';
-              
+                allOrNothing = '1';
+
                 Navigator.pop(context);
-                showUpdateDialog(context , mediaQuery);
+                showUpdateDialog(context, mediaQuery);
               },
               title: Text(
                 'AllOrNothing',
@@ -80,11 +84,10 @@ class UpdateSlide extends StatelessWidget {
               activeColor: Colors.amber,
               checkColor: Colors.white,
               onChanged: (value) {
-              
-                  allOrNothing = '0';
-              
+                allOrNothing = '0';
+
                 Navigator.pop(context);
-                showUpdateDialog(context , mediaQuery);
+                showUpdateDialog(context, mediaQuery);
               },
               title: Text(
                 'Normal',
@@ -103,14 +106,13 @@ class UpdateSlide extends StatelessWidget {
             await Provider.of<Apis>(context, listen: false)
                 .updateCurrentQuestion(
                     allOrNothing: allOrNothing,
-                    mainQuestionId: QuizController.questions[index]
-                            ['main_id']
-                        .toString(),
-                    currentQuestionId: QuizController.questions[index]
-                            ['data']['id']
+                    mainQuestionId:
+                        QuizController.questions[index]['main_id'].toString(),
+                    currentQuestionId: QuizController.questions[index]['data']
+                            ['id']
                         .toString(),
                     mark: currentQuestionMarkController.text,
-                    quizId:testId);
+                    quizId: testId);
             Navigator.of(context).pop();
             Apis.statusResponse == 200
                 ? QuickAlert.show(
@@ -136,17 +138,15 @@ class UpdateSlide extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context1) {
     return SlidableAction(
       onPressed: (con) {
         currentQuestionMarkController = TextEditingController(
-          text:
-              QuizController.questions[index]['data']['mark'].toString(),
+          text: QuizController.questions[index]['data']['mark'].toString(),
         );
-        allOrNothing = QuizController.questions[index]['data']
-                ['allOrNothing']
-            .toString();
-        showUpdateDialog(context , MediaQuery.of(context).size);
+        allOrNothing =
+            QuizController.questions[index]['data']['allOrNothing'].toString();
+        showUpdateDialog(context, MediaQuery.of(context).size);
       },
       backgroundColor: Colors.blueAccent,
       foregroundColor: Colors.white,
