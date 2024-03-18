@@ -62,6 +62,7 @@ class _ShowBookDetailsScreenState extends State<ShowBookDetailsScreen> {
             ? LoadingBookWidget(mediaQuery: mediaQuery)
             : Scaffold(
                 floatingActionButton: FloatButtonWidget(
+                  testId: showBookController.bookData[0]['test_id'].toString(),
                   mediaQuery: mediaQuery,
                   levelName: widget.levelName,
                   subLevelName: widget.subLevelName,
@@ -84,7 +85,6 @@ class _ShowBookDetailsScreenState extends State<ShowBookDetailsScreen> {
                 ),
                 body: Stack(
                   children: [
-                    QrWidget(mediaQuery: mediaQuery),
                     SingleChildScrollView(
                       child: Column(
                         children: [
@@ -104,6 +104,7 @@ class _ShowBookDetailsScreenState extends State<ShowBookDetailsScreen> {
                         ],
                       ),
                     ),
+                    QrWidget(mediaQuery: mediaQuery),
                   ],
                 ),
               );

@@ -1912,4 +1912,59 @@ class Apis with ChangeNotifier {
       return false;
     }
   }
+
+  Future<void> changeQuestion({
+    required File exclFile,
+    required String testId,
+    required String deletePreviousQuestions,
+  }) async {
+    print(exclFile.path);
+
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    var tempDir = await getApplicationDocumentsDirectory();
+    String fullPath = "${tempDir.path}/response2.xlsx";
+    print('full path $fullPath');
+    try {
+      String? myToken = await storage.getString('token');
+      String fileName = exclFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "test_id": testId,
+        "file": MultipartFile.fromFileSync(
+          exclFile.path,
+          filename: fileName,
+        ),
+        "deletePreviousQuestions?": deletePreviousQuestions,
+      });
+      Dio.Response response = await dio().post(
+        "/admin/tests/$testId/importQuestionsFromExcel",
+        data: formData,
+        onReceiveProgress: showDownloadProgress,
+        options: Dio.Options(
+          responseType: ResponseType.bytes,
+          headers: {'Authorization': 'Bearer $myToken'},
+          validateStatus: (status) {
+            return status! < 300;
+          },
+        ),
+      );
+      print(
+          '............................................ excil file status code');
+      print(response.statusCode);
+      print(response.data);
+      // final directory = await getDownloadsDirectory();
+      String filePath = '/storage/emulated/0/Download/StudentsAccounts.xlsx';
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
+      print('File downloaded to: $filePath');
+      statusResponse = 200;
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = e.response!.statusCode!;
+      print('................................error upload data info');
+      message = json.decode(String.fromCharCodes(e.response!.data!))['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 }

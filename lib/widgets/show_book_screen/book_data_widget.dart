@@ -32,25 +32,25 @@ class BookDataWidget extends StatelessWidget {
             height: mediaQuery.height / 30,
           ),
           ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => AdminQuizScreen(
-                      testId:
-                          showBookController.bookData[0]['test_id'].toString()),
-                ));
-              },
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.main,
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => AdminQuizScreen(
+                    testId:
+                        showBookController.bookData[0]['test_id'].toString()),
+              ));
+            },
+            style: ElevatedButton.styleFrom(
+              primary: AppColors.main,
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width / 20),
+              child: const Text(
+                'Show Quiz',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: mediaQuery.width / 20),
-                child: const Text(
-                  'Show Quiz',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ))
+            ),
+          ),
         ],
       ),
     );
