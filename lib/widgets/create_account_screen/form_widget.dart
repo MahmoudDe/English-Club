@@ -25,6 +25,7 @@ class FormCreatAccountWidget extends StatefulWidget {
 
 class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
   FocusNode scoreNod = FocusNode();
+  FocusNode borrowNod = FocusNode();
   FocusNode nameNode = FocusNode();
   FocusNode bronzeNod = FocusNode();
   FocusNode silverNod = FocusNode();
@@ -35,6 +36,7 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
   String studentName = '';
   int classId = 0;
   int studentScore = 0;
+  int borrowLimit = 0;
   int bronzeCoins = 0;
   int silverCoins = 0;
   int goldenCoins = 0;
@@ -82,24 +84,30 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
   }
 
   void changeSection({required index, required value}) {
+    print(index);
+    print(value);
     progresses.removeAt(index);
-    for (int i = 0; i < dataClass.sections.length; i++) {
-      int levelId = 0;
-      int supLevelId = 0;
-      for (int j = 0; j < dataClass.sections[i]['data'].length; j++) {
-        if (dataClass.sections[i]['data'][j]['name'] == value) {
-          levelId = dataClass.sections[i]['data'][j]['level_id'];
-          supLevelId = dataClass.sections[i]['data'][j]['sub_level_id'];
-          progresses.insert(index, {
-            "section_id": dataClass.sections[i]['section_id'],
-            "level_id": levelId,
-            "sub_level_id": supLevelId,
-            "finishedStories": []
-          });
-          return;
-        }
+    print(dataClass.sections);
+
+    int levelId = 0;
+    int supLevelId = 0;
+    for (int j = 0; j < dataClass.sections[index]['data'].length; j++) {
+      if (dataClass.sections[index]['data'][j]['name'] == value) {
+        levelId = dataClass.sections[index]['data'][j]['level_id'];
+        supLevelId = dataClass.sections[index]['data'][j]['sub_level_id'];
+        progresses.insert(index, {
+          "section_id": dataClass.sections[index]['section_id'],
+          "level_id": levelId,
+          "sub_level_id": supLevelId,
+          "finishedStories": []
+        });
+        // print(progresses);
+
+        return;
       }
     }
+
+    // print(progresses);
   }
 
   void changeClasses() {
@@ -118,12 +126,14 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
     try {
       print("studentName => $studentName");
       print("classId => $classId");
+      print("borrowLimit => $borrowLimit");
       print("studentScore => $studentScore");
       print("bronzeCoins => $bronzeCoins");
       print("silverCoins => $silverCoins");
       print("goldenCoins => $goldenCoins");
       print("progresses => $progresses");
       await Provider.of<Apis>(context, listen: false).createStudentAccount(
+          borrowLimit: borrowLimit.toString(),
           name: studentName,
           g_class_id: classId,
           score: studentScore.toString(),
@@ -131,6 +141,7 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
           silver_coins: silverCoins.toString(),
           bronze_coins: bronzeCoins.toString(),
           progresses: progresses);
+
       Apis.statusResponse == 200
           ? QuickAlert.show(
               context: context,
@@ -310,13 +321,42 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
                   labelText: 'Student score',
                   hintText: 'Enter student score',
                   focusNode: scoreNod,
-                  nextNode: bronzeNod,
+                  nextNode: borrowNod,
                   validationFun: (value) {
                     if (value == null || value.isEmpty) {
                       return 'You have to enter score';
                     }
                     setState(() {
                       studentScore = int.parse(value);
+                    });
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: widget.mediaQuery.height / 90,
+              ),
+              //Student limit book
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: widget.mediaQuery.width / 10),
+                child: FormWidget(
+                  textInputType: TextInputType.number,
+                  isNormal: true,
+                  obscureText: false,
+                  togglePasswordVisibility: () {},
+                  mediaQuery: widget.mediaQuery,
+                  textInputAction: TextInputAction.next,
+                  labelText: 'Borrow limit',
+                  hintText: 'limit of books student can borrow',
+                  focusNode: borrowNod,
+                  nextNode: bronzeNod,
+                  validationFun: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'You have to enter a number';
+                    }
+                    setState(() {
+                      borrowLimit = int.parse(value);
                     });
                     return null;
                   },

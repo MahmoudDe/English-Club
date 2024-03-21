@@ -54,7 +54,11 @@ flutter:
     - assets/images/readImage1.png
     - assets/images/openBookTitle.png
     - assets/images/readImage2.png
+    - assets/images/borrowBook.png
     - assets/images/background.png
+    - assets/images/studentScore.png
+    - assets/images/studentLevel.png
+    - assets/images/finishedStudentStories.png
     - assets/images/golden.png
     - assets/images/bronze.png
     - assets/images/circle.png

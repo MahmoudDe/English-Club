@@ -182,6 +182,7 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       allStudents = response.data;
+
       notifyListeners();
     } on DioError catch (e) {
       print(e.response!.data['message']);
@@ -387,6 +388,7 @@ class Apis with ChangeNotifier {
 
   Future<void> createStudentAccount({
     required String name,
+    required String borrowLimit,
     required int g_class_id,
     required String score,
     required String golden_coins,
@@ -403,6 +405,7 @@ class Apis with ChangeNotifier {
           "name": name,
           "g_class_id": g_class_id,
           "score": score,
+          "borrow_limit": borrowLimit,
           "golden_coins": golden_coins,
           "silver_coins": silver_coins,
           "bronze_coins": bronze_coins,
@@ -1965,6 +1968,179 @@ class Apis with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<bool> changeStudentImage({
+    required String studentId,
+    required File studentImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      String fileName1 = studentImage.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "onlyDelete?": '0',
+        "image": MultipartFile.fromFileSync(
+          studentImage.path,
+          filename: fileName1,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/user/changeProfilePicture/$studentId",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change student image server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateStudentData({
+    required String studentId,
+    required String studentName,
+    required String borrowLimit,
+    required String g_class_id,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().patch(
+        "/admin/students/$studentId",
+        data: {
+          'name': studentName,
+          'g_class_id': g_class_id,
+          'borrow_limit': borrowLimit,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change student image server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> borrowBook({
+    required String studentId,
+    required String qrCode,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/progress/$studentId/borrow",
+        data: {
+          'qrCode': qrCode,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student Borrow Book server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      message = response.data.toString();
+      showBookController.message = response.data.toString();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> returnBook({
+    required String studentId,
+    required String qrCode,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/progress/$studentId/return",
+        data: {
+          'qrCode': qrCode,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student return Book server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      message = response.data.toString();
+      showBookController.message = response.data.toString();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }
