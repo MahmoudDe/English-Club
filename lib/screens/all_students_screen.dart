@@ -512,21 +512,32 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                         child: ListView.builder(
                             shrinkWrap: true,
                             itemCount: searchStudentList.length,
-                            itemBuilder: (context, index) => StudentWidget(
-                                onPressedActive: (p0) {
-                                  changeActiveStudentState(
-                                      searchStudentList[index]['inactive'] == 0
-                                          ? '1'
-                                          : '0',
-                                      index);
-                                },
-                                onPressedDelete: (p0) {
-                                  deleteStudent(index);
-                                },
-                                getData: filterData,
-                                mediaQuery: mediaQuery,
-                                searchStudentList: searchStudentList,
-                                index: index)),
+                            itemBuilder: (context, index) => Consumer<Apis>(
+                                  builder: (context, value, child) =>
+                                      StudentWidget(
+                                          allClassesInGrade: allClassesInGrade,
+                                          allGrades: allGrades,
+                                          selectedClassFilterValue:
+                                              selectedClassFilterValue,
+                                          selectedGradeFilterValue:
+                                              selectedGradeFilterValue,
+                                          onPressedActive: (p0) {
+                                            changeActiveStudentState(
+                                                searchStudentList[index]
+                                                            ['inactive'] ==
+                                                        0
+                                                    ? '1'
+                                                    : '0',
+                                                index);
+                                          },
+                                          onPressedDelete: (p0) {
+                                            deleteStudent(index);
+                                          },
+                                          getData: filterData,
+                                          mediaQuery: mediaQuery,
+                                          searchStudentList: searchStudentList,
+                                          index: index),
+                                )),
                       )
                           .animate(
                             controller: controllerAnimation,

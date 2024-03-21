@@ -7,6 +7,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
@@ -27,13 +28,21 @@ class StudentWidget extends StatefulWidget {
       required this.index,
       required this.getData,
       required this.onPressedDelete,
-      required this.onPressedActive});
+      required this.onPressedActive,
+      required this.allClassesInGrade,
+      required this.allGrades,
+      required this.selectedClassFilterValue,
+      required this.selectedGradeFilterValue});
   Function getData;
   Size mediaQuery;
   List searchStudentList;
   int index;
   final void Function(BuildContext)? onPressedDelete;
   final void Function(BuildContext)? onPressedActive;
+  final List allClassesInGrade;
+  final List allGrades;
+  final String selectedClassFilterValue;
+  final String selectedGradeFilterValue;
 
   @override
   State<StudentWidget> createState() => _StudentWidgetState();
@@ -45,6 +54,20 @@ class _StudentWidgetState extends State<StudentWidget> {
   FocusNode studentNameNode = FocusNode();
   FocusNode studentBookLimitNode = FocusNode();
   static File? studentImage;
+  List allClassesInGrade1 = [];
+  List allGrades1 = [];
+  String selectedClassFilterValue1 = '';
+  String selectedGradeFilterValue1 = '';
+
+  late int classId;
+
+  void changeId() {
+    classId = dataClass.students
+        .where((element) => element['name'] == selectedGradeFilterValue1)
+        .toList()[0]['classes']
+        .where((e) => e['name'] == selectedClassFilterValue1)
+        .toList()[0]['id'];
+  }
 
   Future<void> borrowBook() async {
     Navigator.pop(context);
@@ -253,6 +276,46 @@ class _StudentWidgetState extends State<StudentWidget> {
               SizedBox(
                 height: widget.mediaQuery.height / 60,
               ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FilterWidget(
+                      width: widget.mediaQuery.width / 2.3,
+                      mediaQuery: widget.mediaQuery,
+                      menu: allClassesInGrade1,
+                      onChanged: (String? newValue) {
+                        selectedClassFilterValue1 = newValue!;
+                        changeId();
+                        Navigator.pop(context);
+                        updateStudentDialog(context);
+                      },
+                      value: selectedClassFilterValue1,
+                      filterTitle: 'Class',
+                    ),
+                    SizedBox(
+                      width: widget.mediaQuery.width / 20,
+                    ),
+                    FilterWidget(
+                      width: widget.mediaQuery.width / 2.3,
+                      mediaQuery: widget.mediaQuery,
+                      menu: allGrades1,
+                      onChanged: (String? newValue) {
+                        selectedGradeFilterValue1 = newValue!;
+                        changeId();
+                        Navigator.pop(context);
+                        updateStudentDialog(context);
+                      },
+                      value: selectedGradeFilterValue1,
+                      filterTitle: 'Grade',
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: widget.mediaQuery.height / 60,
+              ),
               FormWidget(
                 controller: studentNameController,
                 textInputType: TextInputType.text,
@@ -300,7 +363,35 @@ class _StudentWidgetState extends State<StudentWidget> {
                 height: widget.mediaQuery.height / 40,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  Navigator.pop(context);
+                  if (await Provider.of<Apis>(context, listen: false)
+                      .updateStudentData(
+                    studentId:
+                        widget.searchStudentList[widget.index]['id'].toString(),
+                    studentName: studentNameController.text,
+                    borrowLimit: studentBookLimitController.text,
+                    g_class_id: classId,
+                  )) {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      title: 'update result',
+                      text: showBookController.message,
+                      confirmBtnText: 'Cancel',
+                      confirmBtnColor: Colors.grey,
+                    );
+                  } else {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      title: 'update result',
+                      text: showBookController.message,
+                      confirmBtnText: 'Cancel',
+                      confirmBtnColor: Colors.grey,
+                    );
+                  }
+                },
                 style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -586,6 +677,13 @@ class _StudentWidgetState extends State<StudentWidget> {
                             text: widget.searchStudentList[widget.index]
                                     ['borrow_limit']
                                 .toString());
+                        allGrades1 = widget.allGrades;
+                        allClassesInGrade1 = widget.allClassesInGrade;
+                        selectedClassFilterValue1 =
+                            widget.selectedClassFilterValue;
+                        selectedGradeFilterValue1 =
+                            widget.selectedGradeFilterValue;
+                        changeId();
                         updateStudentDialog(context);
                       },
                       style:

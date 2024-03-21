@@ -2020,7 +2020,7 @@ class Apis with ChangeNotifier {
     required String studentId,
     required String studentName,
     required String borrowLimit,
-    required String g_class_id,
+    required int g_class_id,
   }) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
 
