@@ -9,6 +9,7 @@ import 'package:bdh/data/data.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+// import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart' as Dio;
@@ -25,10 +26,10 @@ class Apis with ChangeNotifier {
   static Map<String, dynamic> allStudents = {};
   static Map<String, dynamic> allGrades = {};
   static List<dynamic> sectionsData = [];
+  static List<dynamic> studentRoadMap = [];
   static Map<String, dynamic> sectionInfo = {};
   static Map<String, dynamic> levelData = {};
   static Map<String, dynamic> stroyData = {};
-
   Future<bool> login(String? username, String? password) async {
     try {
       final response = await dio().post('auth/login',
@@ -364,7 +365,7 @@ class Apis with ChangeNotifier {
     try {
       String? myToken = storage.getString('token');
       Dio.Response response = await dio().get(
-        "/admin/sections",
+        "/student/sections",
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),
@@ -375,6 +376,35 @@ class Apis with ChangeNotifier {
       message = response.data['message'];
       statusResponse = 200;
       sectionsData = response.data['data'];
+      notifyListeners();
+    } on DioError catch (e) {
+      statusResponse = 400;
+      print(e.response!.data['message']);
+      message = e.response!.data['message'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getAllSectionsForStudent({required String id}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/student/sections?student_id=$id",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................get all student sections server response');
+      print(response.data);
+      print('................................');
+      message = response.data['message'];
+      statusResponse = 200;
+      studentRoadMap.clear();
+      studentRoadMap = response.data['data'];
       notifyListeners();
     } on DioError catch (e) {
       statusResponse = 400;

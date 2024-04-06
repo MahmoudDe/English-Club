@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
+import 'package:bdh/screens/all_sections_map_roads_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class StudentWidget extends StatefulWidget {
       required this.searchStudentList,
       required this.index,
       required this.getData,
+      required this.refreshData,
       required this.onPressedDelete,
       required this.onPressedActive,
       required this.allClassesInGrade,
@@ -34,6 +36,7 @@ class StudentWidget extends StatefulWidget {
       required this.selectedClassFilterValue,
       required this.selectedGradeFilterValue});
   Function getData;
+  Function refreshData;
   Size mediaQuery;
   List searchStudentList;
   int index;
@@ -378,7 +381,11 @@ class _StudentWidgetState extends State<StudentWidget> {
                       type: QuickAlertType.success,
                       title: 'update result',
                       text: showBookController.message,
-                      confirmBtnText: 'Cancel',
+                      confirmBtnText: 'ok',
+                      onConfirmBtnTap: () {
+                        Navigator.pop(context);
+                        widget.refreshData();
+                      },
                       confirmBtnColor: Colors.grey,
                     );
                   } else {
@@ -704,7 +711,18 @@ class _StudentWidgetState extends State<StudentWidget> {
                       width: widget.mediaQuery.width / 20,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AllSectionsMapRoadsScreen(
+                              studentData:
+                                  widget.searchStudentList[widget.index],
+                              studentId: widget.searchStudentList[widget.index]
+                                      ['id']
+                                  .toString(),
+                              allSections: [],
+                              mediaQuery: widget.mediaQuery),
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(primary: AppColors.main),
                       child: Padding(
                         padding: EdgeInsets.symmetric(

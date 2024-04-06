@@ -1,8 +1,11 @@
+import 'package:bdh/server/image_url.dart';
 import 'package:bdh/widgets/road_level_screen/level_step_widget.dart';
 import 'package:bdh/widgets/road_level_screen/part_step_widget.dart';
 import 'package:bdh/widgets/road_level_screen/start_step_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
+import '../styles/app_colors.dart';
 
 class RoadLevelsScreen extends StatefulWidget {
   const RoadLevelsScreen(
@@ -10,7 +13,9 @@ class RoadLevelsScreen extends StatefulWidget {
       required this.roadData,
       required this.mediaQuery,
       required this.color,
+      required this.studentData,
       required this.assetUrls});
+  final Map studentData;
   final Map roadData;
   final Size mediaQuery;
   final Color? color;
@@ -100,6 +105,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       if (currentLevel != tempLevel) {
         steps.add(
           LevelStepWidget(
+              levelName: currentLevel,
               mediaQuery: mediaQuery,
               aligmentList: aligmentList,
               counter: counter),
@@ -134,6 +140,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         editStep();
         steps.add(
           LevelStepWidget(
+              levelName: currentLevel,
               mediaQuery: mediaQuery,
               aligmentList: aligmentList,
               counter: counter),
@@ -172,6 +179,25 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: widget.studentData['profile_picture'] == null
+                ? null
+                : NetworkImage(
+                    '${ImageUrl.imageUrl}${widget.studentData['profile_picture']}'),
+            backgroundColor: Colors.white,
+            child: Center(
+                child: Icon(
+              Icons.person,
+              color: AppColors.main,
+            )),
+          ),
+          title: Text(
+            widget.studentData['name'],
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
         backgroundColor: _darkenColor(widget.color!, 0.7),
       ),
       body: isLoading

@@ -50,12 +50,15 @@ class PartStepWidget extends StatelessWidget {
                   items: [
                     PopupMenuItem(
                       child: Container(
-                        // width: mediaQuery.width / 1.2,
-                        height: mediaQuery.height / 7,
+                        height: mediaQuery.height / 6,
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(15)),
-                          color: color,
+                          color: roadData['data'][i]['status'] == null ||
+                                  roadData['data'][i]['status'] == 'reached' ||
+                                  roadData['data'][i]['status'] == 'done'
+                              ? color
+                              : Colors.grey,
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black26,
@@ -72,6 +75,7 @@ class PartStepWidget extends StatelessWidget {
                                 vertical: mediaQuery.height / 40),
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -97,6 +101,20 @@ class PartStepWidget extends StatelessWidget {
                                     color: Colors.white,
                                     thickness: 2,
                                   ),
+                                  SizedBox(
+                                    height: mediaQuery.height / 200,
+                                  ),
+                                  Text(
+                                    roadData['data'][i]['name'],
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: mediaQuery.width / 35,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: mediaQuery.height / 200,
+                                  ),
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
@@ -111,11 +129,30 @@ class PartStepWidget extends StatelessWidget {
                                         ),
                                       ),
                                       CircularPercentIndicator(
-                                        radius: 20,
+                                        radius: mediaQuery.width / 15,
                                         lineWidth: 5,
-                                        center: const Text(
-                                          '0%',
-                                          style: TextStyle(
+                                        progressColor: Colors.green,
+                                        percent: roadData['data'][i]
+                                                    ['status'] ==
+                                                'reached'
+                                            ? double.parse(roadData['data'][i]
+                                                        ['progress'])
+                                                    .toInt() /
+                                                100
+                                            : roadData['data'][i]['status'] ==
+                                                    'done'
+                                                ? 1.0
+                                                : 0.0,
+                                        center: Text(
+                                          roadData['data'][i]['status'] ==
+                                                  'reached'
+                                              ? roadData['data'][i]['progress']
+                                                  .toString()
+                                              : roadData['data'][i]['status'] ==
+                                                      'done'
+                                                  ? '100%'
+                                                  : '0%',
+                                          style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -143,11 +180,19 @@ class PartStepWidget extends StatelessWidget {
               width: mediaQuery.width / 3.5,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(360)),
-                color: color,
+                color: roadData['data'][i]['status'] == null ||
+                        roadData['data'][i]['status'] == 'reached' ||
+                        roadData['data'][i]['status'] == 'done'
+                    ? color
+                    : Colors.grey,
                 // shape: BoxShape,
                 boxShadow: [
                   BoxShadow(
-                    color: _darkenColor(color, 0.7),
+                    color: roadData['data'][i]['status'] == null ||
+                            roadData['data'][i]['status'] == 'reached' ||
+                            roadData['data'][i]['status'] == 'done'
+                        ? _darkenColor(color, 0.7)
+                        : const Color.fromARGB(255, 119, 119, 119),
                     offset: const Offset(0, 6), // changes position of shadow
                   ),
                 ],
@@ -155,11 +200,19 @@ class PartStepWidget extends StatelessWidget {
               child: Stack(
                 children: [
                   Center(
-                      child: Image(
-                    image: const AssetImage('assets/images/openbook.png'),
-                    height: mediaQuery.height / 23,
-                    width: mediaQuery.width / 4,
-                  )),
+                      child: roadData['data'][i]['status'] == null ||
+                              roadData['data'][i]['status'] == 'reached' ||
+                              roadData['data'][i]['status'] == 'done'
+                          ? Image(
+                              image: const AssetImage(
+                                  'assets/images/openbook.png'),
+                              height: mediaQuery.height / 23,
+                              width: mediaQuery.width / 4,
+                            )
+                          : const Icon(
+                              Iconsax.lock_15,
+                              color: Colors.white,
+                            )),
                   Container(
                     height: mediaQuery.height / 10,
                     width: mediaQuery.width / 3.5,

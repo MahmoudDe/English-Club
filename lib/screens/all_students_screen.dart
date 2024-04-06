@@ -534,6 +534,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                             deleteStudent(index);
                                           },
                                           getData: filterData,
+                                          refreshData: getData,
                                           mediaQuery: mediaQuery,
                                           searchStudentList: searchStudentList,
                                           index: index),

@@ -135,7 +135,10 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
                   context,
                   MaterialPageRoute(
                     builder: (context) => AllSectionsMapRoadsScreen(
-                        allSections: allSections, mediaQuery: mediaQuery),
+                        studentData: {},
+                        studentId: '',
+                        allSections: allSections,
+                        mediaQuery: mediaQuery),
                   ),
                 );
               },
