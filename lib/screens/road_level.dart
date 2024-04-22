@@ -3,7 +3,6 @@ import 'package:bdh/widgets/road_level_screen/level_step_widget.dart';
 import 'package:bdh/widgets/road_level_screen/part_step_widget.dart';
 import 'package:bdh/widgets/road_level_screen/start_step_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../styles/app_colors.dart';
 
@@ -14,12 +13,14 @@ class RoadLevelsScreen extends StatefulWidget {
       required this.mediaQuery,
       required this.color,
       required this.studentData,
-      required this.assetUrls});
+      required this.assetUrls,
+      required this.showName});
   final Map studentData;
   final Map roadData;
   final Size mediaQuery;
   final Color? color;
   final List assetUrls;
+  final bool showName;
 
   @override
   State<RoadLevelsScreen> createState() => _RoadLevelsScreenState();
@@ -81,6 +82,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       if (tempLevel == '') {
         steps.add(
           StartStepWidget(
+              assetUrls: widget.assetUrls,
               mediaQuery: mediaQuery,
               aligmentList: aligmentList,
               counter: counter),
@@ -105,7 +107,9 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       if (currentLevel != tempLevel) {
         steps.add(
           LevelStepWidget(
-              levelName: currentLevel,
+              assetUrls: widget.assetUrls,
+              showButton: widget.showName,
+              levelName: tempLevel,
               mediaQuery: mediaQuery,
               aligmentList: aligmentList,
               counter: counter),
@@ -121,6 +125,9 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
 
       //adding steps for each level
       steps.add(PartStepWidget(
+          studentId: widget.studentData['id'].toString(),
+          studentData: widget.studentData,
+          isForStudent: widget.showName,
           mediaQuery: mediaQuery,
           aligmentList: aligmentList,
           counter: counter,
@@ -140,6 +147,8 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         editStep();
         steps.add(
           LevelStepWidget(
+              assetUrls: widget.assetUrls,
+              showButton: widget.showName,
               levelName: currentLevel,
               mediaQuery: mediaQuery,
               aligmentList: aligmentList,
@@ -179,25 +188,27 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: widget.studentData['profile_picture'] == null
-                ? null
-                : NetworkImage(
-                    '${ImageUrl.imageUrl}${widget.studentData['profile_picture']}'),
-            backgroundColor: Colors.white,
-            child: Center(
-                child: Icon(
-              Icons.person,
-              color: AppColors.main,
-            )),
-          ),
-          title: Text(
-            widget.studentData['name'],
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ),
+        title: !widget.showName
+            ? null
+            : ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: widget.studentData['profile_picture'] == null
+                      ? null
+                      : NetworkImage(
+                          '${ImageUrl.imageUrl}${widget.studentData['profile_picture']}'),
+                  backgroundColor: Colors.white,
+                  child: Center(
+                      child: Icon(
+                    Icons.person,
+                    color: AppColors.main,
+                  )),
+                ),
+                title: Text(
+                  widget.studentData['name'],
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
         backgroundColor: _darkenColor(widget.color!, 0.7),
       ),
       body: isLoading
@@ -213,26 +224,6 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
                       'assets/images/backRoad.png',
                     ),
                     fit: BoxFit.fill,
-                  ),
-                ),
-                Positioned(
-                  left: 1,
-                  bottom: mediaQuery.height / 20,
-                  child: SizedBox(
-                    height: mediaQuery.height / 7,
-                    // width: mediaQuery.width / 3,
-                    child:
-                        Lottie.asset(widget.assetUrls[0], fit: BoxFit.contain),
-                  ),
-                ),
-                Positioned(
-                  right: mediaQuery.width / 10,
-                  top: mediaQuery.height / 5,
-                  child: SizedBox(
-                    height: mediaQuery.height / 7,
-                    // width: mediaQuery.width / 3,
-                    child:
-                        Lottie.asset(widget.assetUrls[1], fit: BoxFit.contain),
                   ),
                 ),
                 Column(

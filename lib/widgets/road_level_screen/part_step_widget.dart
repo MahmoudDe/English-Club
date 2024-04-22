@@ -1,3 +1,4 @@
+import 'package:bdh/screens/sub_level_book_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -9,8 +10,11 @@ class PartStepWidget extends StatelessWidget {
       required this.aligmentList,
       required this.counter,
       required this.color,
+      required this.isForStudent,
       required this.currentPart,
       required this.roadData,
+      required this.studentId,
+      required this.studentData,
       required this.i});
   final Size mediaQuery;
   final List aligmentList;
@@ -18,8 +22,10 @@ class PartStepWidget extends StatelessWidget {
   final Color color;
   final String currentPart;
   final Map roadData;
+  final bool isForStudent;
   final int i;
-
+  final String studentId;
+  final Map studentData;
   Color _darkenColor(Color color, [double factor = 0.5]) {
     assert(factor >= 0 && factor <= 1);
     final int red = (color.red * factor).round();
@@ -159,7 +165,55 @@ class PartStepWidget extends StatelessWidget {
                                         ),
                                       ),
                                       ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            isForStudent
+                                                ? Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SubLevelBooksScreen(
+                                                      screenDarkColor: roadData[
+                                                                          'data'][i][
+                                                                      'status'] ==
+                                                                  null ||
+                                                              roadData['data']
+                                                                          [i][
+                                                                      'status'] ==
+                                                                  'reached' ||
+                                                              roadData['data']
+                                                                          [i][
+                                                                      'status'] ==
+                                                                  'done'
+                                                          ? color
+                                                          : const Color
+                                                              .fromARGB(
+                                                              255, 99, 99, 99),
+                                                      subLevelId: roadData[
+                                                                  'data'][i]
+                                                              ['sub_level_id']
+                                                          .toString(),
+                                                      studentId: studentId,
+                                                      title: roadData['data'][i]
+                                                          ['name'],
+                                                      studentData: studentData,
+                                                      screenColor: roadData['data']
+                                                                          [i][
+                                                                      'status'] ==
+                                                                  null ||
+                                                              roadData['data']
+                                                                          [i][
+                                                                      'status'] ==
+                                                                  'reached' ||
+                                                              roadData['data']
+                                                                          [i][
+                                                                      'status'] ==
+                                                                  'done'
+                                                          ? color
+                                                          : Colors.grey,
+                                                    ),
+                                                  ))
+                                                : null;
+                                          },
                                           style: ElevatedButton.styleFrom(
                                               primary: Colors.white),
                                           child: Icon(

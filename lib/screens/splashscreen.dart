@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
             Color.fromARGB(255, 97, 25, 112),
-            const Color.fromRGBO(56, 14, 63, 1),
+             Color.fromRGBO(56, 14, 63, 1),
           ], begin: Alignment.bottomCenter, end: Alignment.topRight),
         ),
         child: const Icon(
@@ -49,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
       print('------------------------------------------------');
       if (token != null) {
         print(token);
+        User.userType = prefs.getString('type')!;
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,

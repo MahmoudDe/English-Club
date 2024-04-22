@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:bdh/controllers/quiz_controller.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
+import 'package:bdh/model/user.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class Apis with ChangeNotifier {
   static Map<String, dynamic> sectionInfo = {};
   static Map<String, dynamic> levelData = {};
   static Map<String, dynamic> stroyData = {};
+  static List subLevelBooksList = [];
   Future<bool> login(String? username, String? password) async {
     try {
       final response = await dio().post('auth/login',
@@ -38,6 +40,7 @@ class Apis with ChangeNotifier {
         String token = response.data['data']['token'];
         print(token);
         String type = response.data['data']['type'];
+        User.userType = type;
         storToken(token: token, type: type);
         print('User logged in!');
         print('-----------------------------------login response');
@@ -2169,6 +2172,43 @@ class Apis with ChangeNotifier {
       notifyListeners();
       return false;
     } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> storiesInSubLevel({
+    required String subLevelId,
+    required String studentId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/student/sections/levels/subLevels/$subLevelId/stories?student_id=$studentId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................subLevels Books server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      subLevelBooksList = response.data['data'];
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      subLevelBooksList = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      subLevelBooksList = [];
       print(e);
       return false;
     }

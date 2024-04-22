@@ -1,6 +1,8 @@
+import 'package:bdh/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 
 class LevelStepWidget extends StatelessWidget {
   const LevelStepWidget(
@@ -8,10 +10,14 @@ class LevelStepWidget extends StatelessWidget {
       required this.levelName,
       required this.mediaQuery,
       required this.aligmentList,
+      required this.assetUrls,
+      required this.showButton,
       required this.counter});
   final Size mediaQuery;
   final List aligmentList;
   final String levelName;
+  final List assetUrls;
+  final bool showButton;
   final int counter;
 
   @override
@@ -21,6 +27,13 @@ class LevelStepWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: aligmentList[counter],
         children: [
+          aligmentList[counter] == MainAxisAlignment.end
+              ? SizedBox(
+                  height: mediaQuery.height / 7,
+                  // width: mediaQuery.width / 3,
+                  child: Lottie.asset(assetUrls[0], fit: BoxFit.contain),
+                )
+              : const SizedBox(),
           GestureDetector(
             onTapDown: (TapDownDetails details) {
               showMenu(
@@ -36,7 +49,9 @@ class LevelStepWidget extends StatelessWidget {
                   items: [
                     PopupMenuItem(
                       child: Container(
-                        height: mediaQuery.height / 6,
+                        height: User.userType == 'admin'
+                            ? mediaQuery.height / 5
+                            : mediaQuery.height / 6,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                           color: Colors.amber,
@@ -56,7 +71,7 @@ class LevelStepWidget extends StatelessWidget {
                                 vertical: mediaQuery.height / 40),
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -85,9 +100,36 @@ class LevelStepWidget extends StatelessWidget {
                                   SizedBox(
                                     height: mediaQuery.height / 200,
                                   ),
+                                  User.userType == 'admin'
+                                      ? const Text(
+                                          'Unlock the vocabulary test for this student',
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                      : const Text(
+                                          'You can ask the admin to unlock vocabulary test for you',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                   SizedBox(
                                     height: mediaQuery.height / 200,
                                   ),
+                                  User.userType == 'admin' && showButton
+                                      ? ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    mediaQuery.width / 8,
+                                                vertical:
+                                                    mediaQuery.height / 60),
+                                          ),
+                                          child: const Text(
+                                            'unlock test',
+                                            style: TextStyle(
+                                                color: Colors.amber,
+                                                fontWeight: FontWeight.bold),
+                                          ))
+                                      : const SizedBox()
                                 ]),
                           ),
                         ),
@@ -128,6 +170,13 @@ class LevelStepWidget extends StatelessWidget {
                   ),
                 ),
           ),
+          aligmentList[counter] != MainAxisAlignment.end
+              ? SizedBox(
+                  height: mediaQuery.height / 7,
+                  // width: mediaQuery.width / 3,
+                  child: Lottie.asset(assetUrls[0], fit: BoxFit.contain),
+                )
+              : const SizedBox(),
         ],
       ),
     );

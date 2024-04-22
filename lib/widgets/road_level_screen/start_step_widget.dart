@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quickalert/quickalert.dart';
 
 import '../../model/constants.dart';
@@ -11,10 +12,12 @@ class StartStepWidget extends StatelessWidget {
       {super.key,
       required this.mediaQuery,
       required this.aligmentList,
+      required this.assetUrls,
       required this.counter});
   final Size mediaQuery;
   final List aligmentList;
   final int counter;
+  final List assetUrls;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +73,11 @@ class StartStepWidget extends StatelessWidget {
                     milliseconds: 500,
                   ),
                 ),
+          ),
+          SizedBox(
+            height: mediaQuery.height / 7,
+            // width: mediaQuery.width / 3,
+            child: Lottie.asset(assetUrls[0], fit: BoxFit.contain),
           ),
         ],
       ),
