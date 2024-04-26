@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:bdh/controllers/show_book_controller.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../styles/app_colors.dart';
@@ -22,33 +25,57 @@ class QrWidget extends StatefulWidget {
 }
 
 class _QrWidgetState extends State<QrWidget> {
+  final ScreenshotController _screenshotController = ScreenshotController();
+
   Future<void> _downloadImage() async {
     // Request storage permission
     var status = await Permission.storage.request();
     if (status.isGranted) {
       try {
-        final qrImage = await QrPainter(
-          data: showBookController.bookData[0]['qrCode'],
-          version: 4,
-          color: Colors.black,
-          emptyColor: Colors.white,
-        ).toImage(150);
+        final Uint8List? imageBytes = await _screenshotController.capture();
+        if (imageBytes != null) {
+          // Create a temporary file to save the image
+          final tempFile = File(
+              '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png');
+          await tempFile.writeAsBytes(imageBytes);
 
-        String filePath =
-            '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png';
-        File file = File(filePath);
-        final bytes = await qrImage.toByteData(
-          format: ImageByteFormat.png,
-        );
-        await file.writeAsBytes(bytes!.buffer.asUint8List());
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('QR code downloaded successfully!')));
+          // Now use the tempFile for sharing or further processing
+          await Share.file(
+            "QR Code",
+            "${showBookController.bookData[0]['title']}.jpg",
+            imageBytes,
+            "image/jpg",
+            text: "Scan this QR code to borrow or return book",
+          );
+        } else {
+          print("Error capturing the QR code image.");
+        }
       } catch (error) {
-        print(error);
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to download QR code')));
+        print("Error capturing or sharing QR code: $error");
       }
+      // try {
+      //   final qrImage = await QrPainter(
+      //     data: showBookController.bookData[0]['qrCode'],
+      //     version: 4,
+      //     color: Colors.black,
+      //     emptyColor: Colors.white,
+      //   ).toImage(150);
+
+      //   String filePath =
+      //       '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png';
+      //   File file = File(filePath);
+      //   final bytes = await qrImage.toByteData(
+      //     format: ImageByteFormat.png,
+      //   );
+      //   await file.writeAsBytes(bytes!.buffer.asUint8List());
+      //   Navigator.pop(context);
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(content: Text('QR code downloaded successfully!')));
+      // } catch (error) {
+      //   print(error);
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(content: Text('Failed to download QR code')));
+      // }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Storage permission is required to download QR code')));
@@ -61,13 +88,17 @@ class _QrWidgetState extends State<QrWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('QR Code'),
-          content: Container(
-            child: PrettyQrView.data(
-              data: showBookController.bookData[0]['qrCode'],
-              decoration: PrettyQrDecoration(
-                image: PrettyQrDecorationImage(
-                  image: NetworkImage(
-                      '${ImageUrl.imageUrl}${showBookController.bookData[0]['cover_url']}'),
+          content: Screenshot(
+            controller: _screenshotController,
+            child: Container(
+              color: Colors.white,
+              child: PrettyQrView.data(
+                data: showBookController.bookData[0]['qrCode'],
+                decoration: PrettyQrDecoration(
+                  image: PrettyQrDecorationImage(
+                    image: NetworkImage(
+                        '${ImageUrl.imageUrl}${showBookController.bookData[0]['cover_url']}'),
+                  ),
                 ),
               ),
             ),

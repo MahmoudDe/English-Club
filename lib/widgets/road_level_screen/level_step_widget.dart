@@ -1,8 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bdh/model/user.dart';
+import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 
 class LevelStepWidget extends StatelessWidget {
   const LevelStepWidget(
@@ -12,13 +17,38 @@ class LevelStepWidget extends StatelessWidget {
       required this.aligmentList,
       required this.assetUrls,
       required this.showButton,
-      required this.counter});
+      required this.counter,
+      required this.studentId,
+      required this.levelId});
   final Size mediaQuery;
   final List aligmentList;
   final String levelName;
   final List assetUrls;
   final bool showButton;
   final int counter;
+  final String studentId;
+  final String levelId;
+
+  Future<void> unlockTest(BuildContext context) async {
+    try {
+      if (await Provider.of<Apis>(context, listen: false)
+          .unlockVocabTest(levelId: levelId, studentId: studentId)) {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            confirmBtnText: 'Ok',
+            text: Apis.message);
+      } else {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            confirmBtnText: 'Ok',
+            text: Apis.message);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +144,9 @@ class LevelStepWidget extends StatelessWidget {
                                   ),
                                   User.userType == 'admin' && showButton
                                       ? ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            unlockTest(context);
+                                          },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.white,
                                             padding: EdgeInsets.symmetric(

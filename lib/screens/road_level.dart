@@ -36,6 +36,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
   }
 
   String tempLevel = '';
+  String tempLevelId = '';
   int counter = 0;
 
   Color _darkenColor(Color color, [double factor = 0.5]) {
@@ -94,11 +95,13 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         }
         tempLevel = widget.roadData['data'][i]['name']
             .substring(0, widget.roadData['data'][i]['name'].indexOf('/'));
+        tempLevelId = widget.roadData['data'][i]['level_id'].toString();
         editStep();
       }
 
       String currentLevel = widget.roadData['data'][i]['name']
           .substring(0, widget.roadData['data'][i]['name'].indexOf('/'));
+      String currentLevelId = widget.roadData['data'][i]['level_id'].toString();
       String currentPart = widget.roadData['data'][i]['name'].substring(
           widget.roadData['data'][i]['name'].indexOf('/') + 1,
           widget.roadData['data'][i]['name'].length);
@@ -107,6 +110,9 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       if (currentLevel != tempLevel) {
         steps.add(
           LevelStepWidget(
+              studentId:
+                  !widget.showName ? '' : widget.studentData['id'].toString(),
+              levelId: tempLevelId,
               assetUrls: widget.assetUrls,
               showButton: widget.showName,
               levelName: tempLevel,
@@ -147,6 +153,9 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         editStep();
         steps.add(
           LevelStepWidget(
+              studentId:
+                  !widget.showName ? '' : widget.studentData['id'].toString(),
+              levelId: currentLevelId,
               assetUrls: widget.assetUrls,
               showButton: widget.showName,
               levelName: currentLevel,

@@ -2213,4 +2213,41 @@ class Apis with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> unlockVocabTest({
+    required String levelId,
+    required String studentId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/tests/sections/levels/$levelId/removeVocabLockForStudent/$studentId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................unlock vocab test server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      message = response.data['message'];
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }
