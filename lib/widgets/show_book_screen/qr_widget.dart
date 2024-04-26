@@ -12,7 +12,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../styles/app_colors.dart';
 
@@ -53,29 +52,6 @@ class _QrWidgetState extends State<QrWidget> {
       } catch (error) {
         print("Error capturing or sharing QR code: $error");
       }
-      // try {
-      //   final qrImage = await QrPainter(
-      //     data: showBookController.bookData[0]['qrCode'],
-      //     version: 4,
-      //     color: Colors.black,
-      //     emptyColor: Colors.white,
-      //   ).toImage(150);
-
-      //   String filePath =
-      //       '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png';
-      //   File file = File(filePath);
-      //   final bytes = await qrImage.toByteData(
-      //     format: ImageByteFormat.png,
-      //   );
-      //   await file.writeAsBytes(bytes!.buffer.asUint8List());
-      //   Navigator.pop(context);
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //       const SnackBar(content: Text('QR code downloaded successfully!')));
-      // } catch (error) {
-      //   print(error);
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //       const SnackBar(content: Text('Failed to download QR code')));
-      // }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Storage permission is required to download QR code')));

@@ -9,10 +9,12 @@ class appBarWidget {
   appBarWidget(
       {required this.animationController,
       required this.mediaQuery,
-      required this.onPressed});
+      required this.onPressed,
+      required this.onPressedList});
   AnimationController animationController;
   Size mediaQuery;
   void Function()? onPressed;
+  void Function()? onPressedList;
 
   bool _isIconTabes = false;
   void _iconTab() {
@@ -30,6 +32,12 @@ class appBarWidget {
       backgroundColor: AppColors.main,
       title: const AppBarContent(),
       actions: [
+        IconButton(
+            onPressed: onPressedList,
+            icon: const Icon(
+              Icons.list_alt,
+              color: Colors.white,
+            )),
         Padding(
           padding: EdgeInsets.symmetric(
               horizontal: mediaQuery.width / 100,

@@ -32,6 +32,8 @@ class Apis with ChangeNotifier {
   static Map<String, dynamic> levelData = {};
   static Map<String, dynamic> stroyData = {};
   static List subLevelBooksList = [];
+  static List doneTasks = [];
+  static List waitingTasks = [];
   Future<bool> login(String? username, String? password) async {
     try {
       final response = await dio().post('auth/login',
@@ -2244,6 +2246,75 @@ class Apis with ChangeNotifier {
       print(e.response);
       message = e.response!.data['message'];
       notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> toDoList() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    doneTasks.clear();
+    waitingTasks.clear();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/admin/todoNotifications",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................to do list server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      doneTasks = response.data['data']['done'];
+      waitingTasks = response.data['data']['waiting'];
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      doneTasks = [];
+      waitingTasks = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      doneTasks = [];
+      waitingTasks = [];
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> makeTaskDone({required String taskId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().patch(
+        "/admin/todoNotifications/$taskId/makeDone",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................make task done server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      toDoList();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
       return false;
     } catch (e) {
       print(e);

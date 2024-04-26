@@ -1,4 +1,5 @@
 import 'package:bdh/screens/start_screen.dart';
+import 'package:bdh/screens/toDo_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -39,6 +40,11 @@ class _NavigationScreenState extends State<NavigationScreen>
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: appBarWidget(
+          onPressedList: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const ToDoScreen(),
+            ));
+          },
           animationController: _animationController,
           mediaQuery: mediaQuery,
           onPressed: () async {
