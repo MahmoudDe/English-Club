@@ -141,10 +141,8 @@ class PartStepWidget extends StatelessWidget {
                                         percent: roadData['data'][i]
                                                     ['status'] ==
                                                 'reached'
-                                            ? double.parse(roadData['data'][i]
-                                                        ['progress'])
-                                                    .toInt() /
-                                                100
+                                            ? double.parse(
+                                                roadData['data'][i]['progress'])
                                             : roadData['data'][i]['status'] ==
                                                     'done'
                                                 ? 1.0
@@ -152,8 +150,7 @@ class PartStepWidget extends StatelessWidget {
                                         center: Text(
                                           roadData['data'][i]['status'] ==
                                                   'reached'
-                                              ? roadData['data'][i]['progress']
-                                                  .toString()
+                                              ? "${(double.parse(roadData['data'][i]['progress']).toInt() * 100).toString()}%"
                                               : roadData['data'][i]['status'] ==
                                                       'done'
                                                   ? '100%'

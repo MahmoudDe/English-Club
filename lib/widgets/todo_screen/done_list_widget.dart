@@ -61,14 +61,3 @@ class DoneListWidget extends StatelessWidget {
   }
 }
 
-class AllProductService {
-  static List<dynamic> data = [];
-  Future<bool> getAllProducts() async {
-    try {
-      data = await Api().get(url: 'https://fakestoreapi.com/products');
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-}

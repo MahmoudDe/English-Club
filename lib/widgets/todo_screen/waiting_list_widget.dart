@@ -17,7 +17,7 @@ class _WaitingListWidgetState extends State<WaitingListWidget> {
     QuickAlert.show(
       context: context,
       title: 'Make it done',
-      text: 'Did you done this task ?',
+      text: 'Did you do this task ?',
       type: QuickAlertType.info,
       animType: QuickAlertAnimType.slideInRight,
       cancelBtnText: 'no',
