@@ -11,7 +11,7 @@ class CollectedPrizeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: Apis.doneTasks.length,
+      itemCount: Apis.donePrizes.length,
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       itemBuilder: (context, index) => Card(

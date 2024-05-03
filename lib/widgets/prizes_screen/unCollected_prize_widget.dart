@@ -42,7 +42,7 @@ class _WaitingListWidgetState extends State<UnCollectedPrizeWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: Apis.doneTasks.length,
+      itemCount: Apis.waitingPrizes.length,
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       itemBuilder: (context, index) => Card(

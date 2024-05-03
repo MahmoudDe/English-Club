@@ -2343,7 +2343,7 @@ class Apis with ChangeNotifier {
       print('................................');
       statusResponse = 200;
       donePrizes = response.data['data']['collected'];
-      waitingPrizes = response.data['data']['unCollected'];
+      waitingPrizes = response.data['data']['unColleted'];
       notifyListeners();
       return true;
     } on DioError catch (e) {
