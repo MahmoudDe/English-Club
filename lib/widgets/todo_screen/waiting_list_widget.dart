@@ -24,7 +24,7 @@ class _WaitingListWidgetState extends State<WaitingListWidget> {
       confirmBtnText: 'yes',
       onConfirmBtnTap: () async {
         if (await Provider.of<Apis>(context, listen: false)
-            .makeTaskDone(taskId: taskId)) {
+            .makeTaskDone(taskId: taskId, page: '1')) {
           Navigator.pop(context);
         }
       },

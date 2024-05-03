@@ -23,4 +23,5 @@ class dataClass {
   static String urlHost = '';
   static List sections = [];
   static List customList = [];
+  static int doneTaskIndex = 0;
 }

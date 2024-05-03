@@ -34,6 +34,8 @@ class Apis with ChangeNotifier {
   static List subLevelBooksList = [];
   static List doneTasks = [];
   static List waitingTasks = [];
+  static List donePrizes = [];
+  static List waitingPrizes = [];
   Future<bool> login(String? username, String? password) async {
     try {
       final response = await dio().post('auth/login',
@@ -2253,7 +2255,7 @@ class Apis with ChangeNotifier {
     }
   }
 
-  Future<bool> toDoList() async {
+  Future<bool> toDoList({required String page}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     doneTasks.clear();
     waitingTasks.clear();
@@ -2261,7 +2263,7 @@ class Apis with ChangeNotifier {
       String? myToken = storage.getString('token');
 
       Dio.Response response = await dio().get(
-        "/admin/todoNotifications",
+        "/admin/todoNotifications?page=$page",
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),
@@ -2270,7 +2272,7 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       statusResponse = 200;
-      doneTasks = response.data['data']['done'];
+      doneTasks = response.data['data']['done']['data'];
       waitingTasks = response.data['data']['waiting'];
       notifyListeners();
       return true;
@@ -2292,7 +2294,8 @@ class Apis with ChangeNotifier {
     }
   }
 
-  Future<bool> makeTaskDone({required String taskId}) async {
+  Future<bool> makeTaskDone(
+      {required String taskId, required String page}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
       String? myToken = storage.getString('token');
@@ -2307,7 +2310,7 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       statusResponse = 200;
-      toDoList();
+      toDoList(page: page);
       notifyListeners();
       return true;
     } on DioError catch (e) {
@@ -2318,6 +2321,82 @@ class Apis with ChangeNotifier {
       return false;
     } catch (e) {
       print(e);
+      return false;
+    }
+  }
+
+  Future<bool> allPrizes() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    donePrizes.clear();
+    waitingPrizes.clear();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/admin/viewPrizes",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................all prizes server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      donePrizes = response.data['data']['collected'];
+      waitingPrizes = response.data['data']['unCollected'];
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      donePrizes = [];
+      waitingPrizes = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      doneTasks = [];
+      waitingTasks = [];
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> givePrize(
+      {required String studentId, required String prizeId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/students/$studentId/collectedPrize/$prizeId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................give prize server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      allPrizes();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      donePrizes = [];
+      waitingPrizes = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      doneTasks = [];
+      waitingTasks = [];
+      notifyListeners();
       return false;
     }
   }

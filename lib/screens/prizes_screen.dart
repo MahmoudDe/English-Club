@@ -1,28 +1,28 @@
-import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
-import 'package:bdh/widgets/todo_screen/done_list_widget.dart';
-import 'package:bdh/widgets/todo_screen/waiting_list_widget.dart';
+import 'package:bdh/widgets/prizes_screen/collected_prize_widget.dart';
+import 'package:bdh/widgets/prizes_screen/unCollected_prize_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../styles/app_colors.dart';
 import '../widgets/title_widget.dart';
 
-class ToDoScreen extends StatefulWidget {
-  const ToDoScreen({super.key});
+class PrizeScreen extends StatefulWidget {
+  const PrizeScreen({super.key});
 
   @override
-  State<ToDoScreen> createState() => _ToDoScreenState();
+  State<PrizeScreen> createState() => _PrizeScreenState();
 }
 
-class _ToDoScreenState extends State<ToDoScreen>
+class _PrizeScreenState extends State<PrizeScreen>
     with SingleTickerProviderStateMixin {
   Future<void> getData() async {
     setState(() {
       isLoading = true;
     });
     try {
-      if (await Provider.of<Apis>(context, listen: false).toDoList(page: '1')) {
+      if (await Provider.of<Apis>(context, listen: false).allPrizes()) {
         setState(() {
           isLoading = false;
         });
@@ -37,13 +37,7 @@ class _ToDoScreenState extends State<ToDoScreen>
   @override
   void initState() {
     controller = TabController(length: 2, vsync: this);
-    controller!.addListener(
-      () {
-        setState(() {
-          dataClass.doneTaskIndex = 1;
-        });
-      },
-    );
+
     getData();
     super.initState();
   }
@@ -117,10 +111,10 @@ class Tabs extends StatelessWidget {
       tabAlignment: TabAlignment.fill,
       tabs: const [
         Tab(
-          text: 'Waiting',
+          text: 'UnCollected',
         ),
         Tab(
-          text: 'Done',
+          text: 'Collected',
         ),
       ],
     );
@@ -146,8 +140,8 @@ class SlidesForTabs extends StatelessWidget {
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          WaitingListWidget(mediaQuery: mediaQuery),
-          DoneListWidget(mediaQuery: mediaQuery),
+          UnCollectedPrizeWidget(mediaQuery: mediaQuery),
+          CollectedPrizeWidget(mediaQuery: mediaQuery),
         ],
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:bdh/screens/add_students_screen.dart';
 import 'package:bdh/screens/english_club_settings_screen.dart';
+import 'package:bdh/screens/prizes_screen.dart';
+import 'package:bdh/screens/toDo_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/appBar/app_bar_content.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +34,6 @@ class appBarWidget {
       backgroundColor: AppColors.main,
       title: const AppBarContent(),
       actions: [
-        IconButton(
-            onPressed: onPressedList,
-            icon: const Icon(
-              Icons.list_alt,
-              color: Colors.white,
-            )),
         Padding(
           padding: EdgeInsets.symmetric(
               horizontal: mediaQuery.width / 100,
@@ -53,6 +49,50 @@ class appBarWidget {
             ),
             itemBuilder: (BuildContext context) {
               return [
+                PopupMenuItem<String>(
+                  value: 'prizes',
+                  child: TextButton.icon(
+                    label: Text(
+                      'Students prizes',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: AppColors.main),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const PrizeScreen(),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.star_rate_rounded,
+                      color: AppColors.main,
+                    ),
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'ToDo list',
+                  child: TextButton.icon(
+                    label: Text(
+                      'ToDo tasks',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: AppColors.main),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ToDoScreen(),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.list_alt,
+                      color: AppColors.main,
+                    ),
+                  ),
+                ),
                 PopupMenuItem<String>(
                   value: 'English_Club',
                   child: TextButton.icon(
