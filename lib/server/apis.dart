@@ -15,6 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart' as Dio;
 
+import '../model/student_model.dart';
+
 class Apis with ChangeNotifier {
   // Add the routes
 
@@ -22,6 +24,7 @@ class Apis with ChangeNotifier {
   static List<dynamic> allAdmins = [];
   static String message = '';
   static int statusResponse = 0;
+  static StudentModel? studentModel;
   static Map<String, dynamic> createAdmin = {};
   static Map<String, dynamic> createStudent = {};
   static Map<String, dynamic> allStudents = {};
@@ -80,7 +83,7 @@ class Apis with ChangeNotifier {
     await storage.setString('type', type);
   }
 
-  Future<void> logout() async {
+  Future<bool> logout() async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
       String? myToken = storage.getString('token');
@@ -93,10 +96,13 @@ class Apis with ChangeNotifier {
       print('................................logout server response');
       print(response.data);
       print('................................');
+      return true;
     } on DioError catch (e) {
       print(e.response!.data['message']);
+      return false;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
@@ -689,7 +695,7 @@ class Apis with ChangeNotifier {
       Dio.Response response = await dio().put(
         "/admin/students/$studentId/inActive",
         data: {
-          'inactive': activeState,
+          'active': activeState,
         },
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
@@ -2186,7 +2192,8 @@ class Apis with ChangeNotifier {
     required String studentId,
   }) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
-
+    print('3====================================');
+    print(studentId);
     try {
       String? myToken = storage.getString('token');
 
@@ -2396,6 +2403,39 @@ class Apis with ChangeNotifier {
       print(e);
       doneTasks = [];
       waitingTasks = [];
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> studentHomeScreen() async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/student/HomeScreen",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student home screen server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      studentModel = StudentModel.fromJson(json: response.data['data']);
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
       notifyListeners();
       return false;
     }

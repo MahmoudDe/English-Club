@@ -184,6 +184,8 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
   }
 
   void filterData() {
+    // filterStudents.clear();
+    searchStudentList.clear();
     setState(() {
       filterStudents = dataClass.students
           .where((element) => element['name'] == selectedGradeFilterValue)
@@ -523,6 +525,13 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                               selectedGradeFilterValue,
                                           onPressedActive: (p0) {
                                             changeActiveStudentState(
+                                                //now
+                                                //InActive = 0 mean it's inActive
+                                                //InActive = 1 mean it's Active
+
+                                                //before
+                                                //InActive = 0 mean it's Active                  to inActive send 1
+                                                //InActive = 1 mean it's InActive                to active send 0
                                                 searchStudentList[index]
                                                             ['inactive'] ==
                                                         0

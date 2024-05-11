@@ -1,10 +1,14 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../server/apis.dart';
+import 'all_sections_map_roads_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,10 +17,13 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    checkLoginStatus(context);
+    checkLoginStatus(
+      context,
+    );
     super.initState();
   }
 
@@ -30,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
             Color.fromARGB(255, 97, 25, 112),
-             Color.fromRGBO(56, 14, 63, 1),
+            Color.fromRGBO(56, 14, 63, 1),
           ], begin: Alignment.bottomCenter, end: Alignment.topRight),
         ),
         child: const Icon(
@@ -41,7 +48,9 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<void> checkLoginStatus(BuildContext context) async {
+  Future<void> checkLoginStatus(
+    BuildContext context,
+  ) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
@@ -51,14 +60,33 @@ class _SplashScreenState extends State<SplashScreen> {
       if (token != null) {
         print(token);
         User.userType = prefs.getString('type')!;
-        // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const NavigationScreen()),
-          (route) => false,
-        );
+        if (User.userType == 'admin') {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const NavigationScreen()),
+            (route) => false,
+          );
+        } else if (User.userType == 'student') {
+          if (await Provider.of<Apis>(context, listen: false)
+              .studentHomeScreen()) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AllSectionsMapRoadsScreen(
+                    studentData: {
+                      'profile_picture': Apis.studentModel!.profilePicture,
+                      'name': Apis.studentModel!.name,
+                      'id': '-1'
+                    },
+                    studentId: '-1',
+                    allSections: [],
+                    mediaQuery: MediaQuery.of(context).size),
+              ),
+              (route) => false,
+            );
+          }
+        }
       } else {
-        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const StartScreen()),

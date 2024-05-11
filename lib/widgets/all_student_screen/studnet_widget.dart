@@ -7,6 +7,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/screens/all_sections_map_roads_screen.dart';
+import 'package:bdh/server/image_url.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:flutter/material.dart';
@@ -545,7 +546,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                     null
                 ? CircleAvatar(
                     backgroundImage: NetworkImage(
-                      '${dataClass.urlHost}${widget.searchStudentList[widget.index]['profile_picture']}',
+                      '${ImageUrl.imageUrl}${widget.searchStudentList[widget.index]['profile_picture']}',
                     ),
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.transparent,

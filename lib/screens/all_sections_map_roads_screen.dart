@@ -2,9 +2,12 @@ import 'package:bdh/model/constants.dart';
 import 'package:bdh/screens/road_level.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/all_sections_road/student_settings_widget.dart';
 
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class AllSectionsMapRoadsScreen extends StatefulWidget {
   static const String routeName = '/navigation-screen';
@@ -33,12 +36,15 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
     super.initState();
     if (widget.studentId.isNotEmpty) {
       getStudentMap();
-      print('from apis ..........................................');
-      print(Apis.studentRoadMap);
-      print('...................................................');
     } else {
       print(widget.allSections);
     }
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 500,
+      ),
+    );
   }
 
   Future<void> getStudentMap() async {
@@ -50,12 +56,17 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
           .getAllSectionsForStudent(id: widget.studentId);
       setState(() {
         // studentRoad = Apis.studentRoadMap;
+        print('from apis ..........................................');
+        print(Apis.studentRoadMap);
+        print('...................................................');
         isLoading = false;
       });
     } catch (e) {
       print(e);
     }
   }
+
+  late AnimationController animationController;
 
   final controller = PageController(initialPage: 0);
   @override
@@ -70,59 +81,77 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
             ),
           )
         : Scaffold(
-            floatingActionButton: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Consumer<Apis>(
-                builder: (context, value, child) => Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: mediaQuery.width / 30,
-                      vertical: mediaQuery.height / 50),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppColors.main),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
+            body: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Apis.studentRoadMap.isEmpty && widget.allSections.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'The english club did not start yet',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    : PageView.builder(
+                        controller: controller,
+                        onPageChanged: (index) {
+                          _currentPage = index;
+                        },
+                        itemCount: widget.studentId.isNotEmpty
+                            ? Apis.studentRoadMap.length
+                            : widget.allSections.length,
+                        itemBuilder: (context, index) {
+                          return widget.studentId.isNotEmpty
+                              ? AnimatedContainer(
+                                  duration: const Duration(milliseconds: 500),
+                                  color: Constants.colorsForRoad[_currentPage],
+                                  child: RoadLevelsScreen(
+                                    showName: true,
+                                    assetUrls: Constants.animations[index],
+                                    studentData: widget.studentData,
+                                    roadData: Apis.studentRoadMap[index],
+                                    mediaQuery: widget.mediaQuery,
+                                    color: Constants.colorsForRoad[index],
+                                  ),
+                                )
+                              : AnimatedContainer(
+                                  duration: const Duration(milliseconds: 500),
+                                  color: Constants.colorsForRoad[_currentPage],
+                                  child: RoadLevelsScreen(
+                                    showName: false,
+                                    studentData: widget.studentData,
+                                    assetUrls: Constants.animations[index],
+                                    roadData: widget.allSections[index],
+                                    mediaQuery: widget.mediaQuery,
+                                    color: Constants.colorsForRoad[index],
+                                  ),
+                                );
+                        }),
+                widget.studentId.isNotEmpty
+                    ? Padding(
+                        padding: EdgeInsets.only(left: mediaQuery.width / 10),
+                        child: StudentSettingsWidget(
+                          animationController: animationController,
+                          mediaQuery: mediaQuery,
+                          studentData: widget.studentData,
+                        ),
+                      )
+                    : const SizedBox(),
+                Positioned(
+                  bottom: mediaQuery.height / 80,
+                  child: SmoothPageIndicator(
+                    controller: controller,
+                    count: widget.studentId.isNotEmpty
+                        ? Apis.studentRoadMap.length
+                        : widget.allSections.length,
+                    effect: const WormEffect(
+                      paintStyle: PaintingStyle.fill,
+                      dotColor: Colors.black38,
+                      activeDotColor: Colors.black54,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-            body: PageView.builder(
-                controller: controller,
-                onPageChanged: (index) {
-                  _currentPage = index;
-                },
-                itemCount: widget.studentId.isNotEmpty
-                    ? Apis.studentRoadMap.length
-                    : widget.allSections.length,
-                itemBuilder: (context, index) {
-                  return widget.studentId.isNotEmpty
-                      ? AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          color: Constants.colorsForRoad[_currentPage],
-                          child: RoadLevelsScreen(
-                            showName: true,
-                            assetUrls: Constants.animations[index],
-                            studentData: widget.studentData,
-                            roadData: Apis.studentRoadMap[index],
-                            mediaQuery: widget.mediaQuery,
-                            color: Constants.colorsForRoad[index],
-                          ),
-                        )
-                      : AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          color: Constants.colorsForRoad[_currentPage],
-                          child: RoadLevelsScreen(
-                            showName: false,
-                            studentData: widget.studentData,
-                            assetUrls: Constants.animations[index],
-                            roadData: widget.allSections[index],
-                            mediaQuery: widget.mediaQuery,
-                            color: Constants.colorsForRoad[index],
-                          ),
-                        );
-                }),
           );
   }
 }

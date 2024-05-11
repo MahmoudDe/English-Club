@@ -1,4 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:bdh/model/user.dart';
+import 'package:bdh/screens/all_sections_map_roads_screen.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
@@ -37,25 +41,50 @@ class _FormWidgetState extends State<FormStartWidget> {
     });
   }
 
-  Future<void> submit(BuildContext context) async {
+  Future<void> submit(BuildContext context, Size mediaQuery) async {
     try {
       bool isLoading = await Provider.of<Apis>(context, listen: false)
           .login(enterdEmail, enterdPass);
 
       if (isLoading) {
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            NavigationScreen.routeName, (Route<dynamic> route) => false);
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBarWidget(
-                  title: 'Success',
-                  message: 'Welcome to your app',
-                  contentType: ContentType.success)
-              .getSnakBar());
+        if (User.userType == 'student') {
+          if (await Provider.of<Apis>(context, listen: false)
+              .studentHomeScreen()) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AllSectionsMapRoadsScreen(
+                      studentData: {
+                        'profile_picture': Apis.studentModel!.profilePicture,
+                        'name': Apis.studentModel!.name,
+                        'id': '-1',
+                      },
+                      studentId: '-1',
+                      allSections: [],
+                      mediaQuery: mediaQuery)),
+              (route) => false,
+            );
+          }
+
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBarWidget(
+                    title: 'Success',
+                    message: 'Welcome to your app',
+                    contentType: ContentType.success)
+                .getSnakBar());
+        } else if (User.userType == 'admin') {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              NavigationScreen.routeName, (Route<dynamic> route) => false);
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBarWidget(
+                    title: 'Success',
+                    message: 'Welcome to your app',
+                    contentType: ContentType.success)
+                .getSnakBar());
+        }
       } else {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBarWidget(
@@ -180,7 +209,7 @@ class _FormWidgetState extends State<FormStartWidget> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    submit(context);
+                    submit(context, mediaQuery);
                   }
                 },
                 style: ElevatedButton.styleFrom(

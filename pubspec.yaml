@@ -40,6 +40,7 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   screenshot: ^2.3.0
   esys_flutter_share_plus: ^2.2.0
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,7 @@ flutter:
     - assets/images/borrowBook.png
     - assets/images/background.png
     - assets/images/studentScore.png
+    - assets/images/homeBack.png
     - assets/images/studentLevel.png
     - assets/images/finishedStudentStories.png
     - assets/images/golden.png
@@ -74,6 +76,7 @@ flutter:
     - assets/lotties/read.json
     - assets/lotties/read2.json
     - assets/lotties/catReading.json
+    - assets/lotties/noData.json
     - assets/lotties/catReading2.json
     - assets/lotties/roadCick.json
     - assets/lotties/roadCick2.json

@@ -31,6 +31,7 @@ class LevelStepWidget extends StatelessWidget {
 
   Future<void> unlockTest(BuildContext context) async {
     try {
+      print(levelId);
       if (await Provider.of<Apis>(context, listen: false)
           .unlockVocabTest(levelId: levelId, studentId: studentId)) {
         QuickAlert.show(
