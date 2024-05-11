@@ -1,11 +1,13 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
+import 'package:bdh/model/user.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/widgets/quiz_screen/add_new_answer_btn_widget.dart';
 import 'package:bdh/widgets/quiz_screen/answers_widget.dart';
 import 'package:bdh/widgets/quiz_screen/current_question_widget.dart';
 import 'package:bdh/widgets/quiz_screen/main_question_widget.dart';
 import 'package:bdh/widgets/quiz_screen/mian_question_menu_widget.dart';
+import 'package:bdh/widgets/quiz_screen/student_answer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,19 +69,24 @@ class QuestionWidget extends StatelessWidget {
               SizedBox(
                 height: mediaQuery.height / 40,
               ),
-              AddNewAnswerButtonWidget(
-                index: index,
-                testId: testId,
-                mediaQuery: mediaQuery,
-              ),
+              User.userType == 'student'
+                  ? const SizedBox()
+                  : AddNewAnswerButtonWidget(
+                      index: index,
+                      testId: testId,
+                      mediaQuery: mediaQuery,
+                    ),
               SizedBox(
                 height: mediaQuery.height / 60,
               ),
-              AnswersWidget(
-                index: index,
-                mediaQuery: mediaQuery,
-                testId: testId,
-              )
+              User.userType == 'student'
+                  ? StudentAnswersWidget(
+                      index: index, mediaQuery: mediaQuery, testId: testId)
+                  : AnswersWidget(
+                      index: index,
+                      mediaQuery: mediaQuery,
+                      testId: testId,
+                    )
             ],
           ),
         ),

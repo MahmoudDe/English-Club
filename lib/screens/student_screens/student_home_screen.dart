@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StudentHomeScreen extends StatefulWidget {
-  StudentHomeScreen({super.key});
+  StudentHomeScreen({
+    super.key,
+  });
 
   @override
   State<StudentHomeScreen> createState() => _StudentHomeScreenState();

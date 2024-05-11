@@ -16,11 +16,13 @@ class UserWidget extends StatelessWidget {
             : NetworkImage(
                 '${ImageUrl.imageUrl}${studentData['profile_picture']}'),
         backgroundColor: Colors.white,
-        child: Center(
-            child: Icon(
-          Icons.person,
-          color: AppColors.main,
-        )),
+        child: studentData['profile_picture'] != null
+            ? const SizedBox()
+            : Center(
+                child: Icon(
+                Icons.person,
+                color: AppColors.main,
+              )),
       ),
       title: Text(
         studentData['name'],

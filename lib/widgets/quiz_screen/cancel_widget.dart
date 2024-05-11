@@ -1,3 +1,5 @@
+import 'package:bdh/controllers/quiz_controller.dart';
+import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/english_club_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
@@ -18,12 +20,18 @@ class CancelWidget extends StatelessWidget {
           cancelBtnText: 'no',
           confirmBtnColor: Colors.red,
           onConfirmBtnTap: () {
+            QuizController.questions.clear();
+            QuizController.test.clear();
+            QuizController.numberOfQuestions = 0;
+            // QuizController.index =;
             Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EnglishClubSettingsScreen(),
-                ));
+            User.userType == 'student'
+                ? Navigator.pop(context)
+                : Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EnglishClubSettingsScreen(),
+                    ));
           },
         );
       },

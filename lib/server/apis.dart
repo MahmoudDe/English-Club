@@ -2440,4 +2440,65 @@ class Apis with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> studentStoryTest(
+      {required String subLevelId, required String storyID}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/student/getTestOf/sublevel/$subLevelId/Story/$storyID",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student story test server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      QuizController.numberOfQuestions =
+          response.data['data']['testSections'].length;
+      QuizController.test.clear();
+      QuizController.questions.clear();
+      QuizController.studentAnswer.clear();
+      QuizController.test = response.data['data']['testSections'];
+      for (int i = 0; i < QuizController.test.length; i++) {
+        QuizController.studentAnswer.insert(i, {
+          "testSection_id": QuizController.test[i]['id'].toString(),
+          "questions": []
+        });
+        for (int j = 0;
+            j < QuizController.test[i]['selected_questions'].length;
+            j++) {
+          QuizController.questions.add({
+            'data': QuizController.test[i]['selected_questions'][j],
+            'main_text_url': QuizController.test[i]['text_url'],
+            'main_is_image': QuizController.test[i]['is_image'],
+            'main_id': QuizController.test[i]['id'],
+          });
+          QuizController.studentAnswer[i]['questions'].insert(j, {
+            'id': QuizController.test[i]['selected_questions'][j]['id']
+                .toString(),
+            'pickedAnswers': []
+          });
+        }
+      }
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      notifyListeners();
+      return false;
+    }
+  }
 }

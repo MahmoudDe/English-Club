@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 
+import 'package:bdh/model/user.dart';
 import 'package:bdh/server/image_url.dart';
 import 'package:bdh/widgets/quiz_screen/current_question_slides/delete_slide.dart';
 import 'package:bdh/widgets/quiz_screen/current_question_slides/turn_to_image_slide.dart';
@@ -36,38 +37,42 @@ class _CurrentQuestionWidgetState extends State<CurrentQuestionWidget> {
   Widget build(BuildContext context) {
     return Slidable(
       key: const ValueKey(0),
-      startActionPane: ActionPane(
-        extentRatio: 1 / 2,
-        dragDismissible: false,
-        motion: const ScrollMotion(),
-        dismissible: DismissiblePane(onDismissed: () {}),
-        children: [
-          DeleteSlide(
-            index: widget.index,
-            testId: widget.testId,
-            context: context,
-          ),
-          UpdateSlide(
-            context: context,
-            testId: widget.testId,
-            index: widget.index,
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        children: [
-          TurnToTextSlide(
-            index: widget.index,
-            testId: widget.testId,
-            context: context,
-          ),
-          TurnToImageSlide(
-              index: widget.index,
-              testId: widget.testId,
-              mediaQuery: widget.mediaQuery)
-        ],
-      ),
+      startActionPane: User.userType == 'student'
+          ? null
+          : ActionPane(
+              extentRatio: 1 / 2,
+              dragDismissible: false,
+              motion: const ScrollMotion(),
+              dismissible: DismissiblePane(onDismissed: () {}),
+              children: [
+                DeleteSlide(
+                  index: widget.index,
+                  testId: widget.testId,
+                  context: context,
+                ),
+                UpdateSlide(
+                  context: context,
+                  testId: widget.testId,
+                  index: widget.index,
+                ),
+              ],
+            ),
+      endActionPane: User.userType == 'student'
+          ? null
+          : ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                TurnToTextSlide(
+                  index: widget.index,
+                  testId: widget.testId,
+                  context: context,
+                ),
+                TurnToImageSlide(
+                    index: widget.index,
+                    testId: widget.testId,
+                    mediaQuery: widget.mediaQuery)
+              ],
+            ),
       child: Container(
           width: widget.mediaQuery.width / 1.1,
           padding: EdgeInsets.symmetric(
@@ -106,15 +111,17 @@ class _CurrentQuestionWidgetState extends State<CurrentQuestionWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      QuizController.questions[widget.index]['data']
-                                  ['allOrNothing'] ==
-                              1
-                          ? 'All or nothing'
-                          : 'Normal',
-                      style: const TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
-                    ),
+                    User.userType == 'student'
+                        ? const SizedBox()
+                        : Text(
+                            QuizController.questions[widget.index]['data']
+                                        ['allOrNothing'] ==
+                                    1
+                                ? 'All or nothing'
+                                : 'Normal',
+                            style: const TextStyle(
+                                color: Colors.red, fontWeight: FontWeight.bold),
+                          ),
                     SizedBox(
                       width: widget.mediaQuery.width / 50,
                     ),
