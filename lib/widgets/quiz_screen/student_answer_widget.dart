@@ -115,10 +115,6 @@ class _StudentAnswersWidgetState extends State<StudentAnswersWidget> {
                   QuizController.questions[widget.index]['data']['id']
                       .toString())]);
     }
-    // answerController = QuizController.filedAnswers[widget.index] == null
-    //     ? TextEditingController()
-    //     : TextEditingController(
-    //         text: QuizController.filedAnswers[widget.index]);
     print('Saved data ---------------------================');
     print(QuizController.filed1Answers);
     print(QuizController.filed2Answers);

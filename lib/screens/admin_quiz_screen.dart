@@ -19,6 +19,7 @@ class AdminQuizScreen extends StatefulWidget {
 
 class _AdminQuizScreenState extends State<AdminQuizScreen> {
   final controller = CarouselController();
+  final controllerNumber = CarouselController();
   bool isLoading = false;
 
   @override
@@ -132,6 +133,9 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                         height: mediaQuery.height / 100,
                       ),
                       ChangeQuestionWidget(
+                        controllerNumber: controllerNumber,
+                        storyId: '',
+                        subLevelId: '',
                         controller: controller,
                         mediaQuery: mediaQuery,
                       ),

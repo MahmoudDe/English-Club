@@ -2464,6 +2464,7 @@ class Apis with ChangeNotifier {
       QuizController.questions.clear();
       QuizController.studentAnswer.clear();
       QuizController.test = response.data['data']['testSections'];
+      print(' THE MAIN LENGTH = ${QuizController.test.length}');
       for (int i = 0; i < QuizController.test.length; i++) {
         QuizController.studentAnswer.insert(i, {
           "testSection_id": QuizController.test[i]['id'].toString(),
@@ -2485,6 +2486,39 @@ class Apis with ChangeNotifier {
           });
         }
       }
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> studentSubmitTest(
+      {required String subLevelId, required String storyID}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/student/submitSolutionOf/sublevel/$subLevelId/Story/$storyID",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student submit test server response');
+      print(response.data);
+      print('................................');
       statusResponse = 200;
       notifyListeners();
       return true;

@@ -21,13 +21,13 @@ class IndicatorWidget extends StatelessWidget {
       activeIndex: activeIndex,
       onDotClicked: animateToSlide,
       count: count,
-      effect: ScaleEffect(
+      effect: WormEffect(
           activeDotColor: Colors.amber,
           dotColor: Colors.white24,
-          dotHeight: mediaQuery.height / 100,
-          dotWidth: mediaQuery.height / 100,
+          dotHeight: mediaQuery.height / 150,
+          dotWidth: mediaQuery.height / 150,
           strokeWidth: 0,
-          spacing: mediaQuery.width / 100),
+          spacing: mediaQuery.width / 150),
     );
   }
 

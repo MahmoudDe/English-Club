@@ -21,6 +21,7 @@ class StudentTestScreen extends StatefulWidget {
 
 class _StudentTestScreenState extends State<StudentTestScreen> {
   final controller = CarouselController();
+  final controllerNumber = CarouselController();
   bool isLoading = false;
 
   @override
@@ -115,7 +116,10 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
                             viewportFraction: 1,
                             onPageChanged: (index, reason) {
                               setState(() {
+                                print(
+                                    'All question length => ${QuizController.questions.length}');
                                 QuizController.index = index;
+                                print('new index = ${QuizController.index}');
                               });
                             },
                             enableInfiniteScroll: false,
@@ -141,6 +145,9 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
                         height: mediaQuery.height / 100,
                       ),
                       ChangeQuestionWidget(
+                        storyId: widget.testId,
+                        subLevelId: widget.subLevelId,
+                        controllerNumber: controllerNumber,
                         controller: controller,
                         mediaQuery: mediaQuery,
                       ),
