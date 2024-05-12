@@ -2017,6 +2017,7 @@ class Apis with ChangeNotifier {
   Future<bool> changeStudentImage({
     required String studentId,
     required File studentImage,
+    required String DeleteImage,
   }) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
 
@@ -2031,7 +2032,7 @@ class Apis with ChangeNotifier {
         ),
       });
       Dio.Response response = await dio().post(
-        "/user/changeProfilePicture/$studentId",
+        "/student/changeProfilePicture/$studentId",
         data: formData,
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
@@ -2042,8 +2043,60 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       statusResponse = 200;
+      print('we are going to show this');
+      if (await studentHomeScreen()) {
+        print('step 3 update student data');
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
       notifyListeners();
-      return true;
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteStudentImage({
+    required String studentId,
+    required String DeleteImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/student/changeProfilePicture/$studentId",
+        data: {
+          'onlyDelete?': DeleteImage,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................delete student image server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      print('we are going to show this');
+      if (await studentHomeScreen()) {
+        print('step 3 update student data');
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
     } on DioError catch (e) {
       print('hello');
       statusResponse = 400;
@@ -2412,7 +2465,18 @@ class Apis with ChangeNotifier {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
       String? myToken = storage.getString('token');
-
+      studentModel = StudentModel(
+        borrowLimit: 0,
+        borrowedStories: [],
+        bronzeCoins: 0,
+        goldenCoins: 0,
+        name: '',
+        profilePicture: '',
+        score: 0,
+        progress: [],
+        silverCoins: 0,
+        testAvailableForStories: [],
+      );
       Dio.Response response = await dio().get(
         "/student/HomeScreen",
         options: Dio.Options(

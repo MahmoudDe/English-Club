@@ -7,12 +7,13 @@ import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 // import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MyApp());
+  runApp(Phoenix(child: MyApp()));
   // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
   //   if (Platform.isAndroid) {
   //     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);

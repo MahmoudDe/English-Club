@@ -756,6 +756,7 @@ class _StudentWidgetState extends State<StudentWidget> {
     try {
       await Provider.of<Apis>(context, listen: false).changeStudentImage(
         studentImage: studentImage!,
+        DeleteImage: '0',
         studentId: widget.searchStudentList[widget.index]['id'].toString(),
       );
       Navigator.pop(context);
@@ -786,6 +787,7 @@ class _StudentWidgetState extends State<StudentWidget> {
     try {
       await Provider.of<Apis>(context, listen: false).changeStudentImage(
         studentImage: studentImage!,
+        DeleteImage: '0',
         studentId: widget.searchStudentList[widget.index]['id'].toString(),
       );
       Navigator.pop(context);
