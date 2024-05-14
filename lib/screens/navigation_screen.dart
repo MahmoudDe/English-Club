@@ -1,4 +1,7 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:bdh/notification/notification_controller.dart';
+import 'package:bdh/notification/notification_services.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:bdh/screens/toDo_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
@@ -39,6 +42,17 @@ class _NavigationScreenState extends State<NavigationScreen>
       print(event.from);
       print(event.category);
       print(event.data);
+      // AwesomeNotifications().createNotification(
+      //   content: NotificationContent(
+      //     id: 1,
+      //     channelKey: 'myKey',
+      //     title: event.notification!.title,
+      //     body: event.notification!.body,
+      //   ),
+      // );
+      NotificationServices().showNotification(
+          title: event.notification!.title.toString(),
+          body: event.notification!.body.toString());
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBarWidget(
@@ -48,6 +62,15 @@ class _NavigationScreenState extends State<NavigationScreen>
             .getSnakBar());
     });
 
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+      onNotificationCreatedMethod:
+          NotificationController.onNotificationCreatedMethod,
+      onDismissActionReceivedMethod:
+          NotificationController.onDismissActionReceivedMethod,
+      onNotificationDisplayedMethod:
+          NotificationController.onNotificationDisplayedMethod,
+    );
     super.initState();
   }
 

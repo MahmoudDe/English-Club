@@ -1,5 +1,7 @@
 // import 'dart:convert';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:bdh/notification/notification_services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -8,6 +10,18 @@ Future<void> handelBackgroundMessage(RemoteMessage message) async {
   print('Title : ${message.notification?.title}');
   print('Body :${message.notification?.body}');
   print('Payload:${message.data}');
+  NotificationServices().showNotification(
+    title: message.notification!.title.toString(),
+    body: message.notification!.body.toString(),
+  );
+  AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: 1,
+      channelKey: 'myKey',
+      title: message.notification!.title,
+      body: message.notification!.body,
+    ),
+  );
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

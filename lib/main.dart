@@ -1,4 +1,6 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
+import 'package:bdh/notification/notification_services.dart';
 import 'package:bdh/screens/HomePage.dart';
 import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/splashscreen.dart';
@@ -16,6 +18,25 @@ import 'notification/notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AwesomeNotifications().initialize(null, [
+    NotificationChannel(
+      channelGroupKey: 'basic_channel_group_key',
+      channelKey: 'myKey',
+      channelName: 'alaa_channel',
+      channelDescription: 'basic_notification_channel',
+    )
+  ], channelGroups: [
+    NotificationChannelGroup(
+        channelGroupKey: 'basic_channel_group_key',
+        channelGroupName: 'basic group')
+  ]);
+  bool isNotificationAllowed =
+      await AwesomeNotifications().isNotificationAllowed();
+  await NotificationServices().initNotification();
+  print('isNotificationAllowed => $isNotificationAllowed');
+  if (!isNotificationAllowed) {
+    AwesomeNotifications().requestPermissionToSendNotifications();
+  }
   await Firebase.initializeApp();
   await FirebaseApi().initNotification();
   runApp(Phoenix(child: MyApp()));
