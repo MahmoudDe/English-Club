@@ -5,7 +5,6 @@ import 'package:bdh/widgets/show_book_screen/book_cover_widget.dart';
 import 'package:bdh/widgets/show_book_screen/book_data_widget.dart';
 import 'package:bdh/widgets/show_book_screen/float_button_widget.dart';
 import 'package:bdh/widgets/show_book_screen/loading_book_widget.dart';
-import 'package:bdh/widgets/show_book_screen/menu_button_widget.dart';
 import 'package:bdh/widgets/show_book_screen/qr_widget.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
@@ -79,9 +78,6 @@ class _ShowBookDetailsScreenState extends State<ShowBookDetailsScreen> {
                       builder: (context) => const EnglishClubSettingsScreen(),
                     )),
                   ),
-                  actions: [
-                    MenuButtonWidget(mediaQuery: mediaQuery),
-                  ],
                 ),
                 body: Stack(
                   children: [

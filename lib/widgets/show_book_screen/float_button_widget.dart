@@ -15,6 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:quickalert/quickalert.dart';
 
+import '../../screens/english_club_settings_screen.dart';
+
 class FloatButtonWidget extends StatelessWidget {
   FloatButtonWidget({
     super.key,
@@ -339,6 +341,45 @@ class FloatButtonWidget extends StatelessWidget {
       animatedIcon: AnimatedIcons.add_event,
       backgroundColor: AppColors.mainLight,
       children: [
+        SpeedDialChild(
+          child: const Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+          label: 'delete',
+          backgroundColor: Colors.red,
+          onTap: (() {
+            QuickAlert.show(
+                context: context,
+                type: QuickAlertType.warning,
+                text: 'Do you want to delete this story?',
+                confirmBtnColor: Colors.amber,
+                confirmBtnText: 'Yes',
+                onConfirmBtnTap: () {
+                  Navigator.pop(context);
+                  if (showBookController().deleteStory() == false) {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      text: showBookController.message,
+                    );
+                  } else {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        text: showBookController.message,
+                        onConfirmBtnTap: () {
+                          Navigator.pop(context);
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) =>
+                                const EnglishClubSettingsScreen(),
+                          ));
+                        });
+                  }
+                });
+          }),
+        ),
         SpeedDialChild(
           child: const Icon(
             Icons.edit,

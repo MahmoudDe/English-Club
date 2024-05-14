@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/screens/admin_quiz_screen.dart';
 import 'package:bdh/screens/english_club_settings_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/show_book_screen/float_button_Level_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -317,6 +319,10 @@ class _ViewEditLevelScreenState extends State<ViewEditLevelScreen> {
             ),
           )
         : Scaffold(
+            floatingActionButton: FloatButtonLevelWidget(
+              testId: Apis.levelData['id'].toString(),
+              mediaQuery: mediaQuery,
+            ),
             appBar: AppBar(
               backgroundColor: AppColors.main,
               title: const Text(
@@ -922,7 +928,12 @@ class _ViewEditLevelScreenState extends State<ViewEditLevelScreen> {
                       height: mediaQuery.height / 30,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => AdminQuizScreen(
+                              testId: Apis.levelData['id'].toString()),
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(primary: AppColors.main),
                       child: const Text(
                         'Show level quiz',

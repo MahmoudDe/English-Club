@@ -146,7 +146,8 @@ class _LevelsWidgetState extends State<LevelsWidget> {
                           ),
                         ),
                         confirmBtnText: 'Create',
-                        confirmBtnColor: Colors.green,
+                        confirmBtnColor:
+                            const Color.fromARGB(255, 145, 229, 147),
                         onConfirmBtnTap: () async {
                           if (formKey.currentState!.validate()) {
                             await Provider.of<Apis>(context, listen: false)
