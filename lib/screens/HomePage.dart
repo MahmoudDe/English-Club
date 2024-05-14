@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: AppColors.whiteLight,
             ),
           ),
+          ElevatedButton(onPressed: () {}, child: const Text('Send message'))
         ],
       ),
     );

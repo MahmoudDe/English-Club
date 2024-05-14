@@ -8,11 +8,16 @@ import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'notification/notification.dart';
+
 // import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotification();
   runApp(Phoenix(child: MyApp()));
   // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
   //   if (Platform.isAndroid) {

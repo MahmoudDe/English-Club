@@ -171,18 +171,17 @@ class _WaitingListWidgetState extends State<UnCollectedPrizeWidget> {
                         ),
                         children: [
                           //Reason
-                          // ListTile(
-                          //   title: const Text(
-                          //     'Reason',
-                          //     style: TextStyle(
-                          //         fontFamily: 'Avenir',
-                          //         fontWeight: FontWeight.bold),
-                          //   ),
-                          //   trailing: Text(
-                          //     doneTasks[index]['giveItTo']['pivot']['reason']
-                          //         .toString(),
-                          //   ),
-                          // ),
+                          ListTile(
+                            title: const Text(
+                              'Reason',
+                              style: TextStyle(
+                                  fontFamily: 'Avenir',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            trailing: Text(
+                              doneTasks[index]['reason'].toString(),
+                            ),
+                          ),
                           //score
                           ListTile(
                             title: const Text(

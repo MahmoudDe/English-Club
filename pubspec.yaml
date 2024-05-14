@@ -42,6 +42,9 @@ dependencies:
   esys_flutter_share_plus: ^2.2.0
   transparent_image: ^2.0.1
   flutter_phoenix: ^1.1.1
+  firebase_messaging: ^14.7.10
+  firebase_core: ^2.24.2
+  flutter_local_notifications: ^17.1.2
 
 dev_dependencies:
   flutter_test:

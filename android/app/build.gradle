@@ -40,7 +40,7 @@ android {
         applicationId "com.example.bdh"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 24
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -48,6 +48,7 @@ android {
     }
     dependencies {
         implementation 'com.google.firebase:firebase-bom:33.0.0'
+        implementation 'com.google.firebase:firebase-analytics'
         implementation 'com.android.support:multidex:1.0.3'
     }
 

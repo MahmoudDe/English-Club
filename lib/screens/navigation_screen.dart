@@ -1,12 +1,15 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:bdh/screens/toDo_screen.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../common/snack_bar_widget.dart';
 import '../model/constants.dart';
 import '../server/apis.dart';
 import '../widgets/appBar/app_bar_widget.dart';
@@ -31,6 +34,20 @@ class _NavigationScreenState extends State<NavigationScreen>
         milliseconds: 500,
       ),
     );
+    FirebaseMessaging.onMessage.listen((event) {
+      print('WE HAVE NEW EVENT ');
+      print(event.from);
+      print(event.category);
+      print(event.data);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBarWidget(
+                title: event.notification!.title.toString(),
+                message: event.notification!.body.toString(),
+                contentType: ContentType.help)
+            .getSnakBar());
+    });
+
     super.initState();
   }
 
