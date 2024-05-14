@@ -34,9 +34,9 @@ class _QrWidgetState extends State<QrWidget> {
         final Uint8List? imageBytes = await _screenshotController.capture();
         if (imageBytes != null) {
           // Create a temporary file to save the image
-          final tempFile = File(
-              '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png');
-          await tempFile.writeAsBytes(imageBytes);
+          // final tempFile = File(
+          //     '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png');
+          // await tempFile.writeAsBytes(imageBytes);
 
           // Now use the tempFile for sharing or further processing
           await Share.file(
@@ -44,7 +44,8 @@ class _QrWidgetState extends State<QrWidget> {
             "${showBookController.bookData[0]['title']}.jpg",
             imageBytes,
             "image/jpg",
-            text: "Scan this QR code to borrow or return book",
+            text:
+                "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
           );
         } else {
           print("Error capturing the QR code image.");
