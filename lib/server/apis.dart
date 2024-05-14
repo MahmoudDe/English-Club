@@ -182,7 +182,7 @@ class Apis with ChangeNotifier {
     }
   }
 
-  Future<void> getAllStudents() async {
+  Future<bool> getAllStudents() async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
       String? myToken = storage.getString('token');
@@ -198,12 +198,15 @@ class Apis with ChangeNotifier {
       allStudents = response.data;
 
       notifyListeners();
+      return true;
     } on DioError catch (e) {
       print(e.response!.data['message']);
       message = e.response!.data['message'];
       notifyListeners();
+      return false;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
@@ -2014,6 +2017,55 @@ class Apis with ChangeNotifier {
     }
   }
 
+  Future<bool> changeAdminImage({
+    required String studentId,
+    required File studentImage,
+    required String DeleteImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+      String fileName1 = studentImage.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "onlyDelete?": '0',
+        "image": MultipartFile.fromFileSync(
+          studentImage.path,
+          filename: fileName1,
+        ),
+      });
+      Dio.Response response = await dio().post(
+        "/student/changeProfilePicture/$studentId",
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................change student image server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      print('we are going to show this');
+      if (await getAllStudents()) {
+        return true;
+      }
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<bool> changeStudentImage({
     required String studentId,
     required File studentImage,
@@ -2045,6 +2097,52 @@ class Apis with ChangeNotifier {
       statusResponse = 200;
       print('we are going to show this');
       if (await studentHomeScreen()) {
+        print('step 3 update student data');
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      showBookController.message = e.response!.data['message'];
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteAdminImage({
+    required String studentId,
+    required String DeleteImage,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/student/changeProfilePicture/$studentId",
+        data: {
+          'onlyDelete?': DeleteImage,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................delete student image server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      print('we are going to show this');
+      if (await getAllStudents()) {
         print('step 3 update student data');
         notifyListeners();
         return true;
@@ -2311,6 +2409,78 @@ class Apis with ChangeNotifier {
       return false;
     } catch (e) {
       print(e);
+      return false;
+    }
+  }
+
+  Future<bool> collectedPrize({required String page}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    donePrizes.clear();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/admin/viewPrizes?collected=1&page=$page",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................collectd pirze list server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      donePrizes = response.data['data']['data'];
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      donePrizes = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      donePrizes = [];
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> unCollectedPrize({required String page}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    waitingPrizes.clear();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/admin/viewPrizes?collected=0&page=$page",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................uncollected prize list server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      waitingPrizes = response.data['data']['data'];
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      waitingPrizes = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      waitingPrizes = [];
+      notifyListeners();
       return false;
     }
   }

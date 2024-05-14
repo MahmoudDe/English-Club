@@ -115,20 +115,14 @@ class _DoneListWidgetState extends State<DoneListWidget> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Issued at : ${doneTasks[index]['issued_at']}',
-                                    ),
-                                    SizedBox(
-                                      width: widget.mediaQuery.width / 30,
-                                    ),
-                                    Text(
-                                      'done at : ${doneTasks[index]['done_at']}',
-                                    ),
-                                  ],
+                                Text(
+                                  'Issued at : ${doneTasks[index]['issued_at']}',
+                                ),
+                                SizedBox(
+                                  height: widget.mediaQuery.height / 100,
+                                ),
+                                Text(
+                                  'done at : ${doneTasks[index]['done_at']}',
                                 ),
                                 Text(
                                   doneTasks[index]['done_by_admin'] == null

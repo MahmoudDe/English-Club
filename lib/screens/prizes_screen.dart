@@ -38,7 +38,7 @@ class _PrizeScreenState extends State<PrizeScreen>
   void initState() {
     controller = TabController(length: 2, vsync: this);
 
-    getData();
+    // getData();
     super.initState();
   }
 

@@ -436,128 +436,134 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
         : Scaffold(
             body: dataClass.students.isEmpty
                 ? EmptyDataWidget(mediaQuery: mediaQuery)
-                : Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      TitleWidget(
-                          mediaQuery: mediaQuery,
-                          title: 'search',
-                          icon: const SizedBox(
-                            width: 0,
-                          )),
-                      SizedBox(
-                        height: mediaQuery.height / 80,
-                      ),
-                      //filter grade and class
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            FilterWidget(
-                              width: mediaQuery.width / 2.3,
-                              mediaQuery: mediaQuery,
-                              menu: allClassesInGrade,
-                              onChanged: (String? newValue) {
-                                controllerAnimation!.reverse().whenComplete(
-                                  () {
+                : Consumer<Apis>(
+                    builder: (context, value, child) => Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        TitleWidget(
+                            mediaQuery: mediaQuery,
+                            title: 'search',
+                            icon: const SizedBox(
+                              width: 0,
+                            )),
+                        SizedBox(
+                          height: mediaQuery.height / 80,
+                        ),
+                        //filter grade and class
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FilterWidget(
+                                width: mediaQuery.width / 2.3,
+                                mediaQuery: mediaQuery,
+                                menu: allClassesInGrade,
+                                onChanged: (String? newValue) {
+                                  controllerAnimation!.reverse().whenComplete(
+                                    () {
+                                      setState(
+                                        () {
+                                          selectedClassFilterValue = newValue!;
+                                          filterData();
+                                        },
+                                      );
+                                      controllerAnimation!.forward();
+                                    },
+                                  );
+                                },
+                                value: selectedClassFilterValue,
+                                filterTitle: 'Class',
+                              ),
+                              SizedBox(
+                                width: mediaQuery.width / 20,
+                              ),
+                              FilterWidget(
+                                width: mediaQuery.width / 2.3,
+                                mediaQuery: mediaQuery,
+                                menu: allGrades,
+                                onChanged: (String? newValue) {
+                                  controllerAnimation!
+                                      .reverse()
+                                      .whenComplete(() {
                                     setState(
                                       () {
-                                        selectedClassFilterValue = newValue!;
+                                        selectedGradeFilterValue = newValue!;
+                                        changeClasses();
                                         filterData();
                                       },
                                     );
                                     controllerAnimation!.forward();
-                                  },
-                                );
-                              },
-                              value: selectedClassFilterValue,
-                              filterTitle: 'Class',
-                            ),
-                            SizedBox(
-                              width: mediaQuery.width / 20,
-                            ),
-                            FilterWidget(
-                              width: mediaQuery.width / 2.3,
-                              mediaQuery: mediaQuery,
-                              menu: allGrades,
-                              onChanged: (String? newValue) {
-                                controllerAnimation!.reverse().whenComplete(() {
-                                  setState(
-                                    () {
-                                      selectedGradeFilterValue = newValue!;
-                                      changeClasses();
-                                      filterData();
-                                    },
-                                  );
-                                  controllerAnimation!.forward();
-                                });
-                              },
-                              value: selectedGradeFilterValue,
-                              filterTitle: 'Grade',
-                            ),
-                          ],
-                        ),
-                      ),
-                      SearchWidget(
-                        controller: _searchController,
-                        mediaQuery: mediaQuery,
-                        onChanged: (value) {
-                          search();
-                        },
-                        onFilterPressed: () {
-                          _showFilterDialog(context, mediaQuery);
-                        },
-                      ),
-                      //students
-                      Expanded(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: searchStudentList.length,
-                            itemBuilder: (context, index) => Consumer<Apis>(
-                                  builder: (context, value, child) =>
-                                      StudentWidget(
-                                          allClassesInGrade: allClassesInGrade,
-                                          allGrades: allGrades,
-                                          selectedClassFilterValue:
-                                              selectedClassFilterValue,
-                                          selectedGradeFilterValue:
-                                              selectedGradeFilterValue,
-                                          onPressedActive: (p0) {
-                                            changeActiveStudentState(
-                                                //now
-                                                //InActive = 0 mean it's inActive
-                                                //InActive = 1 mean it's Active
-
-                                                //before
-                                                //InActive = 0 mean it's Active                  to inActive send 1
-                                                //InActive = 1 mean it's InActive                to active send 0
-                                                searchStudentList[index]
-                                                            ['inactive'] ==
-                                                        0
-                                                    ? '1'
-                                                    : '0',
-                                                index);
-                                          },
-                                          onPressedDelete: (p0) {
-                                            deleteStudent(index);
-                                          },
-                                          getData: filterData,
-                                          refreshData: getData,
-                                          mediaQuery: mediaQuery,
-                                          searchStudentList: searchStudentList,
-                                          index: index),
-                                )),
-                      )
-                          .animate(
-                            controller: controllerAnimation,
-                          )
-                          .fade(
-                              duration: const Duration(
-                                milliseconds: 200,
+                                  });
+                                },
+                                value: selectedGradeFilterValue,
+                                filterTitle: 'Grade',
                               ),
-                              curve: Curves.easeIn),
-                    ],
+                            ],
+                          ),
+                        ),
+                        SearchWidget(
+                          controller: _searchController,
+                          mediaQuery: mediaQuery,
+                          onChanged: (value) {
+                            search();
+                          },
+                          onFilterPressed: () {
+                            _showFilterDialog(context, mediaQuery);
+                          },
+                        ),
+                        //students
+                        Expanded(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: searchStudentList.length,
+                              itemBuilder: (context, index) => Consumer<Apis>(
+                                    builder: (context, value, child) =>
+                                        StudentWidget(
+                                            allClassesInGrade:
+                                                allClassesInGrade,
+                                            allGrades: allGrades,
+                                            selectedClassFilterValue:
+                                                selectedClassFilterValue,
+                                            selectedGradeFilterValue:
+                                                selectedGradeFilterValue,
+                                            onPressedActive: (p0) {
+                                              changeActiveStudentState(
+                                                  //now
+                                                  //InActive = 0 mean it's inActive
+                                                  //InActive = 1 mean it's Active
+
+                                                  //before
+                                                  //InActive = 0 mean it's Active                  to inActive send 1
+                                                  //InActive = 1 mean it's InActive                to active send 0
+                                                  searchStudentList[index]
+                                                              ['inactive'] ==
+                                                          0
+                                                      ? '1'
+                                                      : '0',
+                                                  index);
+                                            },
+                                            onPressedDelete: (p0) {
+                                              deleteStudent(index);
+                                            },
+                                            getData: filterData,
+                                            refreshData: getData,
+                                            mediaQuery: mediaQuery,
+                                            searchStudentList:
+                                                searchStudentList,
+                                            index: index),
+                                  )),
+                        )
+                            .animate(
+                              controller: controllerAnimation,
+                            )
+                            .fade(
+                                duration: const Duration(
+                                  milliseconds: 200,
+                                ),
+                                curve: Curves.easeIn),
+                      ],
+                    ),
                   ),
           );
   }

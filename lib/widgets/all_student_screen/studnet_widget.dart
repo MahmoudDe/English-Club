@@ -1,7 +1,7 @@
 // import 'package:bdh/data/data.dart';
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -57,7 +57,7 @@ class _StudentWidgetState extends State<StudentWidget> {
   TextEditingController studentBookLimitController = TextEditingController();
   FocusNode studentNameNode = FocusNode();
   FocusNode studentBookLimitNode = FocusNode();
-  static File? studentImage;
+  // static File? studentImage;
   List allClassesInGrade1 = [];
   List allGrades1 = [];
   String selectedClassFilterValue1 = '';
@@ -162,108 +162,138 @@ class _StudentWidgetState extends State<StudentWidget> {
           key: formKey,
           child: Column(
             children: [
+              // ElevatedButton(
+              //   onPressed: () {
+              //     showModalBottomSheet(
+              //       context: context,
+              //       builder: (context1) {
+              //         return SizedBox(
+              //           height: widget.mediaQuery.height / 5,
+              //           child: Padding(
+              //             padding: EdgeInsets.symmetric(
+              //                 horizontal: widget.mediaQuery.width / 5),
+              //             child: Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 InkWell(
+              //                   onTap: () {
+              //                     pickImageFromCamera(context);
+              //                   },
+              //                   child: Column(
+              //                     mainAxisSize: MainAxisSize.min,
+              //                     children: [
+              //                       Container(
+              //                         padding: EdgeInsets.all(
+              //                             widget.mediaQuery.height / 80),
+              //                         decoration: BoxDecoration(
+              //                           border:
+              //                               Border.all(color: AppColors.main),
+              //                           borderRadius: const BorderRadius.all(
+              //                             Radius.circular(15),
+              //                           ),
+              //                         ),
+              //                         child: Icon(
+              //                           Icons.camera,
+              //                           color: AppColors.main,
+              //                           size: widget.mediaQuery.height / 15,
+              //                         ),
+              //                       ),
+              //                       Text(
+              //                         'Camera',
+              //                         style: TextStyle(
+              //                             color: AppColors.main,
+              //                             fontWeight: FontWeight.bold),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //                 InkWell(
+              //                   onTap: () {
+              //                     pickImageFromGallery(context);
+              //                   },
+              //                   child: Column(
+              //                     mainAxisSize: MainAxisSize.min,
+              //                     children: [
+              //                       Container(
+              //                         padding: EdgeInsets.all(
+              //                             widget.mediaQuery.height / 80),
+              //                         decoration: BoxDecoration(
+              //                           border:
+              //                               Border.all(color: AppColors.main),
+              //                           borderRadius: const BorderRadius.all(
+              //                             Radius.circular(15),
+              //                           ),
+              //                         ),
+              //                         child: Icon(
+              //                           Icons.image,
+              //                           color: AppColors.main,
+              //                           size: widget.mediaQuery.height / 15,
+              //                         ),
+              //                       ),
+              //                       Text(
+              //                         'Gallery',
+              //                         style: TextStyle(
+              //                             color: AppColors.main,
+              //                             fontWeight: FontWeight.bold),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     );
+              //   },
+              //   style: ElevatedButton.styleFrom(primary: Colors.green),
+              //   child: Padding(
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: widget.mediaQuery.width / 10,
+              //       vertical: widget.mediaQuery.height / 60,
+              //     ),
+              //     child: const Text(
+              //       'change student image',
+              //       style: TextStyle(
+              //           color: Colors.white, fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: widget.mediaQuery.height / 60,
+              // ),
               ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context1) {
-                      return SizedBox(
-                        height: widget.mediaQuery.height / 5,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: widget.mediaQuery.width / 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  pickImageFromCamera(context);
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(
-                                          widget.mediaQuery.height / 80),
-                                      decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: AppColors.main),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(15),
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.camera,
-                                        color: AppColors.main,
-                                        size: widget.mediaQuery.height / 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Camera',
-                                      style: TextStyle(
-                                          color: AppColors.main,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  pickImageFromGallery(context);
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(
-                                          widget.mediaQuery.height / 80),
-                                      decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: AppColors.main),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(15),
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.image,
-                                        color: AppColors.main,
-                                        size: widget.mediaQuery.height / 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Gallery',
-                                      style: TextStyle(
-                                          color: AppColors.main,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                onPressed: () async {
+                  Navigator.pop(context);
+                  if (await Provider.of<Apis>(context, listen: false)
+                      .deleteAdminImage(
+                          studentId: widget.searchStudentList[widget.index]
+                                  ['id']
+                              .toString(),
+                          DeleteImage: '1')) {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      title: 'update result',
+                      text: showBookController.message,
+                      confirmBtnText: 'ok',
+                      onConfirmBtnTap: () {
+                        Navigator.pop(context);
+                        widget.refreshData();
+                      },
+                      confirmBtnColor: Colors.grey,
+                    );
+                  } else {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      title: 'update result',
+                      text: showBookController.message,
+                      confirmBtnText: 'Cancel',
+                      confirmBtnColor: Colors.grey,
+                    );
+                  }
                 },
-                style: ElevatedButton.styleFrom(primary: Colors.green),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: widget.mediaQuery.width / 10,
-                    vertical: widget.mediaQuery.height / 60,
-                  ),
-                  child: const Text(
-                    'change student image',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: widget.mediaQuery.height / 60,
-              ),
-              ElevatedButton(
-                onPressed: () {},
                 style: ElevatedButton.styleFrom(primary: Colors.red),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -535,10 +565,10 @@ class _StudentWidgetState extends State<StudentWidget> {
           ],
         ),
         child: ExpansionTile(
-          collapsedBackgroundColor:
-              widget.searchStudentList[widget.index]['inactive'] == 0
-                  ? Colors.blueAccent
-                  : Colors.white,
+          collapsedBackgroundColor: Colors.white,
+          subtitle: widget.searchStudentList[widget.index]['inactive'] == 0
+              ? const Text('InActive')
+              : const Text('Active'),
           leading: CircleAvatar(
             radius: 25,
             backgroundColor: Colors.orange,
@@ -747,65 +777,73 @@ class _StudentWidgetState extends State<StudentWidget> {
     );
   }
 
-  Future pickImageFromGallery(BuildContext context) async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnedImage == null) return;
-    studentImage = File(returnedImage.path);
+  // Future pickImageFromGallery(BuildContext context) async {
+  //   final returnedImage =
+  //       await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (returnedImage == null) return;
+  //   studentImage = File(returnedImage.path);
 
-    try {
-      await Provider.of<Apis>(context, listen: false).changeStudentImage(
-        studentImage: studentImage!,
-        DeleteImage: '0',
-        studentId: widget.searchStudentList[widget.index]['id'].toString(),
-      );
-      Navigator.pop(context);
-      if (Apis.statusResponse != 200) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          text: Apis.message,
-        );
-      } else {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: Apis.message,
-        );
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  //   try {
+  //     if (await Provider.of<Apis>(context, listen: false).changeAdminImage(
+  //       studentImage: studentImage!,
+  //       DeleteImage: '0',
+  //       studentId: widget.searchStudentList[widget.index]['id'].toString(),
+  //     )) {
+  //       Navigator.pop(context);
+  //       Navigator.pop(context);
 
-  Future pickImageFromCamera(BuildContext context) async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returnedImage == null) return;
-    studentImage = File(returnedImage.path);
+  //       QuickAlert.show(
+  //         context: context,
+  //         type: QuickAlertType.success,
+  //         title: 'update result',
+  //         text: showBookController.message,
+  //         confirmBtnText: 'ok',
+  //         onConfirmBtnTap: () {
+  //           Navigator.pop(context);
+  //           widget.refreshData();
+  //         },
+  //         confirmBtnColor: Colors.grey,
+  //       );
+  //     } else {
+  //       QuickAlert.show(
+  //         context: context,
+  //         type: QuickAlertType.error,
+  //         text: Apis.message,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-    try {
-      await Provider.of<Apis>(context, listen: false).changeStudentImage(
-        studentImage: studentImage!,
-        DeleteImage: '0',
-        studentId: widget.searchStudentList[widget.index]['id'].toString(),
-      );
-      Navigator.pop(context);
-      if (Apis.statusResponse != 200) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          text: Apis.message,
-        );
-      } else {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: Apis.message,
-        );
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // Future pickImageFromCamera(BuildContext context) async {
+  //   final returnedImage =
+  //       await ImagePicker().pickImage(source: ImageSource.camera);
+  //   if (returnedImage == null) return;
+  //   studentImage = File(returnedImage.path);
+
+  //   try {
+  //     await Provider.of<Apis>(context, listen: false).changeStudentImage(
+  //       studentImage: studentImage!,
+  //       DeleteImage: '0',
+  //       studentId: widget.searchStudentList[widget.index]['id'].toString(),
+  //     );
+  //     Navigator.pop(context);
+  //     if (Apis.statusResponse != 200) {
+  //       QuickAlert.show(
+  //         context: context,
+  //         type: QuickAlertType.error,
+  //         text: Apis.message,
+  //       );
+  //     } else {
+  //       QuickAlert.show(
+  //         context: context,
+  //         type: QuickAlertType.success,
+  //         text: Apis.message,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 }
