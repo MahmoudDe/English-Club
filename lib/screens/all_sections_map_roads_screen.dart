@@ -130,6 +130,7 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
                     ? Padding(
                         padding: EdgeInsets.only(left: mediaQuery.width / 10),
                         child: StudentSettingsWidget(
+                          studentId: widget.studentId,
                           animationController: animationController,
                           mediaQuery: mediaQuery,
                           studentData: widget.studentData,

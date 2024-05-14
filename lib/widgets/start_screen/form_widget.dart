@@ -49,7 +49,7 @@ class _FormWidgetState extends State<FormStartWidget> {
       if (isLoading) {
         if (User.userType == 'student') {
           if (await Provider.of<Apis>(context, listen: false)
-              .studentHomeScreen()) {
+              .studentHomeScreen(id: '-1')) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

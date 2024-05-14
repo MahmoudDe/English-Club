@@ -18,9 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
 class StudentHomeScreen extends StatefulWidget {
-  StudentHomeScreen({
-    super.key,
-  });
+  StudentHomeScreen({super.key, required this.studentId});
+  final String studentId;
 
   @override
   State<StudentHomeScreen> createState() => _StudentHomeScreenState();
@@ -37,7 +36,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
       isLoading = true;
     });
     try {
-      if (await Provider.of<Apis>(context, listen: false).studentHomeScreen()) {
+      if (await Provider.of<Apis>(context, listen: false).studentHomeScreen(
+          id: User.userType == 'student' ? '-1' : widget.studentId)) {
         setState(() {
           isLoading = false;
         });

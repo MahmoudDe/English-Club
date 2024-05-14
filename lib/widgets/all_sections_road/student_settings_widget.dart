@@ -17,9 +17,11 @@ class StudentSettingsWidget extends StatelessWidget {
       {super.key,
       required this.mediaQuery,
       required this.studentData,
+      required this.studentId,
       required this.animationController});
   final Size mediaQuery;
   final Map studentData;
+  final String studentId;
   AnimationController animationController;
   bool _isIconTabes = false;
   void _iconTab() {
@@ -61,7 +63,8 @@ class StudentSettingsWidget extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => StudentHomeScreen(),
+                        builder: (context) =>
+                            StudentHomeScreen(studentId: studentId),
                       ),
                     );
                   },

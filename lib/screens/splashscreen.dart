@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen>
           );
         } else if (User.userType == 'student') {
           if (await Provider.of<Apis>(context, listen: false)
-              .studentHomeScreen()) {
+              .studentHomeScreen(id: '-1')) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

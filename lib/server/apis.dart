@@ -2096,13 +2096,9 @@ class Apis with ChangeNotifier {
       print('................................');
       statusResponse = 200;
       print('we are going to show this');
-      if (await studentHomeScreen()) {
-        print('step 3 update student data');
-        notifyListeners();
-        return true;
-      } else {
-        return false;
-      }
+
+      notifyListeners();
+      return true;
     } on DioError catch (e) {
       print('hello');
       statusResponse = 400;
@@ -2188,13 +2184,9 @@ class Apis with ChangeNotifier {
       print('................................');
       statusResponse = 200;
       print('we are going to show this');
-      if (await studentHomeScreen()) {
-        print('step 3 update student data');
-        notifyListeners();
-        return true;
-      } else {
-        return false;
-      }
+
+      notifyListeners();
+      return true;
     } on DioError catch (e) {
       print('hello');
       statusResponse = 400;
@@ -2631,7 +2623,8 @@ class Apis with ChangeNotifier {
     }
   }
 
-  Future<bool> studentHomeScreen() async {
+  Future<bool> studentHomeScreen({required String id}) async {
+    print('The id is $id');
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
       String? myToken = storage.getString('token');
@@ -2648,7 +2641,7 @@ class Apis with ChangeNotifier {
         testAvailableForStories: [],
       );
       Dio.Response response = await dio().get(
-        "/student/HomeScreen",
+        "/student/HomeScreen?student_id=$id",
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),
