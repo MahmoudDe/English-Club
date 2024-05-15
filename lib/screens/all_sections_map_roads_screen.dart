@@ -81,6 +81,24 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
             ),
           )
         : Scaffold(
+            extendBodyBehindAppBar:
+                Apis.studentRoadMap.isEmpty && widget.allSections.isEmpty
+                    ? true
+                    : false,
+            appBar: Apis.studentRoadMap.isEmpty && widget.allSections.isEmpty
+                ? AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    leading: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                        )),
+                  )
+                : null,
             body: Stack(
               alignment: Alignment.topCenter,
               children: [

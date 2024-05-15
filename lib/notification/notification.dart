@@ -4,6 +4,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bdh/notification/notification_services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ////////هي  هبدة شغال الكود بلاها بس بحطا مشان اتأكد انو التطبيق اخد اشعارات  من التيرمينال
 Future<void> handelBackgroundMessage(RemoteMessage message) async {
@@ -91,6 +92,9 @@ class FirebaseApi {
       firebaseMessaging.subscribeToTopic('user');
       //هي النكشن مشان تجبلي التوكين
       String? fcmToken = await firebaseMessaging.getToken();
+      final SharedPreferences storage = await SharedPreferences.getInstance();
+
+      await storage.setString('fcmToken', fcmToken!);
       FirebaseMessaging.onBackgroundMessage(handelBackgroundMessage);
 
       print('The fcm token =>$fcmToken');

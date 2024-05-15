@@ -40,9 +40,15 @@ class Apis with ChangeNotifier {
   static List donePrizes = [];
   static List waitingPrizes = [];
   Future<bool> login(String? username, String? password) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
     try {
-      final response = await dio().post('auth/login',
-          data: {'username': username, 'password': password});
+      String? fcmToken = storage.getString('fcmToken');
+      final response = await dio().post('auth/login', data: {
+        'username': username,
+        'password': password,
+        'fcm_token': fcmToken
+      });
       if (response.statusCode == 200) {
         String token = response.data['data']['token'];
         print(token);
@@ -2668,6 +2674,8 @@ class Apis with ChangeNotifier {
     }
   }
 
+  static bool isError = false;
+
   Future<bool> studentStoryTest(
       {required String subLevelId, required String storyID}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
@@ -2713,6 +2721,7 @@ class Apis with ChangeNotifier {
           });
         }
       }
+      isError = false;
       statusResponse = 200;
       notifyListeners();
       return true;
@@ -2721,6 +2730,7 @@ class Apis with ChangeNotifier {
       statusResponse = 400;
       print(e.error);
       print(e.response);
+      message = e.response!.data['message'];
       notifyListeners();
       return false;
     } catch (e) {

@@ -8,6 +8,7 @@ import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/snack_bar_widget.dart';
 import '../form_widget.dart';
@@ -43,13 +44,12 @@ class _FormWidgetState extends State<FormStartWidget> {
 
   Future<void> submit(BuildContext context, Size mediaQuery) async {
     try {
-      bool isLoading = await Provider.of<Apis>(context, listen: false)
-          .login(enterdEmail, enterdPass);
-
-      if (isLoading) {
+      if (await Provider.of<Apis>(context, listen: false)
+          .login(enterdEmail, enterdPass)) {
         if (User.userType == 'student') {
           if (await Provider.of<Apis>(context, listen: false)
               .studentHomeScreen(id: '-1')) {
+            Navigator.pop(context);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -74,6 +74,7 @@ class _FormWidgetState extends State<FormStartWidget> {
                     contentType: ContentType.success)
                 .getSnakBar());
         } else if (User.userType == 'admin') {
+          Navigator.pop(context);
           Navigator.of(context).pushNamedAndRemoveUntil(
               NavigationScreen.routeName, (Route<dynamic> route) => false);
           ScaffoldMessenger.of(context)
@@ -85,6 +86,8 @@ class _FormWidgetState extends State<FormStartWidget> {
                 .getSnakBar());
         }
       } else {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBarWidget(
@@ -210,6 +213,10 @@ class _FormWidgetState extends State<FormStartWidget> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submit(context, mediaQuery);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.loading,
+                        barrierDismissible: false);
                   }
                 },
                 style: ElevatedButton.styleFrom(

@@ -6,6 +6,7 @@ import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/splashscreen.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:bdh/server/apis.dart';
+import 'package:bdh/server/home_provider.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: showBookController(),
+        ),
+        ChangeNotifierProvider.value(
+          value: HomeProvider(),
         ),
       ],
       child: Consumer<Apis>(

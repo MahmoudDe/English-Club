@@ -1,4 +1,5 @@
 import 'package:bdh/server/apis.dart';
+import 'package:bdh/styles/app_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
   final controller = CarouselController();
   final controllerNumber = CarouselController();
   bool isLoading = false;
+  bool isError = false;
 
   @override
   void initState() {
@@ -40,6 +42,12 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
       if (await Provider.of<Apis>(context, listen: false).studentStoryTest(
           storyID: widget.testId, subLevelId: widget.subLevelId)) {
         setState(() {
+          isError = false;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isError = true;
           isLoading = false;
         });
       }
@@ -92,6 +100,7 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
               elevation: 0,
             ),
             body: Stack(
+              alignment: Alignment.center,
               children: [
                 const SizedBox(
                   height: double.infinity,
@@ -101,59 +110,79 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
                     fit: BoxFit.fill,
                   ),
                 ),
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: mediaQuery.height / 10,
-                      ),
-                      CarouselSlider.builder(
-                        options: CarouselOptions(
-                            scrollPhysics: const NeverScrollableScrollPhysics(),
-                            initialPage: 0,
-                            height: mediaQuery.height / 1.3,
-                            viewportFraction: 1,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                print(
-                                    'All question length => ${QuizController.questions.length}');
-                                QuizController.index = index;
-                                print('new index = ${QuizController.index}');
-                              });
-                            },
-                            enableInfiniteScroll: false,
-                            enlargeCenterPage: false),
-                        carouselController: controller,
-                        itemCount: QuizController.questions.length,
-                        itemBuilder: (context, index, realIndex) {
-                          return QuestionWidget(
-                            testId: widget.testId,
-                            index: index,
-                            mediaQuery: mediaQuery,
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: mediaQuery.height / 100,
-                      ),
-                      IndicatorWidget(
-                          controller: controller,
-                          activeIndex: QuizController.index,
-                          count: QuizController.questions.length),
-                      SizedBox(
-                        height: mediaQuery.height / 100,
-                      ),
-                      ChangeQuestionWidget(
-                        storyId: widget.testId,
-                        subLevelId: widget.subLevelId,
-                        controllerNumber: controllerNumber,
-                        controller: controller,
-                        mediaQuery: mediaQuery,
-                      ),
-                    ],
-                  ),
-                )
+                isError
+                    ? Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: mediaQuery.width / 30),
+                        height: mediaQuery.height / 5,
+                        width: mediaQuery.width / 1.5,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: Text(
+                          Apis.message,
+                          style: TextStyle(
+                              color: AppColors.main,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: mediaQuery.height / 10,
+                            ),
+                            CarouselSlider.builder(
+                              options: CarouselOptions(
+                                  scrollPhysics:
+                                      const NeverScrollableScrollPhysics(),
+                                  initialPage: 0,
+                                  height: mediaQuery.height / 1.3,
+                                  viewportFraction: 1,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      print(
+                                          'All question length => ${QuizController.questions.length}');
+                                      QuizController.index = index;
+                                      print(
+                                          'new index = ${QuizController.index}');
+                                    });
+                                  },
+                                  enableInfiniteScroll: false,
+                                  enlargeCenterPage: false),
+                              carouselController: controller,
+                              itemCount: QuizController.questions.length,
+                              itemBuilder: (context, index, realIndex) {
+                                return QuestionWidget(
+                                  testId: widget.testId,
+                                  index: index,
+                                  mediaQuery: mediaQuery,
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: mediaQuery.height / 100,
+                            ),
+                            IndicatorWidget(
+                                controller: controller,
+                                activeIndex: QuizController.index,
+                                count: QuizController.questions.length),
+                            SizedBox(
+                              height: mediaQuery.height / 100,
+                            ),
+                            ChangeQuestionWidget(
+                              storyId: widget.testId,
+                              subLevelId: widget.subLevelId,
+                              controllerNumber: controllerNumber,
+                              controller: controller,
+                              mediaQuery: mediaQuery,
+                            ),
+                          ],
+                        ),
+                      )
               ],
             ),
           );
