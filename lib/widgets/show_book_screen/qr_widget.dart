@@ -7,10 +7,11 @@ import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/server/image_url.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:screenshot/screenshot.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../styles/app_colors.dart';
 
@@ -26,35 +27,35 @@ class _QrWidgetState extends State<QrWidget> {
   final ScreenshotController _screenshotController = ScreenshotController();
 
   Future<void> _downloadImage() async {
-    // Request storage permission
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      try {
-        final Uint8List? imageBytes = await _screenshotController.capture();
-        if (imageBytes != null) {
-          // Create a temporary file to save the image
-          // final tempFile = File(
-          //     '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png');
-          // await tempFile.writeAsBytes(imageBytes);
+    // // Request storage permission
+    // final plugin = DeviceInfoPlugin();
+    // final android = await plugin.androidInfo;
 
-          // Now use the tempFile for sharing or further processing
-          await Share.file(
-            "QR Code",
-            "${showBookController.bookData[0]['title']}.jpg",
-            imageBytes,
-            "image/jpg",
-            text:
-                "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
-          );
-        } else {
-          print("Error capturing the QR code image.");
-        }
-      } catch (error) {
-        print("Error capturing or sharing QR code: $error");
+    // final storageStatus = android.version.sdkInt < 33
+    //     ? await Permission.storage.request()
+    //     : PermissionStatus.granted;
+    try {
+      final Uint8List? imageBytes = await _screenshotController.capture();
+      if (imageBytes != null) {
+        // Create a temporary file to save the image
+        // final tempFile = File(
+        //     '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png');
+        // await tempFile.writeAsBytes(imageBytes);
+
+        // Now use the tempFile for sharing or further processing
+        await Share.file(
+          "QR Code",
+          "${showBookController.bookData[0]['title']}.jpg",
+          imageBytes,
+          "image/jpg",
+          text:
+              "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
+        );
+      } else {
+        print("Error capturing the QR code image.");
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Storage permission is required to download QR code')));
+    } catch (error) {
+      print("Error capturing or sharing QR code: $error");
     }
   }
 

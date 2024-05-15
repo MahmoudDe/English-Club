@@ -1456,6 +1456,71 @@ class Apis with ChangeNotifier {
     }
   }
 
+  Future<bool> getStudentVocabTest(
+      {required String sectionId, required String levelId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().get(
+        "/student/getVocaTestOf/section/$sectionId/level/$levelId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student story test server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      QuizController.numberOfQuestions =
+          response.data['data']['testSections'].length;
+      QuizController.test.clear();
+      QuizController.questions.clear();
+      QuizController.studentAnswer.clear();
+      QuizController.test = response.data['data']['testSections'];
+      print(' THE MAIN LENGTH = ${QuizController.test.length}');
+      for (int i = 0; i < QuizController.test.length; i++) {
+        QuizController.studentAnswer.insert(i, {
+          "testSection_id": QuizController.test[i]['id'].toString(),
+          "questions": []
+        });
+        for (int j = 0;
+            j < QuizController.test[i]['selected_questions'].length;
+            j++) {
+          QuizController.questions.add({
+            'data': QuizController.test[i]['selected_questions'][j],
+            'main_text_url': QuizController.test[i]['text_url'],
+            'main_is_image': QuizController.test[i]['is_image'],
+            'main_id': QuizController.test[i]['id'],
+          });
+          QuizController.studentAnswer[i]['questions'].insert(j, {
+            'id': QuizController.test[i]['selected_questions'][j]['id']
+                .toString(),
+            'pickedAnswers': []
+          });
+        }
+      }
+      isError = false;
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<bool> changeMainQuestionToText(
       {required String mainQuestionId,
       required String quizId,
@@ -2647,7 +2712,9 @@ class Apis with ChangeNotifier {
         testAvailableForStories: [],
       );
       Dio.Response response = await dio().get(
-        "/student/HomeScreen?student_id=$id",
+        User.userType == 'student'
+            ? "/student/HomeScreen"
+            : "/student/HomeScreen?student_id=$id",
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),
@@ -2741,13 +2808,16 @@ class Apis with ChangeNotifier {
   }
 
   Future<bool> studentSubmitTest(
-      {required String subLevelId, required String storyID}) async {
+      {required String subLevelId,
+      required String storyID,
+      required List<dynamic> answers}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
       String? myToken = storage.getString('token');
 
       Dio.Response response = await dio().post(
         "/student/submitSolutionOf/sublevel/$subLevelId/Story/$storyID",
+        data: json.encode(answers),
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),

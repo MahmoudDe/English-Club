@@ -35,8 +35,10 @@ class ChangeQuestionWidget extends StatelessWidget {
         print(QuizController.studentAnswer[i]);
         print('................................');
       }
-      if (await Provider.of<Apis>(context, listen: false)
-          .studentSubmitTest(subLevelId: subLevelId, storyID: storyId)) {}
+      if (await Provider.of<Apis>(context, listen: false).studentSubmitTest(
+          subLevelId: subLevelId,
+          storyID: storyId,
+          answers: QuizController.studentAnswer)) {}
     } catch (e) {
       print(e);
     }

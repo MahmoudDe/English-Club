@@ -42,14 +42,14 @@ class _NavigationScreenState extends State<NavigationScreen>
       print(event.from);
       print(event.category);
       print(event.data);
-      // AwesomeNotifications().createNotification(
-      //   content: NotificationContent(
-      //     id: 1,
-      //     channelKey: 'myKey',
-      //     title: event.notification!.title,
-      //     body: event.notification!.body,
-      //   ),
-      // );
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'myKey',
+          title: event.notification!.title,
+          body: event.notification!.body,
+        ),
+      );
       NotificationServices().showNotification(
           title: event.notification!.title.toString(),
           body: event.notification!.body.toString());

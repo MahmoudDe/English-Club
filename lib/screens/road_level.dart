@@ -106,8 +106,24 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
 
       //when end all part add uniq step
       if (currentLevel != tempLevel) {
+        bool isLocked = true;
+        print('The level id is => ${(currentLevelId - 1).toString()}');
+        for (int i = 0;
+            i < widget.roadData['availableVocabularyTests'].length;
+            i++) {
+          if ((currentLevelId - 1).toString() ==
+              widget.roadData['availableVocabularyTests'][i]['level_id']
+                  .toString()) {
+            print('Found available test ');
+            setState(() {
+              isLocked = false;
+            });
+          }
+        }
         steps.add(
           LevelStepWidget(
+              isLocked: isLocked,
+              sectionId: widget.roadData['section_id'].toString(),
               studentId:
                   !widget.showName ? '' : widget.studentData['id'].toString(),
               levelId: (currentLevelId - 1).toString(),
@@ -149,8 +165,25 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       //add final level step
       if (i == widget.roadData['data'].length - 1) {
         editStep();
+        bool isLocked = true;
+        print('The level id is => ${currentLevelId.toString()}');
+        for (int i = 0;
+            i < widget.roadData['availableVocabularyTests'].length;
+            i++) {
+          if (currentLevelId.toString() ==
+              widget.roadData['availableVocabularyTests'][i]['level_id']
+                  .toString()) {
+            print('found test');
+            setState(() {
+              isLocked = false;
+            });
+            break;
+          }
+        }
         steps.add(
           LevelStepWidget(
+              sectionId: widget.roadData['section_id'].toString(),
+              isLocked: isLocked,
               studentId:
                   !widget.showName ? '' : widget.studentData['id'].toString(),
               levelId: currentLevelId.toString(),

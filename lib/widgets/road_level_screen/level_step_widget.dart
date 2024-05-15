@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bdh/model/user.dart';
+import 'package:bdh/screens/student_screens/student_vocab_test_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -19,7 +20,10 @@ class LevelStepWidget extends StatelessWidget {
       required this.showButton,
       required this.counter,
       required this.studentId,
+      required this.isLocked,
+      required this.sectionId,
       required this.levelId});
+  final bool isLocked;
   final Size mediaQuery;
   final List aligmentList;
   final String levelName;
@@ -28,6 +32,7 @@ class LevelStepWidget extends StatelessWidget {
   final int counter;
   final String studentId;
   final String levelId;
+  final String sectionId;
 
   Future<void> unlockTest(BuildContext context) async {
     try {
@@ -83,10 +88,11 @@ class LevelStepWidget extends StatelessWidget {
                         height: User.userType == 'admin'
                             ? mediaQuery.height / 5
                             : mediaQuery.height / 6,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          color: Colors.amber,
-                          boxShadow: [
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          color: isLocked ? Colors.amber : Colors.red,
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black26,
                               offset:
@@ -132,18 +138,34 @@ class LevelStepWidget extends StatelessWidget {
                                     height: mediaQuery.height / 200,
                                   ),
                                   User.userType == 'admin'
-                                      ? const Text(
-                                          'Unlock the vocabulary test for this student',
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      : const Text(
-                                          'You can ask the admin to unlock vocabulary test for you',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                      ? isLocked
+                                          ? const Text(
+                                              'Unlock the vocabulary test for this student',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )
+                                          : const Text(
+                                              'The vocabulary test is start already.\n It will lock automatically when the time out',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )
+                                      : isLocked
+                                          ? const Text(
+                                              'You can ask the admin to unlock vocabulary test for you',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )
+                                          : const Text(
+                                              'The vocabulary test is available now for you.\n go a head and good luck',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                   SizedBox(
                                     height: mediaQuery.height / 200,
                                   ),
-                                  User.userType == 'admin' && showButton
+                                  User.userType == 'admin' &&
+                                          showButton &&
+                                          isLocked
                                       ? ElevatedButton(
                                           onPressed: () {
                                             unlockTest(context);
@@ -162,7 +184,33 @@ class LevelStepWidget extends StatelessWidget {
                                                 color: Colors.amber,
                                                 fontWeight: FontWeight.bold),
                                           ))
-                                      : const SizedBox()
+                                      : !isLocked && User.userType == 'student'
+                                          ? ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      StudentVocabTestScreen(
+                                                          levelId: levelId,
+                                                          sectionId: sectionId),
+                                                ));
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.white,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        mediaQuery.width / 8,
+                                                    vertical:
+                                                        mediaQuery.height / 60),
+                                              ),
+                                              child: const Text(
+                                                'Start',
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ))
+                                          : const SizedBox()
                                 ]),
                           ),
                         ),
@@ -173,13 +221,15 @@ class LevelStepWidget extends StatelessWidget {
             child: Container(
               height: mediaQuery.height / 10,
               width: mediaQuery.width / 3.5,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(360)),
-                color: Colors.amber,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(360)),
+                color: isLocked ? Colors.amber : Colors.red,
                 boxShadow: [
                   BoxShadow(
-                    color: Color.fromRGBO(179, 136, 7, 1),
-                    offset: Offset(0, 10), // changes position of shadow
+                    color: isLocked
+                        ? const Color.fromRGBO(179, 136, 7, 1)
+                        : const Color.fromARGB(255, 137, 35, 27),
+                    offset: const Offset(0, 10), // changes position of shadow
                   ),
                 ],
               ),

@@ -19,6 +19,8 @@ import 'notification/notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotification();
   await AwesomeNotifications().initialize(null, [
     NotificationChannel(
       channelGroupKey: 'basic_channel_group_key',
@@ -35,11 +37,6 @@ void main() async {
       await AwesomeNotifications().isNotificationAllowed();
   await NotificationServices().initNotification();
   print('isNotificationAllowed => $isNotificationAllowed');
-  if (!isNotificationAllowed) {
-    AwesomeNotifications().requestPermissionToSendNotifications();
-  }
-  await Firebase.initializeApp();
-  await FirebaseApi().initNotification();
   runApp(Phoenix(child: MyApp()));
   // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
   //   if (Platform.isAndroid) {

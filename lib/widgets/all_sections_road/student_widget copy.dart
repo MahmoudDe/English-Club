@@ -15,8 +15,7 @@ class StudentListTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListTile(
+    return  ListTile(
         leading: CircleAvatar(
           backgroundImage: Apis.studentModel!.profilePicture == null
               ? null
@@ -38,7 +37,7 @@ class StudentListTileWidget extends StatelessWidget {
                   Apis.studentRoadMap.isEmpty ? AppColors.main : Colors.white,
               fontWeight: FontWeight.bold),
         ),
-      ),
-    );
+      )
+    ;
   }
 }
