@@ -44,4 +44,40 @@ class HomeProvider with ChangeNotifier {
       print(e);
     }
   }
+
+  Future<void> getAllNotificationsStudent({required String page}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      notifications.clear();
+      String? myToken = storage.getString('token');
+      Dio.Response response = await dio().get(
+        "/student/notifications?page=$page&read=0",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................all notifications server response');
+      print(response.data);
+      print('................................');
+      notifications = response.data['data']['data'];
+      isLoading = false;
+      isError = false;
+      notifyListeners();
+    } on DioException catch (e) {
+      print('Fine error');
+      notifications = [];
+      isLoading = false;
+      isError = true;
+      notifyListeners();
+      print(e);
+    } catch (e) {
+      notifications = [];
+      print('ERRRRRRRRRRRRRRRRRRRROR');
+      isLoading = false;
+      isError = true;
+      notifyListeners();
+      print(e);
+    }
+  }
 }

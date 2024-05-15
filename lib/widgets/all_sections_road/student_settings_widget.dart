@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:bdh/model/user.dart';
+import 'package:bdh/screens/student_screens/student_notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -39,74 +40,93 @@ class StudentSettingsWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: mediaQuery.height / 27),
       child: ListTile(
-        trailing: PopupMenuButton<String>(
-          onOpened: _iconTab,
-          onCanceled: _iconTab,
-          offset: Offset(0, mediaQuery.height / 20),
-          icon: AnimatedIcon(
-            icon: AnimatedIcons.menu_close,
-            progress: animationController,
-            size: mediaQuery.width / 15,
-            color: Apis.studentRoadMap.isEmpty ? AppColors.main : Colors.white,
-          ),
-          itemBuilder: (BuildContext context) {
-            return [
-              PopupMenuItem<String>(
-                value: 'Add_students',
-                child: TextButton.icon(
-                  label: Text(
-                    'Your profile',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: AppColors.main),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            StudentHomeScreen(studentId: studentId),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Iconsax.user_cirlce_add,
-                    color: AppColors.main,
-                  ),
-                ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            User.userType != 'student'
+                ? const SizedBox.shrink()
+                : IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const StudentNotiScreen(),
+                      ));
+                    },
+                    icon: const Icon(
+                      Icons.notifications,
+                      color: Colors.white,
+                    )),
+            PopupMenuButton<String>(
+              onOpened: _iconTab,
+              onCanceled: _iconTab,
+              offset: Offset(0, mediaQuery.height / 20),
+              icon: AnimatedIcon(
+                icon: AnimatedIcons.menu_close,
+                progress: animationController,
+                size: mediaQuery.width / 15,
+                color:
+                    Apis.studentRoadMap.isEmpty ? AppColors.main : Colors.white,
               ),
-              User.userType != 'student'
-                  ? const PopupMenuItem<String>(
-                      value: 'logout', child: SizedBox())
-                  : PopupMenuItem<String>(
-                      value: 'logout',
-                      child: TextButton.icon(
-                        label: Text(
-                          'Logout',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.main),
-                        ),
-                        onPressed: () async {
-                          if (await Provider.of<Apis>(context, listen: false)
-                              .logout()) {
-                            // call the logout function
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            await prefs.remove('token');
-                            // ignore: use_build_context_synchronously
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                StartScreen.routName,
-                                (Route<dynamic> route) => false);
-                          }
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          color: AppColors.main,
-                        ),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: 'Add_students',
+                    child: TextButton.icon(
+                      label: Text(
+                        'Your profile',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: AppColors.main),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                StudentHomeScreen(studentId: studentId),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Iconsax.user_cirlce_add,
+                        color: AppColors.main,
                       ),
                     ),
-            ];
-          },
+                  ),
+                  User.userType != 'student'
+                      ? const PopupMenuItem<String>(
+                          value: 'logout', child: SizedBox())
+                      : PopupMenuItem<String>(
+                          value: 'logout',
+                          child: TextButton.icon(
+                            label: Text(
+                              'Logout',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.main),
+                            ),
+                            onPressed: () async {
+                              if (await Provider.of<Apis>(context,
+                                      listen: false)
+                                  .logout()) {
+                                // call the logout function
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.remove('token');
+                                // ignore: use_build_context_synchronously
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    StartScreen.routName,
+                                    (Route<dynamic> route) => false);
+                              }
+                            },
+                            icon: Icon(
+                              Icons.logout,
+                              color: AppColors.main,
+                            ),
+                          ),
+                        ),
+                ];
+              },
+            ),
+          ],
         ),
         leading: CircleAvatar(
           backgroundImage: studentData['profile_picture'] == null

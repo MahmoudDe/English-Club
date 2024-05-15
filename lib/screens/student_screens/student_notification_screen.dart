@@ -2,19 +2,20 @@
 // import 'package:bdh/server/apis.dart';
 import 'package:bdh/server/home_provider.dart';
 import 'package:bdh/styles/app_colors.dart';
+import 'package:bdh/widgets/all_sections_road/student_widget%20copy.dart';
 // import 'package:bdh/widgets/Cards/homeCard.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class StudentNotiScreen extends StatefulWidget {
+  const StudentNotiScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<StudentNotiScreen> createState() => _StudentNotiScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _StudentNotiScreenState extends State<StudentNotiScreen> {
   List doneTasks = [];
   final scrollController = ScrollController();
   bool isGettingData = false;
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getData() async {
     try {
       await Provider.of<HomeProvider>(context, listen: false)
-          .getAllNotifications(page: '0');
+          .getAllNotificationsStudent(page: '0');
       doneTasks = doneTasks + HomeProvider.notifications;
     } catch (e) {
       print(e);
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       try {
         await Provider.of<HomeProvider>(context, listen: false)
-            .getAllNotifications(page: page.toString());
+            .getAllNotificationsStudent(page: page.toString());
 
         setState(() {
           doneTasks = doneTasks + HomeProvider.notifications;
@@ -65,6 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.main,
+        title: StudentListTileWidget(
+          mediaQuery: mediaQuery,
+        ),
+      ),
       body: Consumer<HomeProvider>(
         builder: (context, value, child) => HomeProvider.isLoading
             ? Center(
@@ -88,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: mediaQuery.height / 1.3,
+                        height: mediaQuery.height / 1.2,
                         child: ListView.builder(
                           controller: scrollController,
                           padding: EdgeInsets.zero,
