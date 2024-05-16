@@ -31,6 +31,7 @@ class HomeProvider with ChangeNotifier {
     } on DioException catch (e) {
       print('Fine error');
       notifications = [];
+      print('The status code is => ${e.response!.statusCode}');
       isLoading = false;
       isError = true;
       notifyListeners();

@@ -2807,11 +2807,13 @@ class Apis with ChangeNotifier {
     }
   }
 
+  static Map<String, dynamic> studentResultBookTest = {};
   Future<bool> studentSubmitTest(
       {required String subLevelId,
       required String storyID,
       required List<dynamic> answers}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
+    studentResultBookTest.clear();
     try {
       String? myToken = storage.getString('token');
 
@@ -2826,6 +2828,7 @@ class Apis with ChangeNotifier {
           '................................student submit test server response');
       print(response.data);
       print('................................');
+      studentResultBookTest = response.data['data'];
       statusResponse = 200;
       notifyListeners();
       return true;
@@ -2834,6 +2837,10 @@ class Apis with ChangeNotifier {
       statusResponse = 400;
       print(e.error);
       print(e.response);
+      print(e.response!.statusCode);
+      message = e.response!.data['errorDetail'] != null
+          ? e.response!.data['errorDetail'].toString()
+          : e.response!.data['message'];
       notifyListeners();
       return false;
     } catch (e) {

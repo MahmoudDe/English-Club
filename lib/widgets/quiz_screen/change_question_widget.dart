@@ -1,6 +1,7 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors_in_immutables
+// ignore_for_file: must_be_immutable, prefer_const_constructors_in_immutables, use_build_context_synchronously
 
 import 'package:bdh/model/user.dart';
+import 'package:bdh/screens/student_screens/student_result_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,18 @@ class ChangeQuestionWidget extends StatelessWidget {
       if (await Provider.of<Apis>(context, listen: false).studentSubmitTest(
           subLevelId: subLevelId,
           storyID: storyId,
-          answers: QuizController.studentAnswer)) {}
+          answers: QuizController.studentAnswer)) {
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const StudentResultScreen(),
+            ));
+      } else {
+        Navigator.pop(context);
+        QuickAlert.show(
+            context: context, type: QuickAlertType.error, text: Apis.message);
+      }
     } catch (e) {
       print(e);
     }
@@ -87,6 +99,12 @@ class ChangeQuestionWidget extends StatelessWidget {
                             onConfirmBtnTap: (() {
                               print('submit');
                               print(QuizController.studentAnswer);
+
+                              Navigator.pop(context);
+                              QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.loading,
+                                  barrierDismissible: false);
                               submit(context);
                             }));
                   },

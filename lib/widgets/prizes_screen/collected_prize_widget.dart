@@ -165,7 +165,8 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
                                   'assets/images/studentScore.png'),
                               height: widget.mediaQuery.height / 30,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']['score']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['score_points']
                                 .toString()),
                           ),
                           //golden cards
@@ -181,14 +182,14 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
                                   const AssetImage('assets/images/golden.png'),
                               height: widget.mediaQuery.height / 30,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']
-                                    ['golden_coins']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['golden_coin']
                                 .toString()),
                           ),
                           //silver cards
                           ListTile(
                             title: const Text(
-                              'Silver cards',
+                              'Silver card',
                               style: TextStyle(
                                   fontFamily: 'Avenir',
                                   fontWeight: FontWeight.bold),
@@ -198,8 +199,8 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
                                   const AssetImage('assets/images/silver.png'),
                               height: widget.mediaQuery.height / 25,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']
-                                    ['silver_coins']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['silver_coin']
                                 .toString()),
                           ),
                           //bronze cards
@@ -215,8 +216,8 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
                                   const AssetImage('assets/images/bronze.png'),
                               height: widget.mediaQuery.height / 30,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']
-                                    ['bronze_coins']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['bronze_coin']
                                 .toString()),
                           ),
                         ],

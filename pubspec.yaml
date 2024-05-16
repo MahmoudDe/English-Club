@@ -89,6 +89,7 @@ flutter:
     - assets/lotties/empty.json
     - assets/lotties/step.json
     - assets/images/auth1.jpg
+    - assets/lotties/celebrate.json
     - assets/images/auth2.jpg
     - assets/images/englishClubText.png
   fonts:

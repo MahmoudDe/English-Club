@@ -195,7 +195,8 @@ class _WaitingListWidgetState extends State<UnCollectedPrizeWidget> {
                                   'assets/images/studentScore.png'),
                               height: widget.mediaQuery.height / 30,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']['score']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['score_points']
                                 .toString()),
                           ),
                           //golden cards
@@ -211,8 +212,8 @@ class _WaitingListWidgetState extends State<UnCollectedPrizeWidget> {
                                   const AssetImage('assets/images/golden.png'),
                               height: widget.mediaQuery.height / 30,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']
-                                    ['golden_coins']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['golden_coin']
                                 .toString()),
                           ),
                           //silver cards
@@ -228,8 +229,8 @@ class _WaitingListWidgetState extends State<UnCollectedPrizeWidget> {
                                   const AssetImage('assets/images/silver.png'),
                               height: widget.mediaQuery.height / 25,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']
-                                    ['silver_coins']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['silver_coin']
                                 .toString()),
                           ),
                           //bronze cards
@@ -245,8 +246,8 @@ class _WaitingListWidgetState extends State<UnCollectedPrizeWidget> {
                                   const AssetImage('assets/images/bronze.png'),
                               height: widget.mediaQuery.height / 30,
                             ),
-                            trailing: Text(doneTasks[index]['giveItTo']
-                                    ['bronze_coins']
+                            trailing: Text(doneTasks[index]['prize']
+                                    ['bronze_coin']
                                 .toString()),
                           ),
                         ],

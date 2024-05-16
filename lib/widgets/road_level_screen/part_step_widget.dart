@@ -150,7 +150,7 @@ class PartStepWidget extends StatelessWidget {
                                         center: Text(
                                           roadData['data'][i]['status'] ==
                                                   'reached'
-                                              ? "${(double.parse(roadData['data'][i]['progress']).toInt() * 100).toString()}%"
+                                              ? "${(double.parse(roadData['data'][i]['progress']) * 100).toString()}%"
                                               : roadData['data'][i]['status'] ==
                                                       'done'
                                                   ? '100%'

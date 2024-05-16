@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bdh/model/user.dart';
+import 'package:bdh/screens/all_sections_map_roads_screen.dart';
 import 'package:bdh/screens/student_screens/student_vocab_test_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,9 @@ class LevelStepWidget extends StatelessWidget {
       required this.studentId,
       required this.isLocked,
       required this.sectionId,
-      required this.levelId});
+      required this.levelId,
+      required this.allSections,
+      required this.studentData});
   final bool isLocked;
   final Size mediaQuery;
   final List aligmentList;
@@ -33,12 +36,21 @@ class LevelStepWidget extends StatelessWidget {
   final String studentId;
   final String levelId;
   final String sectionId;
+  final List<dynamic> allSections;
+  final Map<dynamic, dynamic> studentData;
 
   Future<void> unlockTest(BuildContext context) async {
     try {
       print(levelId);
       if (await Provider.of<Apis>(context, listen: false)
           .unlockVocabTest(levelId: levelId, studentId: studentId)) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => AllSectionsMapRoadsScreen(
+              allSections: allSections,
+              mediaQuery: mediaQuery,
+              studentData: studentData,
+              studentId: studentId),
+        ));
         QuickAlert.show(
             context: context,
             type: QuickAlertType.success,
@@ -145,7 +157,7 @@ class LevelStepWidget extends StatelessWidget {
                                                   color: Colors.white),
                                             )
                                           : const Text(
-                                              'The vocabulary test is start already.\n It will lock automatically when the time out',
+                                              'Vocabulary test has started.remember to end it when the student finishes',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
@@ -156,7 +168,7 @@ class LevelStepWidget extends StatelessWidget {
                                                   color: Colors.white),
                                             )
                                           : const Text(
-                                              'The vocabulary test is available now for you.\n go a head and good luck',
+                                              'You are ready to start the vocabulary test. Good luck!',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -184,16 +196,12 @@ class LevelStepWidget extends StatelessWidget {
                                                 color: Colors.amber,
                                                 fontWeight: FontWeight.bold),
                                           ))
-                                      : !isLocked && User.userType == 'student'
+                                      : User.userType == 'admin' &&
+                                              showButton &&
+                                              isLocked
                                           ? ElevatedButton(
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      StudentVocabTestScreen(
-                                                          levelId: levelId,
-                                                          sectionId: sectionId),
-                                                ));
+                                                unlockTest(context);
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.white,
@@ -204,13 +212,47 @@ class LevelStepWidget extends StatelessWidget {
                                                         mediaQuery.height / 60),
                                               ),
                                               child: const Text(
-                                                'Start',
+                                                'Lock',
                                                 style: TextStyle(
                                                     color: Colors.red,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ))
-                                          : const SizedBox()
+                                          : !isLocked &&
+                                                  User.userType == 'student'
+                                              ? ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          StudentVocabTestScreen(
+                                                              levelId: levelId,
+                                                              sectionId:
+                                                                  sectionId),
+                                                    ));
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                mediaQuery
+                                                                        .width /
+                                                                    8,
+                                                            vertical: mediaQuery
+                                                                    .height /
+                                                                60),
+                                                  ),
+                                                  child: const Text(
+                                                    'Start',
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ))
+                                              : const SizedBox()
                                 ]),
                           ),
                         ),

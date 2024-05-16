@@ -93,7 +93,7 @@ class FirebaseApi {
       //هي النكشن مشان تجبلي التوكين
       String? fcmToken = await firebaseMessaging.getToken();
       final SharedPreferences storage = await SharedPreferences.getInstance();
-
+      await storage.remove('fcmToken');
       await storage.setString('fcmToken', fcmToken!);
       FirebaseMessaging.onBackgroundMessage(handelBackgroundMessage);
 

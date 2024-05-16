@@ -11,6 +11,7 @@ class RoadLevelsScreen extends StatefulWidget {
       required this.color,
       required this.studentData,
       required this.assetUrls,
+      required this.allSections,
       required this.showName});
 
   final Map studentData;
@@ -19,6 +20,7 @@ class RoadLevelsScreen extends StatefulWidget {
   final Color? color;
   final List assetUrls;
   final bool showName;
+  final List<dynamic> allSections;
 
   @override
   State<RoadLevelsScreen> createState() => _RoadLevelsScreenState();
@@ -122,6 +124,8 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         }
         steps.add(
           LevelStepWidget(
+              allSections: widget.allSections,
+              studentData: widget.roadData,
               isLocked: isLocked,
               sectionId: widget.roadData['section_id'].toString(),
               studentId:
@@ -182,6 +186,8 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         }
         steps.add(
           LevelStepWidget(
+              allSections: widget.allSections,
+              studentData: widget.roadData,
               sectionId: widget.roadData['section_id'].toString(),
               isLocked: isLocked,
               studentId:

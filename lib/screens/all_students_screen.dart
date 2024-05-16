@@ -10,6 +10,7 @@ import 'package:bdh/widgets/all_student_screen/studnet_widget.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:quickalert/quickalert.dart';
@@ -513,55 +514,75 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                           },
                         ),
                         //students
-                        Expanded(
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: searchStudentList.length,
-                              itemBuilder: (context, index) => Consumer<Apis>(
-                                    builder: (context, value, child) =>
-                                        StudentWidget(
-                                            allClassesInGrade:
-                                                allClassesInGrade,
-                                            allGrades: allGrades,
-                                            selectedClassFilterValue:
-                                                selectedClassFilterValue,
-                                            selectedGradeFilterValue:
-                                                selectedGradeFilterValue,
-                                            onPressedActive: (p0) {
-                                              changeActiveStudentState(
-                                                  //now
-                                                  //InActive = 0 mean it's inActive
-                                                  //InActive = 1 mean it's Active
+                        searchStudentList.isEmpty
+                            ? Column(
+                                children: [
+                                  Center(
+                                    child: Lottie.asset(
+                                        'assets/lotties/noData.json',
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                3),
+                                  ),
+                                  Text(
+                                    'No data',
+                                    style: TextStyle(
+                                        color: AppColors.main,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            : Expanded(
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: searchStudentList.length,
+                                    itemBuilder: (context, index) =>
+                                        Consumer<Apis>(
+                                          builder: (context, value, child) =>
+                                              StudentWidget(
+                                                  allClassesInGrade:
+                                                      allClassesInGrade,
+                                                  allGrades: allGrades,
+                                                  selectedClassFilterValue:
+                                                      selectedClassFilterValue,
+                                                  selectedGradeFilterValue:
+                                                      selectedGradeFilterValue,
+                                                  onPressedActive: (p0) {
+                                                    changeActiveStudentState(
+                                                        //now
+                                                        //InActive = 0 mean it's inActive
+                                                        //InActive = 1 mean it's Active
 
-                                                  //before
-                                                  //InActive = 0 mean it's Active                  to inActive send 1
-                                                  //InActive = 1 mean it's InActive                to active send 0
-                                                  searchStudentList[index]
-                                                              ['inactive'] ==
-                                                          0
-                                                      ? '1'
-                                                      : '0',
-                                                  index);
-                                            },
-                                            onPressedDelete: (p0) {
-                                              deleteStudent(index);
-                                            },
-                                            getData: filterData,
-                                            refreshData: getData,
-                                            mediaQuery: mediaQuery,
-                                            searchStudentList:
-                                                searchStudentList,
-                                            index: index),
-                                  )),
-                        )
-                            .animate(
-                              controller: controllerAnimation,
-                            )
-                            .fade(
-                                duration: const Duration(
-                                  milliseconds: 200,
-                                ),
-                                curve: Curves.easeIn),
+                                                        //before
+                                                        //InActive = 0 mean it's Active                  to inActive send 1
+                                                        //InActive = 1 mean it's InActive                to active send 0
+                                                        searchStudentList[index]
+                                                                    [
+                                                                    'inactive'] ==
+                                                                0
+                                                            ? '1'
+                                                            : '0',
+                                                        index);
+                                                  },
+                                                  onPressedDelete: (p0) {
+                                                    deleteStudent(index);
+                                                  },
+                                                  getData: filterData,
+                                                  refreshData: getData,
+                                                  mediaQuery: mediaQuery,
+                                                  searchStudentList:
+                                                      searchStudentList,
+                                                  index: index),
+                                        )),
+                              )
+                                .animate(
+                                  controller: controllerAnimation,
+                                )
+                                .fade(
+                                    duration: const Duration(
+                                      milliseconds: 200,
+                                    ),
+                                    curve: Curves.easeIn),
                       ],
                     ),
                   ),

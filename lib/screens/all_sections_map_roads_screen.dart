@@ -123,6 +123,7 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
                                   duration: const Duration(milliseconds: 500),
                                   color: Constants.colorsForRoad[_currentPage],
                                   child: RoadLevelsScreen(
+                                    allSections: widget.allSections,
                                     showName: true,
                                     assetUrls: Constants.animations[index],
                                     studentData: widget.studentData,
@@ -135,6 +136,7 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
                                   duration: const Duration(milliseconds: 500),
                                   color: Constants.colorsForRoad[_currentPage],
                                   child: RoadLevelsScreen(
+                                    allSections: widget.allSections,
                                     showName: false,
                                     studentData: widget.studentData,
                                     assetUrls: Constants.animations[index],

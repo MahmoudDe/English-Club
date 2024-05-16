@@ -5,6 +5,7 @@ import 'package:bdh/screens/navigation_screen.dart';
 import 'package:bdh/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../server/apis.dart';
@@ -83,6 +84,22 @@ class _SplashScreenState extends State<SplashScreen>
                     mediaQuery: MediaQuery.of(context).size),
               ),
               (route) => false,
+            );
+          } else {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              barrierDismissible: false,
+              confirmBtnColor: Colors.red,
+              text: 'Your session has expired.\n Please log in again.',
+              confirmBtnText: 'LogIn',
+              onConfirmBtnTap: () async {
+                // call the logout function
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.remove('token');
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    StartScreen.routName, (Route<dynamic> route) => false);
+              },
             );
           }
         }

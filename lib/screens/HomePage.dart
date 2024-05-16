@@ -1,11 +1,16 @@
 // import 'package:bdh/server/apis.dart';
 // import 'package:bdh/server/apis.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:bdh/screens/start_screen.dart';
 import 'package:bdh/server/home_provider.dart';
 import 'package:bdh/styles/app_colors.dart';
 // import 'package:bdh/widgets/Cards/homeCard.dart';
 import 'package:bdh/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await Provider.of<HomeProvider>(context, listen: false)
           .getAllNotifications(page: '0');
+      if (HomeProvider.isError) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          barrierDismissible: false,
+          confirmBtnColor: Colors.red,
+          text: 'Your session has expired.\n Please log in again.',
+          confirmBtnText: 'LogIn',
+          onConfirmBtnTap: () async {
+            // call the logout function
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.remove('token');
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                StartScreen.routName, (Route<dynamic> route) => false);
+          },
+        );
+      }
       doneTasks = doneTasks + HomeProvider.notifications;
     } catch (e) {
       print(e);
