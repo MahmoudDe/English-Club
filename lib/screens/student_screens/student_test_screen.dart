@@ -174,6 +174,9 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
                               height: mediaQuery.height / 100,
                             ),
                             ChangeQuestionWidget(
+                              levelId: '',
+                              sectionId: '',
+                              isLevelTest: false,
                               storyId: widget.testId,
                               subLevelId: widget.subLevelId,
                               controllerNumber: controllerNumber,

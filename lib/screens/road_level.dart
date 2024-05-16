@@ -109,6 +109,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       //when end all part add uniq step
       if (currentLevel != tempLevel) {
         bool isLocked = true;
+        Map<String, dynamic> levelAvailabelData = {};
         print('The level id is => ${(currentLevelId - 1).toString()}');
         for (int i = 0;
             i < widget.roadData['availableVocabularyTests'].length;
@@ -119,11 +120,14 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
             print('Found available test ');
             setState(() {
               isLocked = false;
+              levelAvailabelData =
+                  widget.roadData['availableVocabularyTests'][i];
             });
           }
         }
         steps.add(
           LevelStepWidget(
+              levelAvailableData: levelAvailabelData,
               allSections: widget.allSections,
               studentData: widget.roadData,
               isLocked: isLocked,
@@ -169,6 +173,8 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       //add final level step
       if (i == widget.roadData['data'].length - 1) {
         editStep();
+        Map<String, dynamic> levelAvailabelData = {};
+
         bool isLocked = true;
         print('The level id is => ${currentLevelId.toString()}');
         for (int i = 0;
@@ -180,12 +186,15 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
             print('found test');
             setState(() {
               isLocked = false;
+              levelAvailabelData =
+                  widget.roadData['availableVocabularyTests'][i];
             });
             break;
           }
         }
         steps.add(
           LevelStepWidget(
+              levelAvailableData: levelAvailabelData,
               allSections: widget.allSections,
               studentData: widget.roadData,
               sectionId: widget.roadData['section_id'].toString(),

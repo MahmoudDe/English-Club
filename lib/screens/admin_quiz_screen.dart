@@ -133,6 +133,9 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                         height: mediaQuery.height / 100,
                       ),
                       ChangeQuestionWidget(
+                        levelId: '',
+                        sectionId: '',
+                        isLevelTest: false,
                         controllerNumber: controllerNumber,
                         storyId: '',
                         subLevelId: '',

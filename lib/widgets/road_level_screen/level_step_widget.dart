@@ -25,7 +25,8 @@ class LevelStepWidget extends StatelessWidget {
       required this.sectionId,
       required this.levelId,
       required this.allSections,
-      required this.studentData});
+      required this.studentData,
+      required this.levelAvailableData});
   final bool isLocked;
   final Size mediaQuery;
   final List aligmentList;
@@ -38,6 +39,7 @@ class LevelStepWidget extends StatelessWidget {
   final String sectionId;
   final List<dynamic> allSections;
   final Map<dynamic, dynamic> studentData;
+  final Map<dynamic, dynamic> levelAvailableData;
 
   Future<void> unlockTest(BuildContext context) async {
     try {
@@ -55,13 +57,42 @@ class LevelStepWidget extends StatelessWidget {
             context: context,
             type: QuickAlertType.success,
             confirmBtnText: 'Ok',
-            text: Apis.message);
+            text: 'Success');
       } else {
         QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
             confirmBtnText: 'Ok',
-            text: Apis.message);
+            text: 'Unlock test failed');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> lockTest(BuildContext context) async {
+    try {
+      print(levelId);
+      if (await Provider.of<Apis>(context, listen: false)
+          .lockVocabTest(levelId: levelId, studentId: studentId)) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => AllSectionsMapRoadsScreen(
+              allSections: allSections,
+              mediaQuery: mediaQuery,
+              studentData: studentData,
+              studentId: studentId),
+        ));
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            confirmBtnText: 'Ok',
+            text: 'success');
+      } else {
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            confirmBtnText: 'Ok',
+            text: 'lock test failed');
       }
     } catch (e) {
       print(e);
@@ -103,7 +134,11 @@ class LevelStepWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(15)),
-                          color: isLocked ? Colors.amber : Colors.red,
+                          color: isLocked
+                              ? Colors.grey
+                              : levelAvailableData['state'] == 'available'
+                                  ? Colors.red
+                                  : Colors.amber,
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black26,
@@ -152,53 +187,83 @@ class LevelStepWidget extends StatelessWidget {
                                   User.userType == 'admin'
                                       ? isLocked
                                           ? const Text(
-                                              'Unlock the vocabulary test for this student',
+                                              'The student did\'t not reached to this level test yet',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
-                                          : const Text(
-                                              'Vocabulary test has started.remember to end it when the student finishes',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )
+                                          : levelAvailableData['state'] ==
+                                                  'locked'
+                                              ? const Text(
+                                                  'You can now unlock the vocabulary test.',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              : levelAvailableData['state'] ==
+                                                      'available'
+                                                  ? const Text(
+                                                      'Vocabulary test has started.remember to end it when the student finishes',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  : ListTile(
+                                                      title: const Text(
+                                                        'Mark',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      trailing: Text(
+                                                        levelAvailableData[
+                                                                'mark']
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )
                                       : isLocked
                                           ? const Text(
-                                              'You can ask the admin to unlock vocabulary test for you',
+                                              'You did\'t not reached to this level test yet',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
-                                          : const Text(
-                                              'You are ready to start the vocabulary test. Good luck!',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          : levelAvailableData['state'] ==
+                                                  'locked'
+                                              ? const Text(
+                                                  'You can ask the admin to unlock the test for you',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              : levelAvailableData['state'] ==
+                                                      'available'
+                                                  ? const Text(
+                                                      'You are ready to start the vocabulary test. Good luck!',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  : ListTile(
+                                                      title: const Text(
+                                                        'Mark',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      trailing: Text(
+                                                        levelAvailableData[
+                                                                'mark']
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
                                   SizedBox(
                                     height: mediaQuery.height / 200,
                                   ),
                                   User.userType == 'admin' &&
                                           showButton &&
-                                          isLocked
-                                      ? ElevatedButton(
-                                          onPressed: () {
-                                            unlockTest(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal:
-                                                    mediaQuery.width / 8,
-                                                vertical:
-                                                    mediaQuery.height / 60),
-                                          ),
-                                          child: const Text(
-                                            'unlock test',
-                                            style: TextStyle(
-                                                color: Colors.amber,
-                                                fontWeight: FontWeight.bold),
-                                          ))
-                                      : User.userType == 'admin' &&
-                                              showButton &&
-                                              isLocked
+                                          !isLocked
+                                      ? levelAvailableData['state'] == 'locked'
                                           ? ElevatedButton(
                                               onPressed: () {
                                                 unlockTest(context);
@@ -212,24 +277,17 @@ class LevelStepWidget extends StatelessWidget {
                                                         mediaQuery.height / 60),
                                               ),
                                               child: const Text(
-                                                'Lock',
+                                                'unlock test',
                                                 style: TextStyle(
-                                                    color: Colors.red,
+                                                    color: Colors.amber,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ))
-                                          : !isLocked &&
-                                                  User.userType == 'student'
+                                          : levelAvailableData['state'] ==
+                                                  'available'
                                               ? ElevatedButton(
                                                   onPressed: () {
-                                                    Navigator.of(context)
-                                                        .push(MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          StudentVocabTestScreen(
-                                                              levelId: levelId,
-                                                              sectionId:
-                                                                  sectionId),
-                                                    ));
+                                                    lockTest(context);
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -246,12 +304,62 @@ class LevelStepWidget extends StatelessWidget {
                                                                 60),
                                                   ),
                                                   child: const Text(
-                                                    'Start',
+                                                    'lock test',
                                                     style: TextStyle(
                                                         color: Colors.red,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ))
+                                              : const SizedBox()
+                                      : User.userType == 'admin' &&
+                                              showButton &&
+                                              isLocked
+                                          ? const SizedBox()
+                                          : !isLocked &&
+                                                  User.userType == 'student'
+                                              ? levelAvailableData['state'] ==
+                                                      'locked'
+                                                  ? const SizedBox()
+                                                  : levelAvailableData[
+                                                              'state'] ==
+                                                          'available'
+                                                      ? ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                                    MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  StudentVocabTestScreen(
+                                                                      levelId:
+                                                                          levelId,
+                                                                      sectionId:
+                                                                          sectionId),
+                                                            ));
+                                                          },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            padding: EdgeInsets.symmetric(
+                                                                horizontal:
+                                                                    mediaQuery
+                                                                            .width /
+                                                                        8,
+                                                                vertical: mediaQuery
+                                                                        .height /
+                                                                    60),
+                                                          ),
+                                                          child: const Text(
+                                                            'Start',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ))
+                                                      : const SizedBox()
                                               : const SizedBox()
                                 ]),
                           ),
@@ -265,12 +373,18 @@ class LevelStepWidget extends StatelessWidget {
               width: mediaQuery.width / 3.5,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(360)),
-                color: isLocked ? Colors.amber : Colors.red,
+                color: isLocked
+                    ? Colors.grey
+                    : levelAvailableData['state'] == 'available'
+                        ? Colors.red
+                        : Colors.amber,
                 boxShadow: [
                   BoxShadow(
                     color: isLocked
-                        ? const Color.fromRGBO(179, 136, 7, 1)
-                        : const Color.fromARGB(255, 137, 35, 27),
+                        ? Color.fromARGB(255, 113, 113, 113)
+                        : levelAvailableData['state'] == 'available'
+                            ? const Color.fromARGB(255, 127, 28, 21)
+                            : const Color.fromARGB(255, 135, 103, 7),
                     offset: const Offset(0, 10), // changes position of shadow
                   ),
                 ],

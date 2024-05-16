@@ -2459,7 +2459,6 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       statusResponse = 200;
-      message = response.data['message'];
       notifyListeners();
       return true;
     } on DioError catch (e) {
@@ -2467,7 +2466,40 @@ class Apis with ChangeNotifier {
       statusResponse = 400;
       print(e.error);
       print(e.response);
-      message = e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> lockVocabTest({
+    required String levelId,
+    required String studentId,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/tests/sections/levels/$levelId/lockVocabForStudent/$studentId",
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................lock vocab test server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
       notifyListeners();
       return false;
     } catch (e) {
@@ -2819,6 +2851,48 @@ class Apis with ChangeNotifier {
 
       Dio.Response response = await dio().post(
         "/student/submitSolutionOf/sublevel/$subLevelId/Story/$storyID",
+        data: json.encode(answers),
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print(
+          '................................student submit test server response');
+      print(response.data);
+      print('................................');
+      studentResultBookTest = response.data['data'];
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.statusCode);
+      message = e.response!.data['errorDetail'] != null
+          ? e.response!.data['errorDetail'].toString()
+          : e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> studentSubmitTestLevel(
+      {required String levelId,
+      required String sectionId,
+      required List<dynamic> answers}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    studentResultBookTest.clear();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/student/submitSolutionOf/section/$sectionId/level/$levelId",
         data: json.encode(answers),
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},

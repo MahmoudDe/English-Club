@@ -11,19 +11,24 @@ import 'package:quickalert/quickalert.dart';
 import '../../controllers/quiz_controller.dart';
 
 class ChangeQuestionWidget extends StatelessWidget {
-  ChangeQuestionWidget({
-    super.key,
-    required this.controller,
-    required this.mediaQuery,
-    required this.controllerNumber,
-    required this.storyId,
-    required this.subLevelId,
-  });
+  ChangeQuestionWidget(
+      {super.key,
+      required this.controller,
+      required this.mediaQuery,
+      required this.controllerNumber,
+      required this.storyId,
+      required this.subLevelId,
+      required this.isLevelTest,
+      required this.levelId,
+      required this.sectionId});
+  final bool isLevelTest;
   final CarouselController controller;
   final CarouselController controllerNumber;
   final Size mediaQuery;
   final String storyId;
   final String subLevelId;
+  final String levelId;
+  final String sectionId;
 
   Future<void> submit(BuildContext context) async {
     try {
@@ -36,20 +41,39 @@ class ChangeQuestionWidget extends StatelessWidget {
         print(QuizController.studentAnswer[i]);
         print('................................');
       }
-      if (await Provider.of<Apis>(context, listen: false).studentSubmitTest(
-          subLevelId: subLevelId,
-          storyID: storyId,
-          answers: QuizController.studentAnswer)) {
-        Navigator.pop(context);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const StudentResultScreen(),
-            ));
+      if (isLevelTest) {
+        if (await Provider.of<Apis>(context, listen: false)
+            .studentSubmitTestLevel(
+                sectionId: sectionId,
+                levelId: levelId,
+                answers: QuizController.studentAnswer)) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const StudentResultScreen(),
+              ));
+        } else {
+          Navigator.pop(context);
+          QuickAlert.show(
+              context: context, type: QuickAlertType.error, text: Apis.message);
+        }
       } else {
-        Navigator.pop(context);
-        QuickAlert.show(
-            context: context, type: QuickAlertType.error, text: Apis.message);
+        if (await Provider.of<Apis>(context, listen: false).studentSubmitTest(
+            subLevelId: subLevelId,
+            storyID: storyId,
+            answers: QuizController.studentAnswer)) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const StudentResultScreen(),
+              ));
+        } else {
+          Navigator.pop(context);
+          QuickAlert.show(
+              context: context, type: QuickAlertType.error, text: Apis.message);
+        }
       }
     } catch (e) {
       print(e);

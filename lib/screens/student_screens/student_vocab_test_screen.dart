@@ -173,6 +173,9 @@ class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
                               height: mediaQuery.height / 100,
                             ),
                             ChangeQuestionWidget(
+                              sectionId: widget.sectionId,
+                              levelId: widget.levelId,
+                              isLevelTest: true,
                               storyId: widget.sectionId,
                               subLevelId: widget.levelId,
                               controllerNumber: controllerNumber,
