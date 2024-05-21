@@ -26,8 +26,8 @@ class AllStudentsScreen extends StatefulWidget {
 
 class _AllStudentsScreenState extends State<AllStudentsScreen>
     with TickerProviderStateMixin {
-  List<String> allGrades = [];
-  List<String> allClassesInGrade = [];
+  List<String> allGrades = ['All'];
+  List<String> allClassesInGrade = ['All'];
   List filterStudents = [];
   List searchStudentList = [];
   late AnimationController? controllerAnimation;
@@ -65,7 +65,9 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
       }
       setState(() {
         allGrades.clear();
+        allGrades.add('All');
         allClassesInGrade.clear();
+        allClassesInGrade.add('All');
         filterStudents.clear();
         searchStudentList.clear();
         dataClass.students = Apis.allStudents['data'];
@@ -74,7 +76,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
       for (int i = 0; i < dataClass.students.length; i++) {
         allGrades.add(dataClass.students[i]['name']);
       }
-      selectedGradeFilterValue = dataClass.students[0]['name'];
+      selectedGradeFilterValue = allGrades[0];
       changeClasses();
       filterData();
     } catch (e) {
@@ -99,14 +101,23 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
   }
 
   void changeClasses() {
-    final filterClassesOnGrade = dataClass.students
-        .where((element) => element['name'] == selectedGradeFilterValue)
-        .toList();
-    allClassesInGrade.clear();
-    for (int i = 0; i < filterClassesOnGrade[0]['classes'].length; i++) {
-      allClassesInGrade.add(filterClassesOnGrade[0]['classes'][i]['name']);
+    late List filterClassesOnGrade;
+    if (selectedGradeFilterValue == 'All') {
+      filterClassesOnGrade = dataClass.students;
+    } else {
+      filterClassesOnGrade = dataClass.students
+          .where((element) => element['name'] == selectedGradeFilterValue)
+          .toList();
     }
-    selectedClassFilterValue = filterClassesOnGrade[0]['classes'][0]['name'];
+    allClassesInGrade.clear();
+    if (selectedGradeFilterValue == 'All') {
+      allClassesInGrade.add('All');
+    } else {
+      for (int i = 0; i < filterClassesOnGrade[0]['classes'].length; i++) {
+        allClassesInGrade.add(filterClassesOnGrade[0]['classes'][i]['name']);
+      }
+    }
+    selectedClassFilterValue = allClassesInGrade[0];
   }
 
   void search() {
@@ -187,12 +198,25 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
   void filterData() {
     // filterStudents.clear();
     searchStudentList.clear();
+    print('+++++++++++++++++++++++++++++++++++++++++++++');
+    // print(dataClass.students.toString());
+    print('+++++++++++++++++++++++++++++++++++++++++++++');
     setState(() {
-      filterStudents = dataClass.students
-          .where((element) => element['name'] == selectedGradeFilterValue)
-          .toList()[0]['classes']
-          .where((e) => e['name'] == selectedClassFilterValue)
-          .toList()[0]['students'];
+      if (selectedGradeFilterValue == 'All') {
+        filterStudents = dataClass.students;
+        for (int i = 0; i < dataClass.students.length; i++) {
+          for (int j = 0; j < dataClass.students[i]['classes'].length; j++) {
+            filterStudents = filterStudents +
+                dataClass.students[i]['classes'][j]['students'];
+          }
+        }
+      } else {
+        filterStudents = dataClass.students
+            .where((element) => element['name'] == selectedGradeFilterValue)
+            .toList()[0]['classes']
+            .where((e) => e['name'] == selectedClassFilterValue)
+            .toList()[0]['students'];
+      }
       if (selectedOption) {
         searchStudentList = [...filterStudents];
       } else {
