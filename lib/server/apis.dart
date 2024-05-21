@@ -9,6 +9,7 @@ import 'package:bdh/data/data.dart';
 import 'package:bdh/model/user.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart';
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -2903,6 +2904,57 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       studentResultBookTest = response.data['data'];
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      print(e.response!.statusCode);
+      message = e.response!.data['errorDetail'] != null
+          ? e.response!.data['errorDetail'].toString()
+          : e.response!.data['message'];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print(e);
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> convertStudentToExcel({
+    required List students,
+    required BuildContext context,
+  }) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "/admin/export-student",
+        data: json.encode({'student': students}),
+        onReceiveProgress: showDownloadProgress,
+        options: Dio.Options(
+          responseType: ResponseType.bytes,
+          headers: {'Authorization': 'Bearer $myToken'},
+          validateStatus: (status) {
+            return status! < 300;
+          },
+        ),
+      );
+      print('................................convert student to excel');
+      print(response.data);
+      print(response.statusCode);
+      print('................................');
+      Navigator.pop(context);
+      print('Save file');
+      String filePath = '/storage/emulated/0/Download/studentsExcel.xlsx';
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
+      print('File downloaded to: $filePath');
       statusResponse = 200;
       notifyListeners();
       return true;

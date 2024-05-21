@@ -439,6 +439,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
+
     return _isLoading
         ? Scaffold(
             body: Column(
@@ -459,6 +460,33 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
             ),
           )
         : Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.loading,
+                    barrierDismissible: true);
+                if (await Provider.of<Apis>(context, listen: false)
+                    .convertStudentToExcel(
+                        students: searchStudentList, context: context)) {
+                  QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      text:
+                          'You will find the excel file in your download folder');
+                } else {
+                  QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      text: Apis.message);
+                }
+              },
+              backgroundColor: Colors.green,
+              child: const Icon(
+                Icons.download,
+                color: Colors.white,
+              ),
+            ),
             body: dataClass.students.isEmpty
                 ? EmptyDataWidget(mediaQuery: mediaQuery)
                 : Consumer<Apis>(
