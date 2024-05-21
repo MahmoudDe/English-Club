@@ -1,64 +1,59 @@
-// import 'dart:convert';
+import 'dart:convert';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:bdh/notification/notification_services.dart';
+import 'package:bdh/shared/local_network.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 ////////هي  هبدة شغال الكود بلاها بس بحطا مشان اتأكد انو التطبيق اخد اشعارات  من التيرمينال
-Future<void> handelBackgroundMessage(RemoteMessage message) async {
+Future<void> handelBackgroundMessage(
+  RemoteMessage message,
+) async {
   print('Title : ${message.notification?.title}');
   print('Body :${message.notification?.body}');
   print('Payload:${message.data}');
-  NotificationServices().showNotification(
-    title: message.notification!.title.toString(),
-    body: message.notification!.body.toString(),
-  );
-  AwesomeNotifications().createNotification(
-    content: NotificationContent(
-      id: 1,
-      channelKey: 'myKey',
-      title: message.notification!.title,
-      body: message.notification!.body,
-    ),
-  );
+  final localNotification = FlutterLocalNotificationsPlugin();
+
+  final notification = message.notification;
+  if (notification == null) return;
+  await localNotification.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+          android: AndroidNotificationDetails(
+        androidchannel.id,
+        androidchannel.name,
+        channelDescription: androidchannel.description,
+        icon: '@drawable/flutter_logo',
+        importance: Importance.max,
+      )),
+      payload: jsonEncode(message.toMap()));
+
+  // NotificationService().showNotification(
+  //     body: message.notification!.body,
+  //     id: 1,
+  //     title: message.notification!.title);
 }
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-Future<void> showNotification(RemoteMessage message) async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'high_importance_channel',
-    'High Importance Notifications',
-    channelDescription: 'This channel is used for important notification',
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'ticker',
-  );
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    message.notification?.title,
-    message.notification?.body,
-    platformChannelSpecifics,
-    payload: 'item x',
-  );
-}
+final androidchannel = const AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description: 'This channel is used for important notification',
+  importance: Importance.max,
+);
 
 class FirebaseApi {
   ///هود عم اخود انتستنس من فاير بيز
   ///
   final firebaseMessaging = FirebaseMessaging.instance;
-  // final channel = const AndroidNotificationChannel(
+  // final androidchannel = const AndroidNotificationChannel(
   //   'high_importance_channel', // id
   //   'High Importance Notifications', // title
   //   description: 'This channel is used for important notification',
   //   importance: Importance.max,
   // );
+  final localNotification = FlutterLocalNotificationsPlugin();
 
 //هي الفانكشن مشان يستوعب الفاير بيز وين بدو ينتقل وقت امبس عل النوتيفميشن
   // void handleMessage(RemoteMessage? message) {
@@ -73,6 +68,7 @@ class FirebaseApi {
         .setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
     // FirebaseMessaging.instance.getInitialMessage().then((handleMessage));
+    // FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onBackgroundMessage(handelBackgroundMessage);
   }
 
@@ -89,67 +85,80 @@ class FirebaseApi {
         provisional: false,
         sound: true,
       );
-      firebaseMessaging.subscribeToTopic('user');
+      firebaseMessaging.subscribeToTopic('test_test');
       //هي النكشن مشان تجبلي التوكين
       String? fcmToken = await firebaseMessaging.getToken();
-      final SharedPreferences storage = await SharedPreferences.getInstance();
-      await storage.remove('fcmToken');
-      await storage.setString('fcmToken', fcmToken!);
       FirebaseMessaging.onBackgroundMessage(handelBackgroundMessage);
-
-      print('The fcm token =>$fcmToken');
-      // CashNetwork.insertToCash(key: 'fcm_token', value: fcmToken.toString());
+      FirebaseMessaging.onMessage.listen((message) async {
+        final notification = message.notification;
+        if (notification == null) return;
+        await localNotification.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+                android: AndroidNotificationDetails(
+              androidchannel.id,
+              androidchannel.name,
+              channelDescription: androidchannel.description,
+              icon: '@drawable/flutter_logo',
+              importance: Importance.max,
+            )),
+            payload: jsonEncode(message.toMap()));
+      });
+      print(fcmToken);
+      CashNetwork.insertToCash(key: 'fcm_token', value: fcmToken.toString());
       print('/////////////////');
       print('.................');
-      // print(CashNetwork.getCashData(key: 'fcm_token'));
+      print(CashNetwork.getCashData(key: 'fcm_token'));
       initPushNotification();
     } catch (e) {}
   }
 
-  // sendMessage(title, message) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authentication':
-  //         'AAAAw0YHfnM:APA91bGxEYYZNs8Gtlk23RgIfKDQ9COIkluBeVO6C91XvPykNcP-RUCC3ZqvAvqfT-RrZjHrn2wZnI3MtAxi2nIhzZ3GCeWDll-hCjW_MKB8pZKqBh5f8dRb6xOrchJuwHMhpszT9kWa'
-  //   };
-  //   var request =
-  //       http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
-  //   request.body = json.encode({
-  //     "to":
-  //         "dxNkAi0OQ6yCSU5AQ0kq5R:APA91bEuF4nRHhnUhkWkBCgmrMKOyRj9i0i3Dj81HbyXu09GcPqjYTayErrFNdiqBXKRhbGqOHKsRsZ8pCnkEli0wuGPA3EQykNOgGkW5iC97lxGKfZvYXC5OaHh5QoPyAVnBkseeJFt",
-  //     "notification": {"title": title, "body": message}
-  //   });
-  //   request.headers.addAll(headers);
+  sendMessage(title, message) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'key=AAAAM989bQo:APA91bHsa3zC-nCXAMfG9pEH5uHnQXDQ6Ej-EkVLwgboRZNA3MSb11LcMq3GYisGVjZaw2_Uq1OUrcpXsdqyVTwKkykhwVg0mwtj4UKoNydoqjltWgh7gVOxyCOrcIz2G7IA5xEoYDPA'
+    };
+    var request =
+        http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
+    request.body = json.encode({
+      "to":
+          "f85185xJS8Cj7IcTOkgtel:APA91bEkXHiqrrW7RTP1-frGE8g-jpbk5NJTedEiz1i1YehR8C6FvvwyzUdXRBGhTbT7RgNBeDkIlV529KbI0Nlx2u_M4sNDgZl7MR8OHgwEeliCxpRsgy1M1dSbNmPYwacwcalX-CER",
+      "notification": {"title": title, "body": message}
+    });
+    request.headers.addAll(headers);
 
-  //   http.StreamedResponse response = await request.send();
+    http.StreamedResponse response = await request.send();
 
-  //   if (response.statusCode == 200) {
-  //     print(await response.stream.bytesToString());
-  //   } else {
-  //     print(response.reasonPhrase);
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
 
-  // sendMessageTobic(title, message, topic) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization':
-  //         'key=AAAAM989bQo:APA91bHsa3zC-nCXAMfG9pEH5uHnQXDQ6Ej-EkVLwgboRZNA3MSb11LcMq3GYisGVjZaw2_Uq1OUrcpXsdqyVTwKkykhwVg0mwtj4UKoNydoqjltWgh7gVOxyCOrcIz2G7IA5xEoYDPA'
-  //   };
-  //   var request =
-  //       http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
-  //   request.body = json.encode({
-  //     "to": "/topics/$topic",
-  //     "notification": {"title": title, "body": message}
-  //   });
-  //   request.headers.addAll(headers);
+  sendMessageTobic(title, message, topic) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'key=AAAAM989bQo:APA91bHsa3zC-nCXAMfG9pEH5uHnQXDQ6Ej-EkVLwgboRZNA3MSb11LcMq3GYisGVjZaw2_Uq1OUrcpXsdqyVTwKkykhwVg0mwtj4UKoNydoqjltWgh7gVOxyCOrcIz2G7IA5xEoYDPA'
+    };
+    var request =
+        http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
+    request.body = json.encode({
+      "to": "/topics/$topic",
+      "notification": {"title": title, "body": message}
+    });
+    request.headers.addAll(headers);
 
-  //   http.StreamedResponse response = await request.send();
+    http.StreamedResponse response = await request.send();
 
-  //   if (response.statusCode == 200) {
-  //     print(await response.stream.bytesToString());
-  //   } else {
-  //     print(response.reasonPhrase);
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
 }

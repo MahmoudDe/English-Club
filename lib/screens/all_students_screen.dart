@@ -496,6 +496,11 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                     );
                                     controllerAnimation!.forward();
                                   });
+                                  print(
+                                      '***************************************');
+                                  print(searchStudentList);
+                                  print(
+                                      '***************************************');
                                 },
                                 value: selectedGradeFilterValue,
                                 filterTitle: 'Grade',

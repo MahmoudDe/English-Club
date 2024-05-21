@@ -111,18 +111,20 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         bool isLocked = true;
         Map<String, dynamic> levelAvailabelData = {};
         print('The level id is => ${(currentLevelId - 1).toString()}');
-        for (int i = 0;
-            i < widget.roadData['availableVocabularyTests'].length;
-            i++) {
-          if ((currentLevelId - 1).toString() ==
-              widget.roadData['availableVocabularyTests'][i]['level_id']
-                  .toString()) {
-            print('Found available test ');
-            setState(() {
-              isLocked = false;
-              levelAvailabelData =
-                  widget.roadData['availableVocabularyTests'][i];
-            });
+        if (widget.roadData['availableVocabularyTests'] != null) {
+          for (int i = 0;
+              i < widget.roadData['availableVocabularyTests'].length;
+              i++) {
+            if ((currentLevelId - 1).toString() ==
+                widget.roadData['availableVocabularyTests'][i]['level_id']
+                    .toString()) {
+              print('Found available test ');
+              setState(() {
+                isLocked = false;
+                levelAvailabelData =
+                    widget.roadData['availableVocabularyTests'][i];
+              });
+            }
           }
         }
         steps.add(
@@ -177,19 +179,21 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
 
         bool isLocked = true;
         print('The level id is => ${currentLevelId.toString()}');
-        for (int i = 0;
-            i < widget.roadData['availableVocabularyTests'].length;
-            i++) {
-          if (currentLevelId.toString() ==
-              widget.roadData['availableVocabularyTests'][i]['level_id']
-                  .toString()) {
-            print('found test');
-            setState(() {
-              isLocked = false;
-              levelAvailabelData =
-                  widget.roadData['availableVocabularyTests'][i];
-            });
-            break;
+        if (widget.roadData['availableVocabularyTests'] != null) {
+          for (int i = 0;
+              i < widget.roadData['availableVocabularyTests'].length;
+              i++) {
+            if (currentLevelId.toString() ==
+                widget.roadData['availableVocabularyTests'][i]['level_id']
+                    .toString()) {
+              print('found test');
+              setState(() {
+                isLocked = false;
+                levelAvailabelData =
+                    widget.roadData['availableVocabularyTests'][i];
+              });
+              break;
+            }
           }
         }
         steps.add(

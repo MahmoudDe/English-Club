@@ -43,7 +43,7 @@ class Apis with ChangeNotifier {
     final SharedPreferences storage = await SharedPreferences.getInstance();
 
     try {
-      String? fcmToken = storage.getString('fcmToken');
+      String? fcmToken = storage.getString('fcm_token');
       final response = await dio().post('auth/login', data: {
         'username': username,
         'password': password,
@@ -166,7 +166,7 @@ class Apis with ChangeNotifier {
     try {
       String? myToken = storage.getString('token');
       Dio.Response response = await dio().post(
-        "/admin/admins/",
+        "/admin/admins",
         data: {'name': adminName},
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},

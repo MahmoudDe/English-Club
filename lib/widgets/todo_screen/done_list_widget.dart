@@ -2,6 +2,7 @@ import 'package:bdh/data/data.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../server/apis.dart';
@@ -85,64 +86,81 @@ class _DoneListWidgetState extends State<DoneListWidget> {
           )
         : RefreshIndicator(
             onRefresh: pagination,
-            child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: doneTasks.length + (isLoading ? 1 : 0),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) {
-                      if (index == doneTasks.length) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: widget.mediaQuery.height / 80),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.main,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Card(
-                          color: const Color.fromARGB(255, 194, 244, 220),
-                          child: CheckboxListTile(
-                            value: true,
-                            title: Text(
-                              doneTasks[index]['required_action'],
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Issued at : ${doneTasks[index]['issued_at']}',
+            child: doneTasks.isEmpty
+                ? Column(
+                    children: [
+                      SizedBox(
+                        height: widget.mediaQuery.height / 10,
+                      ),
+                      Center(
+                        child: Lottie.asset('assets/lotties/noData.json',
+                            height: MediaQuery.of(context).size.height / 3),
+                      ),
+                      Text(
+                        'No data',
+                        style: TextStyle(
+                            color: AppColors.main, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  )
+                : ListView.builder(
+                        controller: scrollController,
+                        itemCount: doneTasks.length + (isLoading ? 1 : 0),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          if (index == doneTasks.length) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: widget.mediaQuery.height / 80),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.main,
                                 ),
-                                SizedBox(
-                                  height: widget.mediaQuery.height / 100,
+                              ),
+                            );
+                          } else {
+                            return Card(
+                              color: const Color.fromARGB(255, 194, 244, 220),
+                              child: CheckboxListTile(
+                                value: true,
+                                title: Text(
+                                  doneTasks[index]['required_action'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  'done at : ${doneTasks[index]['done_at']}',
+                                subtitle: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Issued at : ${doneTasks[index]['issued_at']}',
+                                    ),
+                                    SizedBox(
+                                      height: widget.mediaQuery.height / 100,
+                                    ),
+                                    Text(
+                                      'done at : ${doneTasks[index]['done_at']}',
+                                    ),
+                                    Text(
+                                      doneTasks[index]['done_by_admin'] == null
+                                          ? 'Done by : No body'
+                                          : 'Done by : ${doneTasks[index]['done_by_admin']['name']}',
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  doneTasks[index]['done_by_admin'] == null
-                                      ? 'Done by : No body'
-                                      : 'Done by : ${doneTasks[index]['done_by_admin']['name']}',
-                                ),
-                              ],
-                            ),
-                            onChanged: (value) {},
-                          ),
-                        );
-                      }
-                    })
-                .animate()
-                .slide(
-                    begin: const Offset(0, 1),
-                    end: const Offset(0, 0),
-                    duration: const Duration(milliseconds: 1000),
-                    curve: Curves.easeInOutCirc)
-                .fadeIn(delay: const Duration(milliseconds: 200)),
+                                onChanged: (value) {},
+                              ),
+                            );
+                          }
+                        })
+                    .animate()
+                    .slide(
+                        begin: const Offset(0, 1),
+                        end: const Offset(0, 0),
+                        duration: const Duration(milliseconds: 1000),
+                        curve: Curves.easeInOutCirc)
+                    .fadeIn(delay: const Duration(milliseconds: 200)),
           );
   }
 }

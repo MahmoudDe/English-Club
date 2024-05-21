@@ -39,6 +39,15 @@ class _AllSectionsMapRoadsScreenState extends State<AllSectionsMapRoadsScreen>
     } else {
       print(widget.allSections);
     }
+    print('first length => ${widget.allSections.length}');
+    print('second length => ${Apis.studentRoadMap.length}');
+    if (widget.allSections.length > 3 || Apis.studentRoadMap.length > 3) {
+      print('Hello');
+      for (int i = 0; i < 3; i++) {
+        Constants.colorsForRoad.add(Constants.colorsForRoad[i]);
+        Constants.animations.add(Constants.animations[i]);
+      }
+    }
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(
