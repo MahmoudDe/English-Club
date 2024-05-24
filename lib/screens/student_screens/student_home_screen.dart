@@ -230,8 +230,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: Apis.studentModel!
-                                      .testAvailableForStories!.length,
+                                  itemCount: Apis
+                                      .studentModel!.borrowedStories!.length,
                                   itemBuilder: (context, index) {
                                     return BorrowedBookWidget(
                                       index2: index,

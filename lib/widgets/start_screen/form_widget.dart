@@ -231,7 +231,6 @@ class _FormWidgetState extends State<FormStartWidget> {
                   ),
                 ),
               ),
-             
               SizedBox(
                 height: widget.mediaQuery.height / 20,
               ),
@@ -251,8 +250,11 @@ class _FormWidgetState extends State<FormStartWidget> {
                 onPressed: () async {
                   launchUrl(whatsApp);
                 },
-                style: TextButton.styleFrom(),
-                icon: const Icon(Icons.message),
+                style: TextButton.styleFrom(backgroundColor: AppColors.main),
+                icon: const Icon(
+                  Icons.message,
+                  color: Colors.white,
+                ),
                 label: const Text(
                   'Contact with us',
                   textAlign: TextAlign.center,

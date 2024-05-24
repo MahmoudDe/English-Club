@@ -568,11 +568,16 @@ class _StudentWidgetState extends State<StudentWidget> {
         child: ExpansionTile(
           collapsedBackgroundColor: Colors.white,
           subtitle: widget.searchStudentList[widget.index]['inactive'] == 0
-              ? const Text('InActive')
-              : const Text('Active'),
+              ? Text(
+                  '${widget.searchStudentList[widget.index]['gradeName'].toString()} \\ ${widget.searchStudentList[widget.index]['className'].toString()} \\ InActive')
+              : Text(
+                  '${widget.searchStudentList[widget.index]['gradeName'].toString()} \\ ${widget.searchStudentList[widget.index]['className'].toString()} \\ Active'),
           leading: CircleAvatar(
             radius: 25,
-            backgroundColor: Colors.orange,
+            backgroundColor:
+                widget.searchStudentList[widget.index]['inactive'] == 0
+                    ? Colors.red
+                    : Colors.green,
             child: widget.searchStudentList[widget.index]['profile_picture'] !=
                     null
                 ? CircleAvatar(

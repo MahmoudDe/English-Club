@@ -144,6 +144,7 @@ class FloatButtonLevelWidget extends StatelessWidget {
               onPressed: () {
                 uploadDta(context);
               },
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.main),
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: mediaQuery.width / 10,

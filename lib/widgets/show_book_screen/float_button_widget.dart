@@ -322,9 +322,9 @@ class FloatButtonWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     horizontal: mediaQuery.width / 10,
                     vertical: mediaQuery.height / 40),
-                child: const Text(
+                child: Text(
                   'Upload data',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: AppColors.main),
                 ),
               ),
             ),

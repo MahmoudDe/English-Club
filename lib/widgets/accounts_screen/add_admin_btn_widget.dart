@@ -122,8 +122,14 @@ class _AddAdminBtnWidgetState extends State<AddAdminBtnWidget> {
             });
       },
       style: ElevatedButton.styleFrom(backgroundColor: AppColors.main),
-      label: const Text('Add admin'),
-      icon: const Icon(Icons.add),
+      label: const Text(
+        'Add admin',
+        style: TextStyle(color: Colors.white),
+      ),
+      icon: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
     );
   }
 }

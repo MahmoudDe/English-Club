@@ -66,9 +66,11 @@ class MyApp extends StatelessWidget {
         builder: (context, value, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: AppColors.main,
+            primaryColor: Colors.white,
             canvasColor: Colors.grey.shade200,
             fontFamily: 'Avenir',
+            appBarTheme: const AppBarTheme(
+                iconTheme: IconThemeData(color: Colors.white)),
             tabBarTheme: TabBarTheme(
               labelColor: AppColors.main,
               labelStyle: TextStyle(

@@ -131,7 +131,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
           LevelStepWidget(
               levelAvailableData: levelAvailabelData,
               allSections: widget.allSections,
-              studentData: widget.roadData,
+              studentData: widget.studentData,
               isLocked: isLocked,
               sectionId: widget.roadData['section_id'].toString(),
               studentId:
@@ -200,7 +200,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
           LevelStepWidget(
               levelAvailableData: levelAvailabelData,
               allSections: widget.allSections,
-              studentData: widget.roadData,
+              studentData: widget.studentData,
               sectionId: widget.roadData['section_id'].toString(),
               isLocked: isLocked,
               studentId:

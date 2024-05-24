@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../styles/app_colors.dart';
+
 class FormWidget extends StatelessWidget {
   const FormWidget({
     super.key,
@@ -61,13 +63,11 @@ class FormWidget extends StatelessWidget {
                     // Add padding
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(color: AppColors.main, width: 2.0),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(color: AppColors.main, width: 2.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -116,13 +116,11 @@ class FormWidget extends StatelessWidget {
                     // Add padding
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(color: AppColors.main, width: 2.0),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
+                      borderSide: BorderSide(color: AppColors.main, width: 2.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),

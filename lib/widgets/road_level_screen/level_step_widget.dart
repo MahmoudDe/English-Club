@@ -46,12 +46,17 @@ class LevelStepWidget extends StatelessWidget {
       print(levelId);
       if (await Provider.of<Apis>(context, listen: false)
           .unlockVocabTest(levelId: levelId, studentId: studentId)) {
+        print('asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+        print('student id => $studentId');
+        print('student data => $studentData');
+        print('all sections => $allSections');
+        print('asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => AllSectionsMapRoadsScreen(
-              allSections: allSections,
+              allSections: [],
               mediaQuery: mediaQuery,
               studentData: studentData,
-              studentId: studentId),
+              studentId: studentId.toString()),
         ));
         QuickAlert.show(
             context: context,
@@ -75,12 +80,19 @@ class LevelStepWidget extends StatelessWidget {
       print(levelId);
       if (await Provider.of<Apis>(context, listen: false)
           .lockVocabTest(levelId: levelId, studentId: studentId)) {
+        print('asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+        print('student id => $studentId');
+        print('student data => $studentData');
+        print('all sections => $allSections');
+        print('asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+
+        Navigator.pop(context);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => AllSectionsMapRoadsScreen(
-              allSections: allSections,
+              allSections: [],
               mediaQuery: mediaQuery,
               studentData: studentData,
-              studentId: studentId),
+              studentId: studentId.toString()),
         ));
         QuickAlert.show(
             context: context,

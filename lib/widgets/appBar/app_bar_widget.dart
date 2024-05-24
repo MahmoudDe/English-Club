@@ -45,6 +45,7 @@ class appBarWidget {
             icon: AnimatedIcon(
               icon: AnimatedIcons.menu_close,
               progress: animationController,
+              color: Colors.white,
               size: mediaQuery.width / 15,
             ),
             itemBuilder: (BuildContext context) {

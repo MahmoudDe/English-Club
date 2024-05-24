@@ -20,7 +20,10 @@ class AdminCardWidget extends StatelessWidget {
         leading: CircleAvatar(
             radius: 20,
             backgroundColor: AppColors.main,
-            child: const Icon(Iconsax.security_user)),
+            child: const Icon(
+              Iconsax.security_user,
+              color: Colors.white,
+            )),
         trailing: IconButton(
             onPressed: onPressed,
             icon: const Icon(
