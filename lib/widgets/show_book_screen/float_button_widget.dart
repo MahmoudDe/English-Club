@@ -186,7 +186,7 @@ class FloatButtonWidget extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.amber,
+                      backgroundColor: Colors.amber,
                     ),
                     child: const Text(
                       'Edit',
@@ -275,7 +275,7 @@ class FloatButtonWidget extends StatelessWidget {
                     openFilePicker(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    backgroundColor: Colors.green,
                   ),
                   child: const Text(
                     'excel file',

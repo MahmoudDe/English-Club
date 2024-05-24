@@ -354,7 +354,8 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                     onPressed: () {
                       openFilePicker();
                     },
-                    style: ElevatedButton.styleFrom(primary: AppColors.main),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.main),
                     icon: const Icon(
                       Icons.file_upload,
                       color: Colors.white,
@@ -415,7 +416,8 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                           .getSnakBar());
                   }
                 },
-                style: ElevatedButton.styleFrom(primary: AppColors.main),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: AppColors.main),
                 child: const Text(
                   'Create book',
                   style: TextStyle(

@@ -208,7 +208,7 @@ class TurnToImageAnswerSlide extends StatelessWidget {
               }
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.blueAccent,
+              backgroundColor: Colors.blueAccent,
               padding: EdgeInsets.symmetric(
                   horizontal: mediaQuery.width / 8,
                   vertical: mediaQuery.height / 60),
@@ -227,7 +227,7 @@ class TurnToImageAnswerSlide extends StatelessWidget {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.red,
+              backgroundColor: Colors.red,
               padding: EdgeInsets.symmetric(
                   horizontal: mediaQuery.width / 6,
                   vertical: mediaQuery.height / 60),

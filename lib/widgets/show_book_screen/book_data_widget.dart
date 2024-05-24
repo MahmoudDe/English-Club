@@ -40,7 +40,7 @@ class BookDataWidget extends StatelessWidget {
               ));
             },
             style: ElevatedButton.styleFrom(
-              primary: AppColors.main,
+              backgroundColor: AppColors.main,
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: mediaQuery.width / 20),

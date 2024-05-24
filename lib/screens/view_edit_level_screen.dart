@@ -934,7 +934,8 @@ class _ViewEditLevelScreenState extends State<ViewEditLevelScreen> {
                               testId: Apis.levelData['id'].toString()),
                         ));
                       },
-                      style: ElevatedButton.styleFrom(primary: AppColors.main),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.main),
                       child: const Text(
                         'Show level quiz',
                         style: TextStyle(

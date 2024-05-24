@@ -391,7 +391,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           },
                         );
                       },
-                      style: ElevatedButton.styleFrom(primary: Colors.green),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: mediaQuery.width / 10,
@@ -426,7 +427,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           );
                         }
                       },
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: mediaQuery.width / 10,

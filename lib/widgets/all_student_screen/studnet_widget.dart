@@ -294,7 +294,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                     );
                   }
                 },
-                style: ElevatedButton.styleFrom(primary: Colors.red),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: widget.mediaQuery.width / 10,
@@ -430,7 +430,8 @@ class _StudentWidgetState extends State<StudentWidget> {
                     );
                   }
                 },
-                style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: widget.mediaQuery.width / 40,
@@ -517,7 +518,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                                 borrowBook();
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.brown,
+                                backgroundColor: Colors.brown,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: widget.mediaQuery.width / 8,
                                   vertical: widget.mediaQuery.height / 50,
@@ -538,7 +539,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                                 returnBook();
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
+                                backgroundColor: Colors.red,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: widget.mediaQuery.width / 8,
                                   vertical: widget.mediaQuery.height / 50,
@@ -724,8 +725,8 @@ class _StudentWidgetState extends State<StudentWidget> {
                         changeId();
                         updateStudentDialog(context);
                       },
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.blueAccent),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: widget.mediaQuery.width / 30,
@@ -754,7 +755,8 @@ class _StudentWidgetState extends State<StudentWidget> {
                               mediaQuery: widget.mediaQuery),
                         ));
                       },
-                      style: ElevatedButton.styleFrom(primary: AppColors.main),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.main),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: widget.mediaQuery.width / 30,

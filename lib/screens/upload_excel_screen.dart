@@ -141,7 +141,7 @@ class _UploadExcelScreenState extends State<UploadExcelScreen> {
                     openFilePicker();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    backgroundColor: Colors.green,
                   ),
                   child: const Text(
                     'excel file',
@@ -204,7 +204,7 @@ class _UploadExcelScreenState extends State<UploadExcelScreen> {
                   }
                 }
               },
-              style: ElevatedButton.styleFrom(primary: AppColors.main),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.main),
               icon: const Icon(
                 Icons.upload,
                 color: Colors.white,

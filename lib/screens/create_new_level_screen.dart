@@ -775,7 +775,8 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
                     onPressed: () {
                       openFilePicker();
                     },
-                    style: ElevatedButton.styleFrom(primary: AppColors.main),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.main),
                     icon: const Icon(
                       Icons.file_upload,
                       color: Colors.white,
@@ -839,7 +840,8 @@ class _CreateNewLevelScreenState extends State<CreateNewLevelScreen> {
                           .getSnakBar());
                   }
                 },
-                style: ElevatedButton.styleFrom(primary: AppColors.main),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: AppColors.main),
                 child: const Text(
                   'Create book',
                   style: TextStyle(

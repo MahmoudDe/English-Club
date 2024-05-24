@@ -342,7 +342,8 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                       });
                     }
                   },
-                  style: ElevatedButton.styleFrom(primary: Colors.amber),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                   child: const Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -414,7 +415,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                 getData();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                backgroundColor: Colors.white,
               ),
               child: const Text(
                 'filter',

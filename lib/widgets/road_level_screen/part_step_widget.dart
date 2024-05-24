@@ -212,7 +212,7 @@ class PartStepWidget extends StatelessWidget {
                                                 : null;
                                           },
                                           style: ElevatedButton.styleFrom(
-                                              primary: Colors.white),
+                                              backgroundColor: Colors.white),
                                           child: Icon(
                                             Icons.arrow_forward,
                                             color: color,

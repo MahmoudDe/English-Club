@@ -9,7 +9,7 @@ import 'package:bdh/data/data.dart';
 import 'package:bdh/model/user.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart';
-import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+// import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
