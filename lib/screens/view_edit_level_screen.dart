@@ -320,8 +320,9 @@ class _ViewEditLevelScreenState extends State<ViewEditLevelScreen> {
           )
         : Scaffold(
             floatingActionButton: FloatButtonLevelWidget(
-              testId: Apis.levelData['id'].toString(),
+              testId: Apis.levelData['vocabulary_test_id'].toString(),
               mediaQuery: mediaQuery,
+              data: Apis.levelData,
             ),
             appBar: AppBar(
               backgroundColor: AppColors.main,

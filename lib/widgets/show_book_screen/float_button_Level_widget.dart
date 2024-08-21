@@ -18,9 +18,11 @@ class FloatButtonLevelWidget extends StatelessWidget {
     super.key,
     required this.mediaQuery,
     required this.testId,
+    required this.data,
   });
   final String testId;
   final Size mediaQuery;
+  final Map data;
 
   int isDeleteQuestion = 0;
   bool didSelectFile = false;

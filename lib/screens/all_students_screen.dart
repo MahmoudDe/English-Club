@@ -596,41 +596,46 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                     itemCount: searchStudentList.length,
                                     itemBuilder: (context, index) =>
                                         Consumer<Apis>(
-                                          builder: (context, value, child) =>
-                                              StudentWidget(
-                                                  allClassesInGrade:
-                                                      allClassesInGrade,
-                                                  allGrades: allGrades,
-                                                  selectedClassFilterValue:
-                                                      selectedClassFilterValue,
-                                                  selectedGradeFilterValue:
-                                                      selectedGradeFilterValue,
-                                                  onPressedActive: (p0) {
-                                                    changeActiveStudentState(
-                                                        //now
-                                                        //InActive = 0 mean it's inActive
-                                                        //InActive = 1 mean it's Active
+                                          builder: (context, value, child) {
+                                            print(
+                                                'f654s65af4dsdfa65654sdfa54df6s546sdfa546dasf654sdfa654dsfa654dfsa654sdfa654sdfa546sdfa');
+                                            print(searchStudentList[index]);
+                                            return StudentWidget(
+                                                allClassesInGrade:
+                                                    allClassesInGrade,
+                                                allGrades: allGrades,
+                                                selectedClassFilterValue:
+                                                    searchStudentList[index]
+                                                        ['className'],
+                                                selectedGradeFilterValue:
+                                                    searchStudentList[index]
+                                                        ['gradeName'],
+                                                onPressedActive: (p0) {
+                                                  changeActiveStudentState(
+                                                      //now
+                                                      //InActive = 0 mean it's inActive
+                                                      //InActive = 1 mean it's Active
 
-                                                        //before
-                                                        //InActive = 0 mean it's Active                  to inActive send 1
-                                                        //InActive = 1 mean it's InActive                to active send 0
-                                                        searchStudentList[index]
-                                                                    [
-                                                                    'inactive'] ==
-                                                                0
-                                                            ? '1'
-                                                            : '0',
-                                                        index);
-                                                  },
-                                                  onPressedDelete: (p0) {
-                                                    deleteStudent(index);
-                                                  },
-                                                  getData: filterData,
-                                                  refreshData: getData,
-                                                  mediaQuery: mediaQuery,
-                                                  searchStudentList:
-                                                      searchStudentList,
-                                                  index: index),
+                                                      //before
+                                                      //InActive = 0 mean it's Active                  to inActive send 1
+                                                      //InActive = 1 mean it's InActive                to active send 0
+                                                      searchStudentList[index][
+                                                                  'inactive'] ==
+                                                              0
+                                                          ? '1'
+                                                          : '0',
+                                                      index);
+                                                },
+                                                onPressedDelete: (p0) {
+                                                  deleteStudent(index);
+                                                },
+                                                getData: filterData,
+                                                refreshData: getData,
+                                                mediaQuery: mediaQuery,
+                                                searchStudentList:
+                                                    searchStudentList,
+                                                index: index);
+                                          },
                                         )),
                               )
                                 .animate(

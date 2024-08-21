@@ -9,12 +9,13 @@ import 'package:bdh/data/data.dart';
 import 'package:bdh/model/user.dart';
 import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart';
-// import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart' as Dio;
+import 'package:dio/dio.dart';
 
 import '../model/student_model.dart';
 
@@ -972,6 +973,24 @@ class Apis with ChangeNotifier {
           filename: fileName,
         ),
       });
+      print('++++++++++++++++++++++++++++++++++++++++++++++++');
+      print(sectionId);
+      print({
+        'name': name,
+        'test_subQuestions_count': test_subQuestions_count,
+        'good_percentage': good_percentage,
+        'veryGood_percentage': veryGood_percentage,
+        'excellent_percentage': excellent_percentage,
+        'prizes': prizes,
+        'vocab_g_percentage': vocab_g_percentage,
+        'vocab_vg_percentage': vocab_vg_percentage,
+        'vocab_exc_percentage': vocab_exc_percentage,
+        'vocabPrizes': vocabPrizes,
+        "file": MultipartFile.fromFileSync(
+          file.path,
+          filename: fileName,
+        ),
+      });
       Dio.Response response = await dio().post(
         "/admin/sections/$sectionId/levels",
         data: formData,
@@ -989,6 +1008,7 @@ class Apis with ChangeNotifier {
     } on DioError catch (e) {
       print('hello');
       statusResponse = 400;
+      print('The status code is => ${e.response!.statusCode}');
       print(e.error);
       print(e.response);
       print(e.response!.data['message']);
@@ -2280,13 +2300,17 @@ class Apis with ChangeNotifier {
     required String borrowLimit,
     required int g_class_id,
   }) async {
+    print('Starting');
+    print('The student id is => $studentId');
+    print('The class id => ${g_class_id}');
     final SharedPreferences storage = await SharedPreferences.getInstance();
-
+    print('step 1');
     try {
       String? myToken = storage.getString('token');
-
+      print('step 2');
+      print(myToken);
       Dio.Response response = await dio().patch(
-        "/admin/students/$studentId",
+        "admin/students/$studentId",
         data: {
           'name': studentName,
           'g_class_id': g_class_id,
@@ -2300,6 +2324,7 @@ class Apis with ChangeNotifier {
           '................................change student image server response');
       print(response.data);
       print('................................');
+      message = response.data['message'];
       statusResponse = 200;
       notifyListeners();
       return true;

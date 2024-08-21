@@ -7,7 +7,7 @@ import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:bdh/widgets/create_story_screen/add_cover_widget.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 // import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -67,10 +67,11 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
     print('----------------------------------');
     String qrResult;
     try {
-      qrResult = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
+      // qrResult = await FlutterBarcodeScanner.scanBarcode(
+      //     '#ff6666', 'Cancel', true, ScanMode.QR);
+
       print('----------------------------------');
-      print(qrResult);
+      // print(qrResult);
       print('----------------------------------');
     } catch (e) {
       print('----------------------------------');
@@ -79,7 +80,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
     }
     if (!mounted) return;
     setState(() {
-      bookQrCode = qrResult;
+      // bookQrCode = qrResult;
     });
     QuickAlert.show(
       context: context,

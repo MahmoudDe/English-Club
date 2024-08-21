@@ -13,7 +13,7 @@ import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
@@ -65,12 +65,27 @@ class _StudentWidgetState extends State<StudentWidget> {
 
   late int classId;
 
-  void changeId() {
+  Future<void> changeId() async {
+    print(selectedClassFilterValue1);
+    print(selectedGradeFilterValue1);
+    print(dataClass.students);
+    print(allGrades1);
+    print(allClassesInGrade1);
+    int selectedGradeIndex = dataClass.students
+        .indexWhere((element) => element['name'] == selectedGradeFilterValue1);
+    allClassesInGrade1.clear();
+    for (int i = 0;
+        i < dataClass.students[selectedGradeIndex]['classes'].length;
+        i++) {
+      allClassesInGrade1
+          .add(dataClass.students[selectedGradeIndex]['classes'][i]['name']);
+    }
     classId = dataClass.students
         .where((element) => element['name'] == selectedGradeFilterValue1)
         .toList()[0]['classes']
         .where((e) => e['name'] == selectedClassFilterValue1)
         .toList()[0]['id'];
+    print(classId);
   }
 
   Future<void> borrowBook() async {
@@ -78,10 +93,11 @@ class _StudentWidgetState extends State<StudentWidget> {
     print('----------------------------------');
     String qrResult;
     try {
-      qrResult = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
+      // qrResult = await FlutterBarcodeScanner.scanBarcode(
+      //     '#ff6666', 'Cancel', true, ScanMode.QR);
+
       print('----------------------------------');
-      print(qrResult);
+      // print(qrResult);
       print('----------------------------------');
     } catch (e) {
       print('----------------------------------');
@@ -92,7 +108,7 @@ class _StudentWidgetState extends State<StudentWidget> {
 
     if (await Provider.of<Apis>(context, listen: false).borrowBook(
         studentId: widget.searchStudentList[widget.index]['id'].toString(),
-        qrCode: qrResult)) {
+        qrCode: 'qrResult')) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
@@ -118,11 +134,12 @@ class _StudentWidgetState extends State<StudentWidget> {
     print('----------------------------------');
     String qrResult;
     try {
-      qrResult = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      print('----------------------------------');
-      print(qrResult);
-      print('----------------------------------');
+      // qrResult = await FlutterBarcodeScanner.scanBarcode(
+      //     '#ff6666', 'Cancel', true, ScanMode.QR);
+
+      // print('----------------------------------');
+      // print(qrResult);
+      // print('----------------------------------');
     } catch (e) {
       print('----------------------------------');
       qrResult = 'Failed to get platform version';
@@ -132,7 +149,7 @@ class _StudentWidgetState extends State<StudentWidget> {
 
     if (await Provider.of<Apis>(context, listen: false).returnBook(
         studentId: widget.searchStudentList[widget.index]['id'].toString(),
-        qrCode: qrResult.toString())) {
+        qrCode: '')) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
@@ -329,17 +346,21 @@ class _StudentWidgetState extends State<StudentWidget> {
                       filterTitle: 'Class',
                     ),
                     SizedBox(
-                      width: widget.mediaQuery.width / 20,
+                      width: widget.mediaQuery.width / 40,
                     ),
                     FilterWidget(
                       width: widget.mediaQuery.width / 2.3,
                       mediaQuery: widget.mediaQuery,
                       menu: allGrades1,
-                      onChanged: (String? newValue) {
-                        selectedGradeFilterValue1 = newValue!;
-                        changeId();
-                        Navigator.pop(context);
-                        updateStudentDialog(context);
+                      onChanged: (String? newValue) async {
+                        if (newValue != 'All') {
+                          selectedGradeFilterValue1 = newValue!;
+                          await changeId();
+                          Navigator.pop(context);
+                          updateStudentDialog(context);
+                        } else {
+                          return;
+                        }
                       },
                       value: selectedGradeFilterValue1,
                       filterTitle: 'Grade',
@@ -399,6 +420,12 @@ class _StudentWidgetState extends State<StudentWidget> {
               ElevatedButton(
                 onPressed: () async {
                   Navigator.pop(context);
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.loading,
+                    text: showBookController.message,
+                    confirmBtnColor: Colors.grey,
+                  );
                   if (await Provider.of<Apis>(context, listen: false)
                       .updateStudentData(
                     studentId:
@@ -407,6 +434,8 @@ class _StudentWidgetState extends State<StudentWidget> {
                     borrowLimit: studentBookLimitController.text,
                     g_class_id: classId,
                   )) {
+                    Navigator.pop(context);
+
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.success,
@@ -420,6 +449,8 @@ class _StudentWidgetState extends State<StudentWidget> {
                       confirmBtnColor: Colors.grey,
                     );
                   } else {
+                    Navigator.pop(context);
+
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.error,
@@ -713,7 +744,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         studentNameController = TextEditingController(
                             text: widget.searchStudentList[widget.index]['name']
                                 .toString());
@@ -727,7 +758,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                             widget.selectedClassFilterValue;
                         selectedGradeFilterValue1 =
                             widget.selectedGradeFilterValue;
-                        changeId();
+                        await changeId();
                         updateStudentDialog(context);
                       },
                       style: ElevatedButton.styleFrom(

@@ -21,30 +21,17 @@ import 'shared/local_network.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CashNetwork.cashInitialization();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyCpqL7hvVLTCa1Nh12eM0q_J2pCP1LHEpo',
+      appId: '1:838693518963:android:d947e652bdbf6c3f3eb406',
+      messagingSenderId: '838693518963',
+      projectId: 'flutter-1cda7',
+    ),
+  );
   await FirebaseApi().initNotification();
-  // await AwesomeNotifications().initialize(null, [
-  //   NotificationChannel(
-  //     channelGroupKey: 'basic_channel_group_key',
-  //     channelKey: 'myKey',
-  //     channelName: 'alaa_channel',
-  //     channelDescription: 'basic_notification_channel',
-  //   )
-  // ], channelGroups: [
-  //   NotificationChannelGroup(
-  //       channelGroupKey: 'basic_channel_group_key',
-  //       channelGroupName: 'basic group')
-  // ]);
-  // bool isNotificationAllowed =
-  //     await AwesomeNotifications().isNotificationAllowed();
-  // await NotificationServices().initNotification();
-  // print('isNotificationAllowed => $isNotificationAllowed');
+
   runApp(Phoenix(child: MyApp()));
-  // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-  //   if (Platform.isAndroid) {
-  //     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  //   }
-  // });
 }
 
 class MyApp extends StatelessWidget {
