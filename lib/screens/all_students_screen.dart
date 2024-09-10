@@ -606,10 +606,12 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                                 allGrades: allGrades,
                                                 selectedClassFilterValue:
                                                     searchStudentList[index]
-                                                        ['className'],
+                                                            ['className'] ??
+                                                        'All',
                                                 selectedGradeFilterValue:
                                                     searchStudentList[index]
-                                                        ['gradeName'],
+                                                            ['gradeName'] ??
+                                                        'All',
                                                 onPressedActive: (p0) {
                                                   changeActiveStudentState(
                                                       //now

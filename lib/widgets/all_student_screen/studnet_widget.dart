@@ -2,7 +2,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 // import 'dart:io';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
@@ -13,13 +12,11 @@ import 'package:bdh/widgets/all_student_screen/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
-// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-// import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
-
 import '../../server/apis.dart';
 import '../form_widget copy.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 
 // ignore: must_be_immutable
 class StudentWidget extends StatefulWidget {
@@ -90,25 +87,33 @@ class _StudentWidgetState extends State<StudentWidget> {
 
   Future<void> borrowBook() async {
     Navigator.pop(context);
+    late ScanResult result;
     print('----------------------------------');
-    String qrResult;
+
     try {
-      // qrResult = await FlutterBarcodeScanner.scanBarcode(
-      //     '#ff6666', 'Cancel', true, ScanMode.QR);
+      result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': 'cancel',
+            'flash_on': 'on',
+            'flash_off': 'off',
+          },
+        ),
+      );
 
       print('----------------------------------');
-      // print(qrResult);
+      print(result.rawContent);
+      print(result);
       print('----------------------------------');
     } catch (e) {
       print('----------------------------------');
-      qrResult = 'Failed to get platform version';
       print('----------------------------------');
     }
     if (!mounted) return;
 
     if (await Provider.of<Apis>(context, listen: false).borrowBook(
         studentId: widget.searchStudentList[widget.index]['id'].toString(),
-        qrCode: 'qrResult')) {
+        qrCode: result.rawContent)) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
@@ -132,24 +137,30 @@ class _StudentWidgetState extends State<StudentWidget> {
   Future<void> returnBook() async {
     Navigator.pop(context);
     print('----------------------------------');
-    String qrResult;
-    try {
-      // qrResult = await FlutterBarcodeScanner.scanBarcode(
-      //     '#ff6666', 'Cancel', true, ScanMode.QR);
+    late ScanResult result;
 
-      // print('----------------------------------');
-      // print(qrResult);
-      // print('----------------------------------');
+    try {
+      result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': 'cancel',
+            'flash_on': 'on',
+            'flash_off': 'off',
+          },
+        ),
+      );
+
+      print('----------------------------------');
+      print('----------------------------------');
     } catch (e) {
       print('----------------------------------');
-      qrResult = 'Failed to get platform version';
       print('----------------------------------');
     }
     if (!mounted) return;
 
     if (await Provider.of<Apis>(context, listen: false).returnBook(
         studentId: widget.searchStudentList[widget.index]['id'].toString(),
-        qrCode: '')) {
+        qrCode: result.rawContent)) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.success,

@@ -33,7 +33,7 @@ class BookDataWidget extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
+              Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => AdminQuizScreen(
                     testId:
                         showBookController.bookData[0]['test_id'].toString()),

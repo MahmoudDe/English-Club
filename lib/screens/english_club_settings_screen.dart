@@ -56,6 +56,12 @@ class _EnglishClubSettingsScreenState extends State<EnglishClubSettingsScreen>
       setState(() {
         allSections = Apis.sectionsData;
       });
+      if (allSections.isEmpty) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
       setState(() {
         for (int i = 0; i < allSections.length; i++) {
           allSectionsNames.add(allSections[i]['section_name']);

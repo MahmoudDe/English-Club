@@ -66,20 +66,24 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
       for (int j = 0; j < dataClass.sections[i]['data'].length; j++) {
         levels_parts.add(dataClass.sections[i]['data'][j]['name']);
       }
-      String startValue = levels_parts[0];
-      sections.add({
-        "drop_menu": levels_parts,
-        "value": startValue,
-        "grade_id": dataClass.sections[i]['section_id'],
-      });
-      levelId = dataClass.sections[i]['data'][0]['level_id'];
-      supLevelId = dataClass.sections[i]['data'][0]['sub_level_id'];
-      progresses.add({
-        "section_id": dataClass.sections[i]['section_id'],
-        "level_id": levelId,
-        "sub_level_id": supLevelId,
-        "finishedStories": []
-      });
+      print('The last section is => ${dataClass.sections.last}');
+      print('The data we get is => $levels_parts');
+      if (levels_parts.isNotEmpty) {
+        String? startValue = levels_parts[0];
+        sections.add({
+          "drop_menu": levels_parts,
+          "value": startValue,
+          "grade_id": dataClass.sections[i]['section_id'],
+        });
+        levelId = dataClass.sections[i]['data'][0]['level_id'];
+        supLevelId = dataClass.sections[i]['data'][0]['sub_level_id'];
+        progresses.add({
+          "section_id": dataClass.sections[i]['section_id'],
+          "level_id": levelId,
+          "sub_level_id": supLevelId,
+          "finishedStories": []
+        });
+      }
     }
   }
 
@@ -457,26 +461,28 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
                 children: List.generate(
                   dataClass.sections.length,
                   (index) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        FilterSectionLevelsWidget(
-                            mediaQuery: widget.mediaQuery,
-                            value: sections[index]['value'],
-                            onChanged: (value) {
-                              setState(() {
-                                sections[index]['value'] = value!;
-                                changeSection(index: index, value: value);
-                              });
-                            },
-                            menu: sections[index]['drop_menu'],
-                            filterTitle: dataClass.sections[index]
-                                ['section_name']),
-                        SizedBox(
-                          height: widget.mediaQuery.height / 90,
-                        )
-                      ],
-                    );
+                    return dataClass.sections[index]['data'].isEmpty
+                        ? const SizedBox()
+                        : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FilterSectionLevelsWidget(
+                                  mediaQuery: widget.mediaQuery,
+                                  value: sections[index]['value'],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      sections[index]['value'] = value!;
+                                      changeSection(index: index, value: value);
+                                    });
+                                  },
+                                  menu: sections[index]['drop_menu'],
+                                  filterTitle: dataClass.sections[index]
+                                      ['section_name']),
+                              SizedBox(
+                                height: widget.mediaQuery.height / 90,
+                              )
+                            ],
+                          );
                   },
                 ),
               ),

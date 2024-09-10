@@ -1012,7 +1012,7 @@ class Apis with ChangeNotifier {
       print(e.error);
       print(e.response);
       print(e.response!.data['message']);
-      message = e.response!.data['errors'].toString();
+      message = e.response!.data['message'].toString();
       notifyListeners();
       return false;
     } catch (e) {
@@ -1101,7 +1101,8 @@ class Apis with ChangeNotifier {
 
     try {
       String? myToken = storage.getString('token');
-
+      print('The token is => $myToken');
+      print('the section id is => $sectionId');
       Dio.Response response = await dio().put(
         "/admin/sections/$sectionId/makeReady",
         options: Dio.Options(

@@ -930,9 +930,10 @@ class _ViewEditLevelScreenState extends State<ViewEditLevelScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => AdminQuizScreen(
-                              testId: Apis.levelData['id'].toString()),
+                              testId: Apis.levelData['vocabulary_test_id']
+                                  .toString()),
                         ));
                       },
                       style: ElevatedButton.styleFrom(
