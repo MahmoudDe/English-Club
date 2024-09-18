@@ -51,6 +51,7 @@ class _QrWidgetState extends State<QrWidget> {
           text:
               "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
         );
+      
       } else {
         print("Error capturing the QR code image.");
       }

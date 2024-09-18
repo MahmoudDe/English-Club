@@ -929,7 +929,7 @@ class Apis with ChangeNotifier {
       print(e.error);
       print(e.response);
       print(e.response!.data['message']);
-      message = e.response!.data['errors'].toString();
+      message = e.response!.data.toString();
       notifyListeners();
       return false;
     } catch (e) {
@@ -1012,7 +1012,7 @@ class Apis with ChangeNotifier {
       print(e.error);
       print(e.response);
       print(e.response!.data['message']);
-      message = e.response!.data['message'].toString();
+      message = e.response!.data.toString();
       notifyListeners();
       return false;
     } catch (e) {
@@ -1419,7 +1419,7 @@ class Apis with ChangeNotifier {
       statusResponse = 400;
       print(e.error);
       print(e.response);
-      showBookController.message = e.response!.data['message'];
+      showBookController.message = e.response!.data.toString();
       notifyListeners();
       return false;
     } catch (e) {
@@ -2103,7 +2103,7 @@ class Apis with ChangeNotifier {
     } on DioError catch (e) {
       statusResponse = e.response!.statusCode!;
       print('................................error upload data info');
-      message = json.decode(String.fromCharCodes(e.response!.data!))['message'];
+      message = json.decode(String.fromCharCodes(e.response!.data!)).toString();
       notifyListeners();
     } catch (e) {
       print(e);
