@@ -3,7 +3,7 @@
 import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/student_screens/student_result_screen.dart';
 import 'package:bdh/server/apis.dart';
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_controller.dart' as carousel_slider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
@@ -19,11 +19,15 @@ class ChangeQuestionWidget extends StatelessWidget {
       required this.storyId,
       required this.subLevelId,
       required this.isLevelTest,
+      required this.scrollController,
       required this.levelId,
+      required this.activeIndex,
       required this.sectionId});
   final bool isLevelTest;
-  final CarouselController controller;
-  final CarouselController controllerNumber;
+  final int activeIndex;
+  final carousel_slider.CarouselSliderController controller;
+  final carousel_slider.CarouselSliderController controllerNumber;
+  final ScrollController scrollController;
   final Size mediaQuery;
   final String storyId;
   final String subLevelId;
@@ -89,6 +93,12 @@ class ChangeQuestionWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+              FocusScope.of(context).unfocus();
+
+              scrollController.animateTo(
+                  (activeIndex - 1) * MediaQuery.of(context).size.width / 7,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut);
               controller.previousPage();
               controllerNumber.previousPage();
               // controller.
@@ -153,6 +163,11 @@ class ChangeQuestionWidget extends StatelessWidget {
                 ),
           GestureDetector(
             onTap: () {
+              FocusScope.of(context).unfocus();
+              scrollController.animateTo(
+                  (activeIndex + 1) * MediaQuery.of(context).size.width / 7,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut);
               controller.nextPage();
               controllerNumber.nextPage();
             },

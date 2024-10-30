@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../server/apis.dart';
+import '../../shimmer/board_shimmer.dart';
 
 class CollectedPrizeWidget extends StatefulWidget {
   const CollectedPrizeWidget({super.key, required this.mediaQuery});
@@ -80,12 +82,9 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
     return isGettingData
-        ? Center(
-            child: CircularProgressIndicator(
-              color: AppColors.main,
-            ),
-          )
+        ? const BoardShimmer()
         : doneTasks.isEmpty
             ? Column(
                 children: [
@@ -94,7 +93,7 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
                   ),
                   Center(
                     child: Lottie.asset('assets/lotties/noData.json',
-                        height: MediaQuery.of(context).size.height / 3),
+                        height: MediaQuery.of(context).size.height / 8),
                   ),
                   Text(
                     'No data',
@@ -110,15 +109,22 @@ class _CollectedPrizeWidgetState extends State<CollectedPrizeWidget> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
                       if (index == doneTasks.length) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: widget.mediaQuery.height / 80),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.main,
-                            ),
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey[100]!,
+                          highlightColor: Colors.grey[300]!,
+                          child: Container(
+                            height: mediaQuery.height / 10,
+                            width: mediaQuery.width,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                           ),
-                        );
+                        )
+                            .animate()
+                            .fade(duration: const Duration(milliseconds: 50));
                       } else {
                         return Card(
                           color: const Color.fromARGB(255, 194, 244, 220),

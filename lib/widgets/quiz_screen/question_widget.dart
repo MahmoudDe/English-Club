@@ -14,16 +14,17 @@ import 'package:provider/provider.dart';
 // import '../../styles/app_colors.dart';
 
 class QuestionWidget extends StatelessWidget {
-  QuestionWidget({
-    super.key,
-    required this.mediaQuery,
-    required this.index,
-    required this.testId,
-  });
+  QuestionWidget(
+      {super.key,
+      required this.mediaQuery,
+      required this.index,
+      required this.testId,
+      required this.startIndex});
   final Size mediaQuery;
   final String testId;
   int newQuestionIndex = 0;
   int index;
+  int startIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +57,10 @@ class QuestionWidget extends StatelessWidget {
               Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: mediaQuery.width / 40),
-                  child:
-                      MainQuestionWidget(index: index, mediaQuery: mediaQuery)),
+                  child: MainQuestionWidget(
+                      index: index,
+                      mediaQuery: mediaQuery,
+                      startIndex: startIndex)),
               SizedBox(
                 height: mediaQuery.height / 40,
               ),

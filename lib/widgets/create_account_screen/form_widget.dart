@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
@@ -145,7 +146,7 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
           silver_coins: silverCoins.toString(),
           bronze_coins: bronzeCoins.toString(),
           progresses: progresses);
-
+      Navigator.of(context).pop();
       Apis.statusResponse == 200
           ? QuickAlert.show(
               context: context,
@@ -493,6 +494,10 @@ class _FormCreatAccountWidgetState extends State<FormCreatAccountWidget> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     createStudentAccount();
+                    loadingDialog(
+                        context: context,
+                        mediaQuery: widget.mediaQuery,
+                        title: 'Loading...');
                   }
                 },
                 style: ElevatedButton.styleFrom(

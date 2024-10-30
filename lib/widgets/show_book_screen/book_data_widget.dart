@@ -17,8 +17,10 @@ class BookDataWidget extends StatelessWidget {
               showBookController.bookData[0]['title'].toString(), mediaQuery),
           infoWidget(
               'subQuestions',
-              showBookController.bookData[0]['test']['subQuestions_count']
-                  .toString(),
+              showBookController.bookData[0]['test'] == null
+                  ? '0'
+                  : showBookController.bookData[0]['test']['subQuestions_count']
+                      .toString(),
               mediaQuery),
           infoWidget(
               'Quantity',

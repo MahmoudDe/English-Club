@@ -88,14 +88,14 @@ class _NavigationScreenState extends State<NavigationScreen>
           animationController: _animationController,
           mediaQuery: mediaQuery,
           onPressed: () async {
-            await Provider.of<Apis>(context, listen: false).logout();
             // call the logout function
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.remove('token');
             // ignore: use_build_context_synchronously
             Navigator.of(context).pushNamedAndRemoveUntil(
                 StartScreen.routName, (Route<dynamic> route) => false);
-          }).customAppBar(),
+            await Provider.of<Apis>(context, listen: false).logout();
+          }).customAppBar(context),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.main,

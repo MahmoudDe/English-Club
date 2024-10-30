@@ -26,7 +26,6 @@ class AnswersWidget extends StatefulWidget {
 class _AnswersWidgetState extends State<AnswersWidget> {
   FocusNode answerNode = FocusNode();
   late TextEditingController answerController;
-
   @override
   void initState() {
     answerController = TextEditingController(

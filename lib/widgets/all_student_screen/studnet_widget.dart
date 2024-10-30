@@ -85,6 +85,67 @@ class _StudentWidgetState extends State<StudentWidget> {
     print(classId);
   }
 
+  Future<void> confirmBorrowBook() async {
+    AwesomeDialog(
+        context: context,
+        body: Column(
+          children: [
+            Text(
+              'Are you sure you want to confirm ${widget.searchStudentList[widget.index]['name']} to borrow the book [Book Name]?\n Please confirm to proceed. ',
+              style: TextStyle(
+                color: AppColors.main,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: widget.mediaQuery.height / 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                borrowBook();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.brown,
+                padding: EdgeInsets.symmetric(
+                  horizontal: widget.mediaQuery.width / 8,
+                  vertical: widget.mediaQuery.height / 50,
+                ),
+              ),
+              child: const Text(
+                'Borrow book',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: widget.mediaQuery.height / 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                returnBook();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: EdgeInsets.symmetric(
+                  horizontal: widget.mediaQuery.width / 8,
+                  vertical: widget.mediaQuery.height / 50,
+                ),
+              ),
+              child: const Text(
+                'Return book',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: widget.mediaQuery.height / 50,
+            ),
+          ],
+        )).show();
+  }
+
+  Future<void> confirmReturnBook() async {}
+
   Future<void> borrowBook() async {
     Navigator.pop(context);
     late ScanResult result;
@@ -111,27 +172,27 @@ class _StudentWidgetState extends State<StudentWidget> {
     }
     if (!mounted) return;
 
-    if (await Provider.of<Apis>(context, listen: false).borrowBook(
-        studentId: widget.searchStudentList[widget.index]['id'].toString(),
-        qrCode: result.rawContent)) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        title: 'Scan result',
-        text: showBookController.message,
-        confirmBtnText: 'Cancel',
-        confirmBtnColor: Colors.grey,
-      );
-    } else {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Scan result',
-        text: Apis.message,
-        confirmBtnText: 'Cancel',
-        confirmBtnColor: Colors.grey,
-      );
-    }
+    // if (await Provider.of<Apis>(context, listen: false).borrowBook(
+    //     studentId: widget.searchStudentList[widget.index]['id'].toString(),
+    //     qrCode: result.rawContent)) {
+    //   QuickAlert.show(
+    //     context: context,
+    //     type: QuickAlertType.success,
+    //     title: 'Scan result',
+    //     text: showBookController.message,
+    //     confirmBtnText: 'Cancel',
+    //     confirmBtnColor: Colors.grey,
+    //   );
+    // } else {
+    //   QuickAlert.show(
+    //     context: context,
+    //     type: QuickAlertType.error,
+    //     title: 'Scan result',
+    //     text: Apis.message,
+    //     confirmBtnText: 'Cancel',
+    //     confirmBtnColor: Colors.grey,
+    //   );
+    // }
   }
 
   Future<void> returnBook() async {
@@ -743,7 +804,7 @@ class _StudentWidgetState extends State<StudentWidget> {
                 height: widget.mediaQuery.height / 30,
               ),
               trailing: Text(widget.searchStudentList[widget.index]
-                      ['finishedStoriesCount']
+                      ['finishedLevelsCount']
                   .toString()),
             ),
             //buttons

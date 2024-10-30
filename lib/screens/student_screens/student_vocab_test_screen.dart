@@ -1,6 +1,6 @@
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,10 +21,12 @@ class StudentVocabTestScreen extends StatefulWidget {
 }
 
 class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
-  final controller = CarouselController();
-  final controllerNumber = CarouselController();
+  final controller = carousel_slider.CarouselSliderController();
+  final controllerNumber = carousel_slider.CarouselSliderController();
   bool isLoading = false;
   bool isError = false;
+  int startIndex = 1;
+  final scrollController = ScrollController();
 
   @override
   void initState() {
@@ -134,8 +136,8 @@ class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
                             SizedBox(
                               height: mediaQuery.height / 10,
                             ),
-                            CarouselSlider.builder(
-                              options: CarouselOptions(
+                            carousel_slider.CarouselSlider.builder(
+                              options: carousel_slider.CarouselOptions(
                                   scrollPhysics:
                                       const NeverScrollableScrollPhysics(),
                                   initialPage: 0,
@@ -157,6 +159,7 @@ class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
                               itemBuilder: (context, index, realIndex) {
                                 return QuestionWidget(
                                   testId: '0',
+                                  startIndex: startIndex,
                                   index: index,
                                   mediaQuery: mediaQuery,
                                 );
@@ -166,6 +169,7 @@ class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
                               height: mediaQuery.height / 100,
                             ),
                             IndicatorWidget(
+                                scrollController: scrollController,
                                 controller: controller,
                                 activeIndex: QuizController.index,
                                 count: QuizController.questions.length),
@@ -175,6 +179,8 @@ class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
                             ChangeQuestionWidget(
                               sectionId: widget.sectionId,
                               levelId: widget.levelId,
+                              activeIndex: QuizController.index,
+                              scrollController: scrollController,
                               isLevelTest: true,
                               storyId: widget.sectionId,
                               subLevelId: widget.levelId,

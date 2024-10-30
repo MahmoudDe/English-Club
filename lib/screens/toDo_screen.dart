@@ -53,6 +53,13 @@ class _ToDoScreenState extends State<ToDoScreen>
     final Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          'System Tasks',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: mediaQuery.width / 20),
+        ),
         backgroundColor: AppColors.main,
       ),
       body: Stack(

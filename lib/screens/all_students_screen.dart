@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
@@ -138,6 +139,8 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
       await Provider.of<Apis>(context, listen: false)
           .deleteStudent(searchStudentList[index]['id'].toString());
       if (Apis.statusResponse == 200) {
+        Navigator.pop(context);
+
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -169,6 +172,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
           studentId: searchStudentList[index]['id'].toString(),
           activeState: activeState);
       if (Apis.statusResponse == 200) {
+        Navigator.pop(context);
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -614,22 +618,23 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                                         'All',
                                                 onPressedActive: (p0) {
                                                   changeActiveStudentState(
-                                                      //now
-                                                      //InActive = 0 mean it's inActive
-                                                      //InActive = 1 mean it's Active
-
-                                                      //before
-                                                      //InActive = 0 mean it's Active                  to inActive send 1
-                                                      //InActive = 1 mean it's InActive                to active send 0
                                                       searchStudentList[index][
                                                                   'inactive'] ==
                                                               0
                                                           ? '1'
                                                           : '0',
                                                       index);
+                                                  loadingDialog(
+                                                      context: context,
+                                                      mediaQuery: mediaQuery,
+                                                      title: 'Loading...');
                                                 },
                                                 onPressedDelete: (p0) {
                                                   deleteStudent(index);
+                                                  loadingDialog(
+                                                      context: context,
+                                                      mediaQuery: mediaQuery,
+                                                      title: 'Loading...');
                                                 },
                                                 getData: filterData,
                                                 refreshData: getData,

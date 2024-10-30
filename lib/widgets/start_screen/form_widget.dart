@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/all_sections_map_roads_screen.dart';
 import 'package:bdh/screens/navigation_screen.dart';
@@ -70,7 +71,7 @@ class _FormWidgetState extends State<FormStartWidget> {
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBarWidget(
                     title: 'Success',
-                    message: 'Welcome to your app',
+                    message: 'Welcome to the English Club',
                     contentType: ContentType.success)
                 .getSnakBar());
         } else if (User.userType == 'admin') {
@@ -159,7 +160,7 @@ class _FormWidgetState extends State<FormStartWidget> {
                   togglePasswordVisibility: () {},
                   mediaQuery: widget.mediaQuery,
                   textInputAction: TextInputAction.next,
-                  labelText: 'user name',
+                  labelText: 'username',
                   hintText: 'EX: Ahmed Mohsen',
                   focusNode: nameNode,
                   nextNode: passNode,
@@ -213,10 +214,10 @@ class _FormWidgetState extends State<FormStartWidget> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submit(context, mediaQuery);
-                    QuickAlert.show(
+                    loadingDialog(
                         context: context,
-                        type: QuickAlertType.loading,
-                        barrierDismissible: false);
+                        mediaQuery: mediaQuery,
+                        title: 'Loading');
                   }
                 },
                 style: ElevatedButton.styleFrom(

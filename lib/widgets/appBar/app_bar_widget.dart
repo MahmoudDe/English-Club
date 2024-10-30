@@ -29,7 +29,7 @@ class appBarWidget {
     }
   }
 
-  PreferredSizeWidget? customAppBar() {
+  PreferredSizeWidget? customAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.main,
       title: const AppBarContent(),
@@ -48,6 +48,44 @@ class appBarWidget {
               color: Colors.white,
               size: mediaQuery.width / 15,
             ),
+            onSelected: (value) {
+              if (value == 'prizes') {
+                Navigator.pop(context);
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const PrizeScreen(),
+                  ),
+                );
+              } else if (value == 'ToDo list') {
+                Navigator.pop(context);
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ToDoScreen(),
+                  ),
+                );
+              } else if (value == 'English_Club') {
+                Navigator.pop(context);
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const EnglishClubSettingsScreen(),
+                  ),
+                );
+                print('hello');
+              } else if (value == 'Add_students') {
+                Navigator.pop(context);
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddStudentsScreen(),
+                  ),
+                );
+              } else if (value == 'logout') {
+                onPressed;
+              }
+            },
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem<String>(

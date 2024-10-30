@@ -51,6 +51,8 @@ class FormWidget extends StatelessWidget {
                   keyboardType: textInputType,
                   focusNode: focusNode,
                   obscureText: obscureText,
+                  autocorrect: false, // Disables autocorrect
+                  enableSuggestions: false,
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(nextNode);
                   },

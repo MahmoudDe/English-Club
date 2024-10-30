@@ -11,6 +11,7 @@ import 'package:bdh/server/dio_settings.dart';
 import 'package:dio/dio.dart';
 import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
@@ -2571,14 +2572,17 @@ class Apis with ChangeNotifier {
     }
   }
 
-  Future<bool> unCollectedPrize({required String page}) async {
+  Future<bool> unCollectedPrize({
+    required int page,
+  }) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     waitingPrizes.clear();
     try {
       String? myToken = storage.getString('token');
 
       Dio.Response response = await dio().get(
-        "/admin/viewPrizes?collected=0&page=$page",
+        "/admin/viewPrizes?collected=0",
+        queryParameters: {'page': page},
         options: Dio.Options(
           headers: {'Authorization': 'Bearer $myToken'},
         ),
@@ -2588,7 +2592,7 @@ class Apis with ChangeNotifier {
       print(response.data);
       print('................................');
       statusResponse = 200;
-      waitingPrizes = response.data['data']['data'];
+      waitingPrizes = await response.data['data']['data'];
       notifyListeners();
       return true;
     } on DioError catch (e) {

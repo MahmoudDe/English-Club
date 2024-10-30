@@ -48,6 +48,13 @@ class _PrizeScreenState extends State<PrizeScreen>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.main,
+        title: Text(
+          'Students Prizes',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: mediaQuery.width / 24),
+        ),
       ),
       body: Stack(
         alignment: Alignment.topCenter,
@@ -56,7 +63,7 @@ class _PrizeScreenState extends State<PrizeScreen>
             height: mediaQuery.height / 25,
             child: TitleWidget(
               mediaQuery: mediaQuery,
-              title: 'Tasks',
+              title: 'Prizes',
               icon: Icon(
                 Icons.notifications_active,
                 color: AppColors.whiteLight,

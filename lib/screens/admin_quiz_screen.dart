@@ -1,5 +1,5 @@
 import 'package:bdh/server/apis.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +18,11 @@ class AdminQuizScreen extends StatefulWidget {
 }
 
 class _AdminQuizScreenState extends State<AdminQuizScreen> {
-  final controller = CarouselController();
-  final controllerNumber = CarouselController();
+  final controller = carousel_slider.CarouselSliderController();
+  final scrollController = ScrollController();
+  final controllerNumber = carousel_slider.CarouselSliderController();
   bool isLoading = false;
+  int startIndex = 1;
 
   @override
   void initState() {
@@ -99,8 +101,8 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                       SizedBox(
                         height: mediaQuery.height / 10,
                       ),
-                      CarouselSlider.builder(
-                        options: CarouselOptions(
+                      carousel_slider.CarouselSlider.builder(
+                        options: carousel_slider.CarouselOptions(
                             scrollPhysics: const NeverScrollableScrollPhysics(),
                             initialPage: 0,
                             height: mediaQuery.height / 1.3,
@@ -116,6 +118,7 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                         itemCount: QuizController.questions.length,
                         itemBuilder: (context, index, realIndex) {
                           return QuestionWidget(
+                            startIndex: startIndex,
                             testId: widget.testId,
                             index: index,
                             mediaQuery: mediaQuery,
@@ -126,6 +129,7 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                         height: mediaQuery.height / 100,
                       ),
                       IndicatorWidget(
+                          scrollController: scrollController,
                           controller: controller,
                           activeIndex: QuizController.index,
                           count: QuizController.questions.length),
@@ -135,7 +139,9 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                       ChangeQuestionWidget(
                         levelId: '',
                         sectionId: '',
+                        scrollController: scrollController,
                         isLevelTest: false,
+                        activeIndex: QuizController.index,
                         controllerNumber: controllerNumber,
                         storyId: '',
                         subLevelId: '',
