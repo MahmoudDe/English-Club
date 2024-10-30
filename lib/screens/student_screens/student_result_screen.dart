@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class StudentResultScreen extends StatefulWidget {
-  const StudentResultScreen({super.key});
-
+  const StudentResultScreen({super.key, required this.storyTitle});
+  final String storyTitle;
   @override
   State<StudentResultScreen> createState() => _StudentResultScreenState();
 }
@@ -62,6 +62,7 @@ class _StudentResultScreenState extends State<StudentResultScreen> {
               mediaQuery: mediaQuery,
               result: Apis.studentResultBookTest['evaluation']),
           UserNewPointsWidget(
+            storyTitle: widget.storyTitle,
             isNewScoreTimeStart: isNewScoreTimeStart,
             mediaQuery: mediaQuery,
             result: Apis.studentResultBookTest,

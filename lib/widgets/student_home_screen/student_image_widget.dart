@@ -13,7 +13,7 @@ class StudentImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<Apis>(
       builder: (context, value, child) => Container(
-        width: mediaQuery.width / 2,
+        width: mediaQuery.width / 2.5,
         height: mediaQuery.height / 5,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -33,7 +33,7 @@ class StudentImageWidget extends StatelessWidget {
                 child: Icon(
                   Icons.person,
                   color: AppColors.main,
-                  size: mediaQuery.width / 5,
+                  size: mediaQuery.width / 6,
                 ),
               )
             : Center(

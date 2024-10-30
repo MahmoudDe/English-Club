@@ -21,6 +21,7 @@ class ChangeQuestionWidget extends StatelessWidget {
       required this.isLevelTest,
       required this.scrollController,
       required this.levelId,
+      required this.storyTitle,
       required this.activeIndex,
       required this.sectionId});
   final bool isLevelTest;
@@ -33,6 +34,7 @@ class ChangeQuestionWidget extends StatelessWidget {
   final String subLevelId;
   final String levelId;
   final String sectionId;
+  final String storyTitle;
 
   Future<void> submit(BuildContext context) async {
     try {
@@ -55,7 +57,9 @@ class ChangeQuestionWidget extends StatelessWidget {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const StudentResultScreen(),
+                builder: (context) => StudentResultScreen(
+                  storyTitle: storyTitle,
+                ),
               ));
         } else {
           Navigator.pop(context);
@@ -71,7 +75,8 @@ class ChangeQuestionWidget extends StatelessWidget {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const StudentResultScreen(),
+                builder: (context) =>
+                    StudentResultScreen(storyTitle: storyTitle),
               ));
         } else {
           Navigator.pop(context);

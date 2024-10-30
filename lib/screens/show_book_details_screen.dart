@@ -59,49 +59,58 @@ class _ShowBookDetailsScreenState extends State<ShowBookDetailsScreen> {
       builder: (context, value, child) {
         return showBookController.isLoading
             ? LoadingBookWidget(mediaQuery: mediaQuery)
-            : Scaffold(
-                floatingActionButton: FloatButtonWidget(
-                  testId: showBookController.bookData[0]['test_id'].toString(),
-                  mediaQuery: mediaQuery,
-                  levelName: widget.levelName,
-                  subLevelName: widget.subLevelName,
-                ),
-                appBar: AppBar(
-                  backgroundColor: AppColors.main,
-                  leading: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    onPressed: () =>
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const EnglishClubSettingsScreen(),
-                    )),
+            : WillPopScope(
+                onWillPop: () async {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const EnglishClubSettingsScreen(),
+                  ));
+                  return false;
+                },
+                child: Scaffold(
+                  floatingActionButton: FloatButtonWidget(
+                    testId:
+                        showBookController.bookData[0]['test_id'].toString(),
+                    mediaQuery: mediaQuery,
+                    levelName: widget.levelName,
+                    subLevelName: widget.subLevelName,
                   ),
-                ),
-                body: Stack(
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          TitleWidget(
-                              mediaQuery: mediaQuery,
-                              title:
-                                  '${widget.subLevelName} / ${widget.levelName}',
-                              icon: const Icon(Icons.abc)),
-                          SizedBox(
-                            height: mediaQuery.height / 30,
-                          ),
-                          BookCoverWidget(mediaQuery: mediaQuery),
-                          SizedBox(
-                            height: mediaQuery.height / 30,
-                          ),
-                          const BookDataWidget(),
-                        ],
+                  appBar: AppBar(
+                    backgroundColor: AppColors.main,
+                    leading: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
                       ),
+                      onPressed: () => Navigator.of(context)
+                          .pushReplacement(MaterialPageRoute(
+                        builder: (context) => const EnglishClubSettingsScreen(),
+                      )),
                     ),
-                    QrWidget(mediaQuery: mediaQuery),
-                  ],
+                  ),
+                  body: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            TitleWidget(
+                                mediaQuery: mediaQuery,
+                                title:
+                                    '${widget.subLevelName} / ${widget.levelName}',
+                                icon: const Icon(Icons.abc)),
+                            SizedBox(
+                              height: mediaQuery.height / 30,
+                            ),
+                            BookCoverWidget(mediaQuery: mediaQuery),
+                            SizedBox(
+                              height: mediaQuery.height / 30,
+                            ),
+                            const BookDataWidget(),
+                          ],
+                        ),
+                      ),
+                      QrWidget(mediaQuery: mediaQuery),
+                    ],
+                  ),
                 ),
               );
       },

@@ -12,10 +12,13 @@ import '../../widgets/quiz_screen/question_widget.dart';
 
 class StudentTestScreen extends StatefulWidget {
   const StudentTestScreen(
-      {super.key, required this.testId, required this.subLevelId});
+      {super.key,
+      required this.testId,
+      required this.storyTitle,
+      required this.subLevelId});
   final String testId;
   final String subLevelId;
-
+  final String storyTitle;
   @override
   State<StudentTestScreen> createState() => _StudentTestScreenState();
 }
@@ -180,6 +183,7 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
                             ),
                             ChangeQuestionWidget(
                               levelId: '',
+                              storyTitle: widget.storyTitle,
                               activeIndex: QuizController.index,
                               scrollController: scrollController,
                               sectionId: '',

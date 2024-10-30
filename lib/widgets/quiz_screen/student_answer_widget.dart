@@ -213,64 +213,60 @@ class _StudentAnswersWidgetState extends State<StudentAnswersWidget> {
         : Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: widget.mediaQuery.width / 30),
-            child: Form(
-              key: QuizController.formKey,
-              child: TextFormField(
-                controller: answerController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.text,
-                focusNode: answerNode,
-                autocorrect: false, // Disables autocorrect
-                enableSuggestions: false,
-                validator: (value) {
-                  answerNode.unfocus();
-                  return null;
-                },
-                onChanged: (value) {
-                  if (value.toLowerCase() ==
-                      QuizController.questions[widget.index]['data']['answers']
-                              [0]['text_url']
-                          .toLowerCase()) {
-                    QuizController.studentAnswer[mainIndex]['questions']
-                            [currentIndex]['pickedAnswers']
-                        .clear();
-                    QuizController.studentAnswer[mainIndex]['questions']
-                            [currentIndex]['pickedAnswers']
-                        .add(QuizController.questions[widget.index]['data']
-                            ['answers'][0]['id']);
-                    print(QuizController.questions[widget.index]);
-                    print(QuizController.studentAnswer[mainIndex]);
-                    saveData(value: value);
-                    print('correct');
-                  } else {
-                    QuizController.studentAnswer[mainIndex]['questions']
-                            [currentIndex]['pickedAnswers']
-                        .clear();
-                    QuizController.studentAnswer[mainIndex]['questions']
-                            [currentIndex]['pickedAnswers']
-                        .add('-1');
-                    print(QuizController.questions[widget.index]);
-                    print(QuizController.studentAnswer[mainIndex]);
-                    saveData(value: value);
-                    print('false');
-                  }
-                },
-                decoration: InputDecoration(
-                  labelText: 'Answer',
-                  labelStyle: const TextStyle(color: Colors.black),
-                  hintText: 'Enter your answer',
-                  hintStyle: const TextStyle(color: Colors.black38),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  // Add padding
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(width: 2.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(width: 2.0),
-                  ),
+            child: TextFormField(
+              controller: answerController,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              focusNode: answerNode,
+              autocorrect: false, // Disables autocorrect
+              enableSuggestions: false,
+              validator: (value) {
+                return null;
+              },
+              onChanged: (value) {
+                if (value.toLowerCase() ==
+                    QuizController.questions[widget.index]['data']['answers'][0]
+                            ['text_url']
+                        .toLowerCase()) {
+                  QuizController.studentAnswer[mainIndex]['questions']
+                          [currentIndex]['pickedAnswers']
+                      .clear();
+                  QuizController.studentAnswer[mainIndex]['questions']
+                          [currentIndex]['pickedAnswers']
+                      .add(QuizController.questions[widget.index]['data']
+                          ['answers'][0]['id']);
+                  print(QuizController.questions[widget.index]);
+                  print(QuizController.studentAnswer[mainIndex]);
+                  saveData(value: value);
+                  print('correct');
+                } else {
+                  QuizController.studentAnswer[mainIndex]['questions']
+                          [currentIndex]['pickedAnswers']
+                      .clear();
+                  QuizController.studentAnswer[mainIndex]['questions']
+                          [currentIndex]['pickedAnswers']
+                      .add('-1');
+                  print(QuizController.questions[widget.index]);
+                  print(QuizController.studentAnswer[mainIndex]);
+                  saveData(value: value);
+                  print('false');
+                }
+              },
+              decoration: InputDecoration(
+                labelText: 'Answer',
+                labelStyle: const TextStyle(color: Colors.black),
+                hintText: 'Enter your answer',
+                hintStyle: const TextStyle(color: Colors.black38),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                // Add padding
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(width: 2.0),
                 ),
               ),
             ),

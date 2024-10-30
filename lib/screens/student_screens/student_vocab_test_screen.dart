@@ -179,6 +179,7 @@ class _StudentVocabTestScreenState extends State<StudentVocabTestScreen> {
                             ChangeQuestionWidget(
                               sectionId: widget.sectionId,
                               levelId: widget.levelId,
+                              storyTitle: 'Vocab Test',
                               activeIndex: QuizController.index,
                               scrollController: scrollController,
                               isLevelTest: true,

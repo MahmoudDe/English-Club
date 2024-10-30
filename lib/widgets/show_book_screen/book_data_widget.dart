@@ -37,6 +37,8 @@ class BookDataWidget extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => AdminQuizScreen(
+                    storyTitle:
+                        '${showBookController.bookData[0]['title']} story',
                     testId:
                         showBookController.bookData[0]['test_id'].toString()),
               ));

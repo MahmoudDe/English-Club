@@ -17,16 +17,11 @@ class MainQuestionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    index == 0 ||
-            QuizController.questions[index]['main_text_url'] ==
-                QuizController.questions[index - 1]['main_text_url']
-        ? QuizController.startIndex = QuizController.startIndex
-        : QuizController.startIndex++;
     return SizedBox(
       width: mediaQuery.width / 1.1,
       child: QuizController.questions[index]['main_is_image'] == 0
           ? Text(
-              '${QuizController.startIndex}.${QuizController.questions[index]['main_text_url']}',
+              '${index + 1}.${QuizController.questions[index]['main_text_url']}',
               softWrap: true,
               textAlign: TextAlign.center,
               style:

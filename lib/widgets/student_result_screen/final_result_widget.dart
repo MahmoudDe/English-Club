@@ -8,10 +8,12 @@ class UserNewPointsWidget extends StatelessWidget {
     required this.isNewScoreTimeStart,
     required this.mediaQuery,
     required this.result,
+    required this.storyTitle,
   });
   final bool isNewScoreTimeStart;
   final Size mediaQuery;
   final Map<String, dynamic> result;
+  final String storyTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,11 @@ class UserNewPointsWidget extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        width: mediaQuery.width / 2,
-                        height: mediaQuery.height / 15,
+                        width: mediaQuery.width / 1.3,
+                        // height: mediaQuery.height / 15,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: mediaQuery.width / 20,
+                            vertical: mediaQuery.height / 50),
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
                           color: Colors.amber,
@@ -44,11 +49,11 @@ class UserNewPointsWidget extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          result['evaluation'],
+                          '${result['evaluation']} in $storyTitle',
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: mediaQuery.width / 15),
+                              fontSize: mediaQuery.width / 20),
                         ),
                       ),
                       SizedBox(

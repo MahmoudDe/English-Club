@@ -932,6 +932,7 @@ class _ViewEditLevelScreenState extends State<ViewEditLevelScreen> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => AdminQuizScreen(
+                              storyTitle: 'Vocabulary Test',
                               testId: Apis.levelData['vocabulary_test_id']
                                   .toString()),
                         ));

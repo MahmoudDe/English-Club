@@ -42,15 +42,13 @@ class appBarWidget {
             onOpened: _iconTab,
             onCanceled: _iconTab,
             offset: Offset(0, mediaQuery.height / 20),
-            icon: AnimatedIcon(
-              icon: AnimatedIcons.menu_close,
-              progress: animationController,
+            icon: const Icon(
+              Icons.menu,
               color: Colors.white,
-              size: mediaQuery.width / 15,
             ),
             onSelected: (value) {
               if (value == 'prizes') {
-                Navigator.pop(context);
+                //     Navigator.pop(context);
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -58,7 +56,7 @@ class appBarWidget {
                   ),
                 );
               } else if (value == 'ToDo list') {
-                Navigator.pop(context);
+                //   Navigator.pop(context);
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -66,7 +64,7 @@ class appBarWidget {
                   ),
                 );
               } else if (value == 'English_Club') {
-                Navigator.pop(context);
+                //   Navigator.pop(context);
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -75,7 +73,7 @@ class appBarWidget {
                 );
                 print('hello');
               } else if (value == 'Add_students') {
-                Navigator.pop(context);
+                // Navigator.pop(context);
 
                 Navigator.of(context).push(
                   MaterialPageRoute(

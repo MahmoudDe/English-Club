@@ -6,48 +6,63 @@ class CardWidget extends StatelessWidget {
       required this.color,
       required this.icon,
       required this.data,
+      required this.title,
       required this.mediaQuery});
   final Color color;
   final String icon;
+  final String title;
   final String data;
   final Size mediaQuery;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: mediaQuery.height / 7,
-      width: mediaQuery.width / 3.5,
+      // height: mediaQuery.height / 7,
+      width: mediaQuery.width,
+      margin: EdgeInsets.symmetric(vertical: mediaQuery.height / 150),
+      padding: EdgeInsets.symmetric(
+          horizontal: mediaQuery.width / 20, vertical: mediaQuery.height / 90),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(15)),
-        color: color,
-        boxShadow: [
+        color: Colors.white,
+        border: Border.all(color: color, width: 2),
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.black12,
             spreadRadius: 2,
-            blurRadius: 3,
-            offset: const Offset(0, 3), // changes position of shadow
+            blurRadius: 2,
+            offset: Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: mediaQuery.height / 60,
-          ),
-          Image(
-            image: AssetImage(
-              icon,
-            ),
-            // height: mediaQuery.height / 15,
-            width: mediaQuery.width / 7,
-          ),
-          SizedBox(
-            height: mediaQuery.height / 100,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image(
+                image: AssetImage(
+                  icon,
+                ),
+                // height: mediaQuery.height / 15,
+                width: mediaQuery.width / 9,
+              ),
+              SizedBox(
+                width: mediaQuery.width / 20,
+              ),
+              Text(
+                title,
+                style: TextStyle(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: mediaQuery.width / 30),
+              )
+            ],
           ),
           Text(
             data,
             style: TextStyle(
-                color: Colors.white,
+                color: color,
                 fontWeight: FontWeight.bold,
                 fontSize: mediaQuery.width / 20),
           )

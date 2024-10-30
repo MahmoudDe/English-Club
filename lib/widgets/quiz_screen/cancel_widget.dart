@@ -12,28 +12,32 @@ class CancelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.warning,
-          text:
-              'If you exit the test, all your answers will disappear.\nAre you sure?',
-          cancelBtnText: 'no',
-          confirmBtnColor: Colors.red,
-          onConfirmBtnTap: () {
-            QuizController.questions.clear();
-            QuizController.test.clear();
-            QuizController.numberOfQuestions = 0;
-            // QuizController.index =;
-            Navigator.pop(context);
-            User.userType == 'student'
-                ? Navigator.pop(context)
-                : Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EnglishClubSettingsScreen(),
-                    ));
-          },
-        );
+        if (User.userType != 'student') {
+          Navigator.pop(context);
+        } else {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.warning,
+            text:
+                'If you exit the test, all your answers will disappear.\nAre you sure?',
+            cancelBtnText: 'no',
+            confirmBtnColor: Colors.red,
+            onConfirmBtnTap: () {
+              QuizController.questions.clear();
+              QuizController.test.clear();
+              QuizController.numberOfQuestions = 0;
+              // QuizController.index =;
+              Navigator.pop(context);
+              User.userType == 'student'
+                  ? Navigator.pop(context)
+                  : Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EnglishClubSettingsScreen(),
+                      ));
+            },
+          );
+        }
       },
       icon: Icon(
         Icons.cancel_outlined,

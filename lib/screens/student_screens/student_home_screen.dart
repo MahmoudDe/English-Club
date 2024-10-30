@@ -72,7 +72,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           ),
         ),
         body: Stack(
-          alignment: Alignment.center,
+          alignment: Alignment.topCenter,
           children: [
             Opacity(
               opacity: 0.5,
@@ -122,22 +122,26 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: mediaQuery.width / 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CardWidget(
+                                  title: 'Bronze cards',
                                   color: Colors.brown,
                                   icon: 'assets/images/bronze.png',
                                   data:
                                       Apis.studentModel!.bronzeCoins.toString(),
                                   mediaQuery: mediaQuery),
                               CardWidget(
+                                  title: 'Silver cards',
                                   color: Colors.grey,
                                   icon: 'assets/images/silver.png',
                                   data:
                                       Apis.studentModel!.silverCoins.toString(),
                                   mediaQuery: mediaQuery),
                               CardWidget(
+                                  title: 'Gold cards',
                                   color: Colors.amber,
                                   icon: 'assets/images/golden.png',
                                   data:

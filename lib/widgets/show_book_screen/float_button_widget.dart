@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/screens/show_book_details_screen.dart';
 import 'package:bdh/server/apis.dart';
@@ -226,6 +227,7 @@ class FloatButtonWidget extends StatelessWidget {
         testId: testId,
       );
       Navigator.pop(context);
+      Navigator.pop(context);
       if (Apis.statusResponse == 200) {
         QuickAlert.show(
           context: context,
@@ -317,6 +319,7 @@ class FloatButtonWidget extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 uploadDta(context);
+                loadingDialog(context: context, mediaQuery: mediaQuery);
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(

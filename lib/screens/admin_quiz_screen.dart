@@ -10,9 +10,9 @@ import '../widgets/quiz_screen/indicator_widget.dart';
 import '../widgets/quiz_screen/question_widget.dart';
 
 class AdminQuizScreen extends StatefulWidget {
-  AdminQuizScreen({super.key, required this.testId});
+  AdminQuizScreen({super.key, required this.storyTitle, required this.testId});
   final String testId;
-
+  final String storyTitle;
   @override
   State<AdminQuizScreen> createState() => _AdminQuizScreenState();
 }
@@ -139,6 +139,7 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                       ChangeQuestionWidget(
                         levelId: '',
                         sectionId: '',
+                        storyTitle: widget.storyTitle,
                         scrollController: scrollController,
                         isLevelTest: false,
                         activeIndex: QuizController.index,

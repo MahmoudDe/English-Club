@@ -32,7 +32,7 @@ class BooksWidget extends StatelessWidget {
         itemCount: levels[index]['sub_levels'][index1]['stories'].length,
         itemBuilder: (context, index2) => GestureDetector(
           onTap: (() {
-            Navigator.of(context).push(MaterialPageRoute(
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => ShowBookDetailsScreen(
                   bookId: levels[index]['sub_levels'][index1]['stories'][index2]
                           ['id']
