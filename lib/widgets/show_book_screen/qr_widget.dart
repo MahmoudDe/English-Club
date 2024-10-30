@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -51,13 +52,18 @@ class _QrWidgetState extends State<QrWidget> {
           text:
               "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
         );
-      
       } else {
         print("Error capturing the QR code image.");
       }
     } catch (error) {
       print("Error capturing or sharing QR code: $error");
     }
+  }
+
+  String generateQrData(String code) {
+    String encodedData = base64UrlEncode(utf8.encode(code));
+    print('the encodedData => $encodedData');
+    return encodedData;
   }
 
   void showDialogFun() {
@@ -71,7 +77,7 @@ class _QrWidgetState extends State<QrWidget> {
             child: Container(
               color: Colors.white,
               child: PrettyQrView.data(
-                data: showBookController.bookData[0]['qrCode'],
+                data: generateQrData(showBookController.bookData[0]['qrCode']),
                 decoration: PrettyQrDecoration(
                   image: PrettyQrDecorationImage(
                     image: NetworkImage(

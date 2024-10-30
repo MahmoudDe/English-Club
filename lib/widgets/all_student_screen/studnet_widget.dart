@@ -2,7 +2,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 // import 'dart:io';
+import 'dart:convert';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/screens/all_sections_map_roads_screen.dart';
@@ -85,72 +88,222 @@ class _StudentWidgetState extends State<StudentWidget> {
     print(classId);
   }
 
-  Future<void> confirmBorrowBook() async {
+  Future<void> confirmBorrowBook(String title, String result) async {
     AwesomeDialog(
         context: context,
-        body: Column(
-          children: [
-            Text(
-              'Are you sure you want to confirm ${widget.searchStudentList[widget.index]['name']} to borrow the book [Book Name]?\n Please confirm to proceed. ',
-              style: TextStyle(
-                color: AppColors.main,
-                fontWeight: FontWeight.bold,
+        body: Padding(
+          padding:
+              EdgeInsets.symmetric(horizontal: widget.mediaQuery.width / 30),
+          child: Column(
+            children: [
+              Text(
+                'Are you sure you want to confirm ${widget.searchStudentList[widget.index]['name']} to borrow ($title) ?\n Please confirm to proceed.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: AppColors.main,
+                    fontWeight: FontWeight.bold,
+                    fontSize: MediaQuery.of(context).size.width / 30),
               ),
-            ),
-            SizedBox(
-              height: widget.mediaQuery.height / 50,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                borrowBook();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
-                padding: EdgeInsets.symmetric(
-                  horizontal: widget.mediaQuery.width / 8,
-                  vertical: widget.mediaQuery.height / 50,
-                ),
+              SizedBox(
+                height: widget.mediaQuery.height / 50,
               ),
-              child: const Text(
-                'Borrow book',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: widget.mediaQuery.width / 3,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        loadingDialog(
+                            context: context,
+                            mediaQuery: widget.mediaQuery,
+                            title: 'Loading...');
+                        if (await Provider.of<Apis>(context, listen: false)
+                            .borrowBook(
+                                studentId: widget
+                                    .searchStudentList[widget.index]['id']
+                                    .toString(),
+                                qrCode: result)) {
+                          Navigator.pop(context);
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.success,
+                            title: 'Scan result',
+                            text: showBookController.message,
+                            confirmBtnText: 'Cancel',
+                            confirmBtnColor: Colors.grey,
+                          );
+                        } else {
+                          Navigator.pop(context);
+
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: 'Scan result',
+                            text: Apis.message,
+                            confirmBtnText: 'Cancel',
+                            confirmBtnColor: Colors.grey,
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: widget.mediaQuery.width / 20,
+                          vertical: widget.mediaQuery.height / 80,
+                        ),
+                      ),
+                      child: const Text(
+                        'Borrow',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: widget.mediaQuery.width / 50,
+                  ),
+                  SizedBox(
+                    width: widget.mediaQuery.width / 3,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: widget.mediaQuery.width / 20,
+                          vertical: widget.mediaQuery.height / 80,
+                        ),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(
-              height: widget.mediaQuery.height / 50,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                returnBook();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: EdgeInsets.symmetric(
-                  horizontal: widget.mediaQuery.width / 8,
-                  vertical: widget.mediaQuery.height / 50,
-                ),
+              SizedBox(
+                height: widget.mediaQuery.height / 50,
               ),
-              child: const Text(
-                'Return book',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: widget.mediaQuery.height / 50,
-            ),
-          ],
+            ],
+          ),
         )).show();
   }
 
-  Future<void> confirmReturnBook() async {}
+  Future<void> confirmReturnBook(String title, String result) async {
+    AwesomeDialog(
+        context: context,
+        body: Padding(
+          padding:
+              EdgeInsets.symmetric(horizontal: widget.mediaQuery.width / 30),
+          child: Column(
+            children: [
+              Text(
+                'Are you sure you want to confirm ${widget.searchStudentList[widget.index]['name']} to return ($title) ?\n Please confirm to proceed.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: AppColors.main,
+                    fontWeight: FontWeight.bold,
+                    fontSize: MediaQuery.of(context).size.width / 30),
+              ),
+              SizedBox(
+                height: widget.mediaQuery.height / 50,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: widget.mediaQuery.width / 3,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        loadingDialog(
+                            context: context,
+                            mediaQuery: widget.mediaQuery,
+                            title: 'Loading...');
+                        if (await Provider.of<Apis>(context, listen: false)
+                            .returnBook(
+                                studentId: widget
+                                    .searchStudentList[widget.index]['id']
+                                    .toString(),
+                                qrCode: result)) {
+                          Navigator.pop(context);
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.success,
+                            title: 'Scan result',
+                            text: showBookController.message,
+                            confirmBtnText: 'Cancel',
+                            confirmBtnColor: Colors.grey,
+                          );
+                        } else {
+                          Navigator.pop(context);
+
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: 'Scan result',
+                            text: showBookController.message,
+                            confirmBtnText: 'Cancel',
+                            confirmBtnColor: Colors.grey,
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: widget.mediaQuery.width / 20,
+                          vertical: widget.mediaQuery.height / 80,
+                        ),
+                      ),
+                      child: const Text(
+                        'Return',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: widget.mediaQuery.width / 50,
+                  ),
+                  SizedBox(
+                    width: widget.mediaQuery.width / 3,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: widget.mediaQuery.width / 20,
+                          vertical: widget.mediaQuery.height / 80,
+                        ),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: widget.mediaQuery.height / 50,
+              ),
+            ],
+          ),
+        )).show();
+  }
 
   Future<void> borrowBook() async {
     Navigator.pop(context);
     late ScanResult result;
     print('----------------------------------');
-
     try {
       result = await BarcodeScanner.scan(
         options: ScanOptions(
@@ -161,45 +314,27 @@ class _StudentWidgetState extends State<StudentWidget> {
           },
         ),
       );
-
       print('----------------------------------');
-      print(result.rawContent);
-      print(result);
+      print('row content => ${result.rawContent}');
+      print('normal result ${result}');
+      String decodedData = utf8.decode(base64Url.decode(result.rawContent));
+      print('decoded result ${decodedData}');
+      print('@#\$\$#@');
+      print('story name is ${decodedData.split('@#\$\$#@')}');
       print('----------------------------------');
+      confirmBorrowBook(
+          decodedData.split('@#\$\$#@')[1], decodedData.split('@#\$\$#@')[2]);
     } catch (e) {
       print('----------------------------------');
       print('----------------------------------');
     }
     if (!mounted) return;
-
-    // if (await Provider.of<Apis>(context, listen: false).borrowBook(
-    //     studentId: widget.searchStudentList[widget.index]['id'].toString(),
-    //     qrCode: result.rawContent)) {
-    //   QuickAlert.show(
-    //     context: context,
-    //     type: QuickAlertType.success,
-    //     title: 'Scan result',
-    //     text: showBookController.message,
-    //     confirmBtnText: 'Cancel',
-    //     confirmBtnColor: Colors.grey,
-    //   );
-    // } else {
-    //   QuickAlert.show(
-    //     context: context,
-    //     type: QuickAlertType.error,
-    //     title: 'Scan result',
-    //     text: Apis.message,
-    //     confirmBtnText: 'Cancel',
-    //     confirmBtnColor: Colors.grey,
-    //   );
-    // }
   }
 
   Future<void> returnBook() async {
     Navigator.pop(context);
     print('----------------------------------');
     late ScanResult result;
-
     try {
       result = await BarcodeScanner.scan(
         options: ScanOptions(
@@ -210,36 +345,23 @@ class _StudentWidgetState extends State<StudentWidget> {
           },
         ),
       );
-
       print('----------------------------------');
+      print('----------------------------------');
+      print('row content => ${result.rawContent}');
+      print('normal result ${result}');
+      String decodedData = utf8.decode(base64Url.decode(result.rawContent));
+      print('decoded result ${decodedData}');
+      print('@#\$\$#@');
+      print('story name is ${decodedData.split('@#\$\$#@')}');
+      print('----------------------------------');
+      confirmReturnBook(
+          decodedData.split('@#\$\$#@')[1], decodedData.split('@#\$\$#@')[2]);
       print('----------------------------------');
     } catch (e) {
       print('----------------------------------');
       print('----------------------------------');
     }
     if (!mounted) return;
-
-    if (await Provider.of<Apis>(context, listen: false).returnBook(
-        studentId: widget.searchStudentList[widget.index]['id'].toString(),
-        qrCode: result.rawContent)) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        title: 'Scan result',
-        text: showBookController.message,
-        confirmBtnText: 'Cancel',
-        confirmBtnColor: Colors.grey,
-      );
-    } else {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Scan result',
-        text: showBookController.message,
-        confirmBtnText: 'Cancel',
-        confirmBtnColor: Colors.grey,
-      );
-    }
   }
 
   final formKey = GlobalKey<FormState>();

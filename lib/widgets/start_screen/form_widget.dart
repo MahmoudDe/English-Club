@@ -9,7 +9,6 @@ import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/snack_bar_widget.dart';
 import '../form_widget.dart';
