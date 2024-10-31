@@ -9,6 +9,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
+import '../../common/dialogs/dialogs.dart';
 import '../../server/apis.dart';
 
 // ignore: must_be_immutable
@@ -150,11 +151,18 @@ class _LevelsWidgetState extends State<LevelsWidget> {
                             const Color.fromARGB(255, 145, 229, 147),
                         onConfirmBtnTap: () async {
                           if (formKey.currentState!.validate()) {
+                            loadingDialog(
+                                context: context,
+                                mediaQuery: widget.mediaQuery,
+                                title: 'Loading...');
+
                             await Provider.of<Apis>(context, listen: false)
                                 .createSupLevel(
                               levelId: widget.levels[index]['id'].toString(),
                               supLevelName: newSubLevelName,
                             );
+                            Navigator.of(context).pop();
+
                             Navigator.of(context).pop();
                             Apis.statusResponse == 200
                                 ? QuickAlert.show(

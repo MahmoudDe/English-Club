@@ -113,12 +113,19 @@ class _BookSubLevelWidgetState extends State<BookSubLevelWidget> {
                           date: DateFormat('yyyy-MM-dd').format(selectedDate!),
                           mark: markController.text)) {
                     Navigator.of(context).pop();
-                    setState(() {
-                      Apis.subLevelBooksList[widget.index2]['status'] =
-                          'success';
-                      Apis.subLevelBooksList[widget.index2]['mark'] =
-                          markController.text;
-                    });
+                    if (Apis.evaluation == 'Fail') {
+                      setState(() {
+                        Apis.subLevelBooksList[widget.index2]['status'] =
+                            Apis.evaluation;
+                      });
+                    } else {
+                      setState(() {
+                        Apis.subLevelBooksList[widget.index2]['status'] =
+                            'success';
+                        Apis.subLevelBooksList[widget.index2]['mark'] =
+                            markController.text;
+                      });
+                    }
                     Navigator.pop(context);
                   } else {
                     Navigator.of(context).pop();

@@ -1,7 +1,9 @@
+import 'package:bdh/model/user.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/quiz_controller.dart';
@@ -35,7 +37,24 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
   @override
   void initState() {
     getData();
+    if (User.userType == 'student') {
+      disableScreenshots();
+    }
     super.initState();
+  }
+
+  Future<void> disableScreenshots() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  @override
+  void dispose() {
+    _enableScreenshots();
+    super.dispose();
+  }
+
+  Future<void> _enableScreenshots() async {
+    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
   }
 
   Future<void> getData() async {

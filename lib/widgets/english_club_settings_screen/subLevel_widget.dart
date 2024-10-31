@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, use_build_context_synchronously
 
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/screens/create_new_story_screen.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/widgets/english_club_settings_screen/books_widget.dart';
@@ -58,11 +59,14 @@ class _subLevelWidgetState extends State<subLevelWidget> {
     int index1,
   ) async {
     try {
+      loadingDialog(
+          context: context, mediaQuery: widget.mediaQuery, title: 'Loading...');
       await Provider.of<Apis>(context, listen: false).deleteSubLevel(
         levelId: widget.levels[widget.index]['id'].toString(),
         supLevelId:
             widget.levels[widget.index]['sub_levels'][index1]['id'].toString(),
       );
+      Navigator.pop(context);
       Apis.statusResponse == 200
           ? QuickAlert.show(
               context: context,
@@ -98,6 +102,9 @@ class _subLevelWidgetState extends State<subLevelWidget> {
     int index1,
   ) async {
     try {
+      loadingDialog(
+          context: context, mediaQuery: widget.mediaQuery, title: 'Loading...');
+
       await Provider.of<Apis>(context, listen: false).upDateSubLevel(
         levelId: widget.levels[widget.index]['id'].toString(),
         subLevelId:
@@ -105,6 +112,7 @@ class _subLevelWidgetState extends State<subLevelWidget> {
         newSubLevelName: newSubLevelName,
         newLevelId: selectedLevelId.toString(),
       );
+      Navigator.pop(context);
       Apis.statusResponse == 200
           ? QuickAlert.show(
               context: context,
