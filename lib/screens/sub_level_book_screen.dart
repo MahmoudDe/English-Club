@@ -114,7 +114,10 @@ class _SubLevelBooksScreenState extends State<SubLevelBooksScreen> {
                             itemCount: Apis.subLevelBooksList.length,
                             itemBuilder: (context, index2) =>
                                 BookSubLevelWidget(
+                                    studentName: widget.studentData['name'],
                                     screenColor: widget.screenColor,
+                                    studentId:
+                                        widget.studentData['id'].toString(),
                                     index2: index2,
                                     mediaQuery: mediaQuery)),
                       )

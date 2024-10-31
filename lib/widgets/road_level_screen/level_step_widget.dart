@@ -199,7 +199,7 @@ class LevelStepWidget extends StatelessWidget {
                                   User.userType == 'admin'
                                       ? isLocked
                                           ? const Text(
-                                              'The student did\'t not reached to this level test yet',
+                                              'The student did\'t not reach to this level test yet',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
@@ -242,7 +242,7 @@ class LevelStepWidget extends StatelessWidget {
                                           : levelAvailableData['state'] ==
                                                   'locked'
                                               ? const Text(
-                                                  'You can ask the admin to unlock the test for you',
+                                                  'You can ask the admin to unlock this test for you',
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 )

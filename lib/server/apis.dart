@@ -2465,6 +2465,51 @@ class Apis with ChangeNotifier {
     }
   }
 
+  Future<bool> endStoryCycle(
+      {required String mark,
+      required String date,
+      required String studentId,
+      required String storyId}) async {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    print('3====================================');
+    print(studentId);
+    try {
+      String? myToken = storage.getString('token');
+
+      Dio.Response response = await dio().post(
+        "admin/student/$studentId/story/$storyId/finish_cycle",
+        data: {
+          'mark': mark,
+          'date': date,
+        },
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $myToken'},
+        ),
+      );
+      print('................................subLevels Books server response');
+      print(response.data);
+      print('................................');
+      statusResponse = 200;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      print('hello');
+      statusResponse = 400;
+      print(e.error);
+      print(e.response);
+      message = await e.response!.data['message'];
+      // subLevelBooksList = [];
+      notifyListeners();
+      return false;
+    } catch (e) {
+      // subLevelBooksList = [];
+      message = await 'Exception error';
+
+      print(e);
+      return false;
+    }
+  }
+
   Future<bool> unlockVocabTest({
     required String levelId,
     required String studentId,
