@@ -139,7 +139,6 @@ class _LevelStepWidgetState extends State<LevelStepWidget> {
                           text: 'You entered a fail mark');
                     } else {
                       Navigator.pop(context);
-
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => AllSectionsMapRoadsScreen(
                             allSections: [],
