@@ -4,6 +4,7 @@ import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/widgets/accounts_screen/add_admin_btn_widget.dart';
 import 'package:bdh/widgets/accounts_screen/admin_card_widget.dart';
+import 'package:bdh/widgets/show_book_screen/loading_book_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -58,10 +59,13 @@ class _AllAdminsSlideState extends State<AllAdminsWidget> {
                           text:
                               'Are you sure you want to delete this admin (${dataClass.admins[index]['name']})',
                           onConfirmBtnTap: () async {
+                            LoadingBookWidget(mediaQuery: widget.mediaQuery);
                             await Provider.of<Apis>(context, listen: false)
                                 .deleteAdmin(
                                     dataClass.admins[index]['id'].toString());
                             Navigator.pop(context);
+                            Navigator.pop(context);
+
                             Apis.statusResponse == 200
                                 ? QuickAlert.show(
                                     context: context,

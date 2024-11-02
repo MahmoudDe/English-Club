@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,9 +64,12 @@ class _AddAdminBtnWidgetState extends State<AddAdminBtnWidget> {
             confirmBtnColor: Colors.green,
             onConfirmBtnTap: () async {
               if (formKey.currentState!.validate()) {
+                loadingDialog(context: context, mediaQuery: widget.mediaQuery);
                 await Provider.of<Apis>(context, listen: false)
                     .addNewAdmin(newAdminName);
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
+
                 Apis.statusResponse == 200
                     ? QuickAlert.show(
                         context: context,

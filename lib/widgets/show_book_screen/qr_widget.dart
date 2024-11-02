@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -8,9 +9,11 @@ import 'package:bdh/controllers/show_book_controller.dart';
 import 'package:bdh/server/image_url.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+// import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:screenshot/screenshot.dart';
 // import 'package:device_info_plus/device_info_plus.dart';
 
@@ -42,16 +45,24 @@ class _QrWidgetState extends State<QrWidget> {
         // final tempFile = File(
         //     '/storage/emulated/0/Download/${showBookController.bookData[0]['title']}.png');
         // await tempFile.writeAsBytes(imageBytes);
+        final tempDir = await getTemporaryDirectory();
 
+        // Create a temporary file
+        final filePath = '${tempDir.path}/shared_image.png';
+        final file = File(filePath);
+
+        // Write the imageBytes to the file
+        await file.writeAsBytes(imageBytes);
         // Now use the tempFile for sharing or further processing
-        await Share.file(
-          "QR Code",
-          "${showBookController.bookData[0]['title']}.jpg",
-          imageBytes,
-          "image/jpg",
-          text:
-              "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
-        );
+        await Share.shareXFiles([XFile(file.path)], text: 'Great picture');
+        // await Share.file(
+        //   "QR Code",
+        //   "${showBookController.bookData[0]['title']}.jpg",
+        //   imageBytes,
+        //   "image/jpg",
+        //   text:
+        //       "Scan this QR code to borrow or return ${showBookController.bookData[0]['title']} book",
+        // );
       } else {
         print("Error capturing the QR code image.");
       }

@@ -3,9 +3,9 @@ import 'package:bdh/server/apis.dart';
 import 'package:bdh/styles/app_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+// import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../widgets/quiz_screen/cancel_widget.dart';
 import '../../widgets/quiz_screen/change_question_widget.dart';
@@ -44,7 +44,8 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
   }
 
   Future<void> disableScreenshots() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    await FlutterWindowManagerPlus.addFlags(
+        FlutterWindowManagerPlus.FLAG_SECURE);
   }
 
   @override
@@ -54,7 +55,8 @@ class _StudentTestScreenState extends State<StudentTestScreen> {
   }
 
   Future<void> _enableScreenshots() async {
-    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+    await FlutterWindowManagerPlus.clearFlags(
+        FlutterWindowManagerPlus.FLAG_SECURE);
   }
 
   Future<void> getData() async {

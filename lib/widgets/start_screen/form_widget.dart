@@ -212,6 +212,8 @@ class _FormWidgetState extends State<FormStartWidget> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    FocusScope.of(context).unfocus();
+
                     submit(context, mediaQuery);
                     loadingDialog(
                         context: context,
