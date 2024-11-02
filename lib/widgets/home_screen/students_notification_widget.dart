@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../screens/start_screen.dart';
 import '../../server/home_provider.dart';
 import '../../styles/app_colors.dart';
+import 'package:intl/intl.dart';
 
 class StudentsNotificationWidget extends StatefulWidget {
   const StudentsNotificationWidget({
@@ -197,21 +198,30 @@ class _StudentsNotificationWidgetState
                             color: Colors.amber,
                           ),
                         ),
-                        title: Text(
-                          doneTasks[index]['title'],
-                          style: TextStyle(
-                              color: AppColors.main,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: SizedBox(
-                          width: mediaQuery.width / 2,
-                          child: Text(
-                            doneTasks[index]['message'],
-                            style: const TextStyle(
-                              color: Colors.black45,
-                              overflow: TextOverflow.ellipsis,
+                        title: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: mediaQuery.width / 1.3,
+                              child: Text(
+                                doneTasks[index]['message'],
+                                maxLines: 3,
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
-                          ),
+                            Text(
+                              DateFormat('yyyy-MM-dd hh:mm a').format(
+                                  DateTime.parse(
+                                      doneTasks[index]['created_at'])),
+                              style: TextStyle(
+                                  color: Colors.black45,
+                                  fontSize: mediaQuery.width / 30),
+                            )
+                          ],
                         ),
                       ),
                     ),

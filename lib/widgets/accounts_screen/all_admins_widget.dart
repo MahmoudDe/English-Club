@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bdh/common/dialogs/dialogs.dart';
 import 'package:bdh/data/data.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:bdh/widgets/accounts_screen/add_admin_btn_widget.dart';
@@ -57,15 +58,20 @@ class _AllAdminsSlideState extends State<AllAdminsWidget> {
                             Navigator.pop(context);
                           },
                           text:
-                              'Are you sure you want to delete this admin (${dataClass.admins[index]['name']})',
+                              'Do you want to delete this admin (${dataClass.admins[index]['name']})',
                           onConfirmBtnTap: () async {
-                            LoadingBookWidget(mediaQuery: widget.mediaQuery);
+                            // LoadingBookWidget(mediaQuery: widget.mediaQuery);
+                            loadingDialog(
+                                context: context,
+                                mediaQuery: widget.mediaQuery,
+                                title: 'Loading...');
                             await Provider.of<Apis>(context, listen: false)
                                 .deleteAdmin(
                                     dataClass.admins[index]['id'].toString());
                             Navigator.pop(context);
-                            Navigator.pop(context);
-
+                            setState(() {
+                              dataClass.admins = Apis.allAdmins;
+                            });
                             Apis.statusResponse == 200
                                 ? QuickAlert.show(
                                     context: context,
@@ -75,9 +81,6 @@ class _AllAdminsSlideState extends State<AllAdminsWidget> {
                                     text: Apis.message,
                                     onConfirmBtnTap: () {
                                       Navigator.of(context).pop();
-                                      setState(() {
-                                        dataClass.admins = Apis.allAdmins;
-                                      });
                                     })
                                 : QuickAlert.show(
                                     context: context,

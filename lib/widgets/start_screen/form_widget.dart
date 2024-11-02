@@ -258,7 +258,7 @@ class _FormWidgetState extends State<FormStartWidget> {
                   color: Colors.white,
                 ),
                 label: const Text(
-                  'Contact with us',
+                  'Contact us',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),

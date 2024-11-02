@@ -337,7 +337,7 @@ class _LevelStepWidgetState extends State<LevelStepWidget> {
                                   User.userType == 'admin'
                                       ? widget.isLocked
                                           ? const Text(
-                                              'The student did\'t reach to this level test yet',
+                                              'The student didn\'t reach to this level test yet',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
