@@ -224,7 +224,7 @@ class Apis with ChangeNotifier {
       String? myToken = storage.getString('token');
       Dio.Response response = await dio().get(
         "/admin/students",
-        data: {
+        queryParameters: {
           'start_date': start_date,
           'end_date': end_date,
         },
@@ -236,13 +236,17 @@ class Apis with ChangeNotifier {
           '................................all students with filter server response');
       print(response.data);
       print('................................');
+      allStudents.clear();
       allStudents = response.data;
       notifyListeners();
     } on DioError catch (e) {
+      print('------------------------dio exception');
+      print(e.response!.data);
       print(e.response!.data['message']);
       message = e.response!.data['message'];
       notifyListeners();
     } catch (e) {
+      print('------------------------exception');
       print(e);
     }
   }
@@ -359,6 +363,7 @@ class Apis with ChangeNotifier {
   Future<void> deleteStudent(String id) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     try {
+      print('we want to delete this student');
       String? myToken = storage.getString('token');
       Dio.Response response = await dio().delete(
         "/admin/students/$id",

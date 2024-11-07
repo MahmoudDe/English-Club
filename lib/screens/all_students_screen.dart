@@ -630,11 +630,25 @@ class _AllStudentsScreenState extends State<AllStudentsScreen>
                                                       title: 'Loading...');
                                                 },
                                                 onPressedDelete: (p0) {
-                                                  deleteStudent(index);
-                                                  loadingDialog(
-                                                      context: context,
-                                                      mediaQuery: mediaQuery,
-                                                      title: 'Loading...');
+                                                  QuickAlert.show(
+                                                    context: context,
+                                                    type:
+                                                        QuickAlertType.warning,
+                                                    text:
+                                                        'Do you want to delete this student?',
+                                                    confirmBtnText: 'Yes',
+                                                    cancelBtnText: 'Cancel',
+                                                    onCancelBtnTap: () {},
+                                                    onConfirmBtnTap: () {
+                                                      Navigator.pop(context);
+                                                      deleteStudent(index);
+                                                      loadingDialog(
+                                                          context: context,
+                                                          mediaQuery:
+                                                              mediaQuery,
+                                                          title: 'Loading...');
+                                                    },
+                                                  );
                                                 },
                                                 getData: filterData,
                                                 refreshData: getData,
