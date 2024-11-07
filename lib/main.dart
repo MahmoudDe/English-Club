@@ -1,4 +1,5 @@
 // import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:bdh/common/statics.dart';
 import 'package:bdh/controllers/show_book_controller.dart';
 // import 'package:bdh/notification/notification_services.dart';
 import 'package:bdh/screens/HomePage.dart';
@@ -37,6 +38,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
+    Statics.isPlatformDesktop = mediaQuery.width > 700;
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(

@@ -1,3 +1,4 @@
+import 'package:bdh/common/statics.dart';
 import 'package:bdh/controllers/quiz_controller.dart';
 import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/english_club_settings_screen.dart';
@@ -42,7 +43,9 @@ class CancelWidget extends StatelessWidget {
       icon: Icon(
         Icons.cancel_outlined,
         color: Colors.white,
-        size: mediaQuery.width / 15,
+        size: Statics.isPlatformDesktop
+            ? mediaQuery.width / 35
+            : mediaQuery.width / 15,
       ),
     );
   }

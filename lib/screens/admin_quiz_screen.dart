@@ -1,3 +1,4 @@
+import 'package:bdh/common/statics.dart';
 import 'package:bdh/server/apis.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
@@ -99,7 +100,9 @@ class _AdminQuizScreenState extends State<AdminQuizScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: mediaQuery.height / 10,
+                        height: Statics.isPlatformDesktop
+                            ? mediaQuery.height / 13
+                            : mediaQuery.height / 10,
                       ),
                       carousel_slider.CarouselSlider.builder(
                         options: carousel_slider.CarouselOptions(

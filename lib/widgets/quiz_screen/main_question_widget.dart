@@ -1,3 +1,4 @@
+import 'package:bdh/common/statics.dart';
 import 'package:bdh/server/image_url.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,9 @@ class MainQuestionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: mediaQuery.width / 1.1,
+      width: Statics.isPlatformDesktop
+          ? mediaQuery.width / 3
+          : mediaQuery.width / 1.1,
       child: QuizController.questions[index]['main_is_image'] == 0
           ? Text(
               '${index + 1}.${QuizController.questions[index]['main_text_url']}',

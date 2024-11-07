@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors_in_immutables, use_build_context_synchronously
 
+import 'package:bdh/common/statics.dart';
 import 'package:bdh/model/user.dart';
 import 'package:bdh/screens/student_screens/student_result_screen.dart';
 import 'package:bdh/server/apis.dart';
@@ -101,7 +102,10 @@ class ChangeQuestionWidget extends StatelessWidget {
               FocusScope.of(context).unfocus();
 
               scrollController.animateTo(
-                  (activeIndex - 1) * MediaQuery.of(context).size.width / 7,
+                  (activeIndex - 1) *
+                      (Statics.isPlatformDesktop
+                          ? MediaQuery.of(context).size.width / 30
+                          : MediaQuery.of(context).size.width / 7),
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut);
               controller.previousPage();
@@ -113,9 +117,13 @@ class ChangeQuestionWidget extends StatelessWidget {
               print('..............................................');
             },
             child: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: mediaQuery.width / 20,
-                  vertical: mediaQuery.height / 40),
+              padding: Statics.isPlatformDesktop
+                  ? EdgeInsets.symmetric(
+                      horizontal: mediaQuery.width / 30,
+                      vertical: mediaQuery.height / 60)
+                  : EdgeInsets.symmetric(
+                      horizontal: mediaQuery.width / 20,
+                      vertical: mediaQuery.height / 40),
               decoration: const BoxDecoration(
                   color: Colors.amber,
                   borderRadius: BorderRadius.all(Radius.circular(15))),
@@ -170,16 +178,23 @@ class ChangeQuestionWidget extends StatelessWidget {
             onTap: () {
               FocusScope.of(context).unfocus();
               scrollController.animateTo(
-                  (activeIndex + 1) * MediaQuery.of(context).size.width / 7,
+                  (activeIndex + 1) *
+                      (Statics.isPlatformDesktop
+                          ? MediaQuery.of(context).size.width / 30
+                          : MediaQuery.of(context).size.width / 7),
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut);
               controller.nextPage();
               controllerNumber.nextPage();
             },
             child: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: mediaQuery.width / 20,
-                  vertical: mediaQuery.height / 40),
+              padding: Statics.isPlatformDesktop
+                  ? EdgeInsets.symmetric(
+                      horizontal: mediaQuery.width / 30,
+                      vertical: mediaQuery.height / 60)
+                  : EdgeInsets.symmetric(
+                      horizontal: mediaQuery.width / 20,
+                      vertical: mediaQuery.height / 40),
               decoration: const BoxDecoration(
                   color: Colors.amber,
                   borderRadius: BorderRadius.all(Radius.circular(15))),
