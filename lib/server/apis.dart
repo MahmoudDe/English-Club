@@ -207,11 +207,14 @@ class Apis with ChangeNotifier {
       notifyListeners();
       return true;
     } on DioError catch (e) {
+      print('-------------------- dio exception');
+      print(e.response);
       print(e.response!.data['message']);
       message = e.response!.data['message'];
       notifyListeners();
       return false;
     } catch (e) {
+      print('--------------------  exception');
       print(e);
       return false;
     }

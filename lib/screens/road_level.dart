@@ -98,7 +98,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
         tempLevelId = widget.roadData['data'][i]['level_id'].toString();
         editStep();
       }
-
+      print('----------------------- the i here is => ${i}');
       String currentLevel = widget.roadData['data'][i]['name']
           .substring(0, widget.roadData['data'][i]['name'].indexOf('/'));
       int currentLevelId = widget.roadData['data'][i]['level_id'];
@@ -108,16 +108,22 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
 
       //when end all part add uniq step
       if (currentLevel != tempLevel) {
+        currentLevelId = widget.roadData['data'][i - 1]['level_id'];
+
         bool isLocked = true;
         Map<String, dynamic> levelAvailabelData = {};
-        print('The level id is => ${(currentLevelId - 1).toString()}');
+        print('The level id is => ${(currentLevelId).toString()}');
+        print(
+            'the length of vocab avaliable is => ${widget.roadData['availableVocabularyTests'].length}');
         if (widget.roadData['availableVocabularyTests'] != null) {
           for (int i = 0;
               i < widget.roadData['availableVocabularyTests'].length;
               i++) {
-            if ((currentLevelId - 1).toString() ==
-                widget.roadData['availableVocabularyTests'][i]['level_id']
-                    .toString()) {
+            print(
+                'the main id is =>${widget.roadData['availableVocabularyTests'][i]['level_id']}');
+            if ((currentLevelId).toString() ==
+                (widget.roadData['availableVocabularyTests'][i]['level_id']
+                    .toString())) {
               print('Found available test ');
               setState(() {
                 isLocked = false;
@@ -136,7 +142,7 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
               sectionId: widget.roadData['section_id'].toString(),
               studentId:
                   !widget.showName ? '' : widget.studentData['id'].toString(),
-              levelId: (currentLevelId - 1).toString(),
+              levelId: (currentLevelId).toString(),
               assetUrls: widget.assetUrls,
               showButton: widget.showName,
               levelName: tempLevel,
@@ -176,21 +182,20 @@ class _RoadLevelsScreenState extends State<RoadLevelsScreen>
       if (i == widget.roadData['data'].length - 1) {
         editStep();
         Map<String, dynamic> levelAvailabelData = {};
-
         bool isLocked = true;
         print('The level id is => ${currentLevelId.toString()}');
         if (widget.roadData['availableVocabularyTests'] != null) {
-          for (int i = 0;
-              i < widget.roadData['availableVocabularyTests'].length;
-              i++) {
+          for (int j = 0;
+              j < widget.roadData['availableVocabularyTests'].length;
+              j++) {
             if (currentLevelId.toString() ==
-                widget.roadData['availableVocabularyTests'][i]['level_id']
+                widget.roadData['availableVocabularyTests'][j]['level_id']
                     .toString()) {
               print('found test');
               setState(() {
                 isLocked = false;
                 levelAvailabelData =
-                    widget.roadData['availableVocabularyTests'][i];
+                    widget.roadData['availableVocabularyTests'][j];
               });
               break;
             }
